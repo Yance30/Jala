@@ -62,7 +62,14 @@ html, body, [class*="css"] {
     color: #132A1C;
 }
 #MainMenu, footer { visibility: hidden; }
-.block-container { padding-top: 1.25rem; padding-bottom: 2rem; max-width: 1560px; }
+[data-testid="stAppDeployButton"] { display: none !important; }
+.block-container { padding-top: 2.75rem; padding-bottom: 2rem; max-width: 1560px; }
+
+/* keep the fixed Streamlit/Cloud toolbar band compact so it never covers the JALA topbar */
+[data-testid="stHeader"], [data-testid="stHeader"] [data-testid="stToolbar"] {
+    height: 2.25rem !important; min-height: 2.25rem !important; max-height: 2.25rem !important;
+}
+[data-testid="stHeader"] button { height: 2rem !important; min-height: 2rem !important; }
 
 /* tabular numbers for all metrics / tables */
 .tnum, [data-testid="stMetric"] { font-feature-settings: "tnum", "cv02", "cv03", "cv04"; }
@@ -71,32 +78,36 @@ html, body, [class*="css"] {
 section[data-testid="stSidebar"] { width: 264px !important; min-width: 264px !important; background: #F8FAFC; border-right: 1px solid #E2E8F0; }
 section[data-testid="stSidebar"] .block-container { padding: 1.25rem 1rem; }
 
-/* radio rendered as the Stitch nav rail (Material Symbols glyphs via ligatures) */
+/* radio rendered as the Stitch nav rail (Material Symbols glyphs via ligatures).
+   Selectors avoid child combinators on the option list: Streamlit <=1.57 puts labels
+   directly in the radiogroup, newer builds wrap each label in a div (react-aria). */
 section[data-testid="stSidebar"] div[role="radiogroup"] { gap: 4px; }
-section[data-testid="stSidebar"] div[role="radiogroup"] > label {
+section[data-testid="stSidebar"] div[role="radiogroup"] label {
     display: flex; align-items: center; gap: 12px;
     padding: 8px 12px; border-radius: 8px; margin: 0;
     font-size: 14px; font-weight: 500; color: #334155; cursor: pointer;
 }
-section[data-testid="stSidebar"] div[role="radiogroup"] > label:hover { background: #ECEFF2; color: #132A1C; }
-section[data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checked) {
+section[data-testid="stSidebar"] div[role="radiogroup"] label:hover { background: #ECEFF2; color: #132A1C; }
+section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input:checked) {
     background: #0F766E; color: #FFFFFF; font-weight: 600;
     box-shadow: 0 1px 2px rgba(19, 42, 28, 0.12);
 }
-section[data-testid="stSidebar"] div[role="radiogroup"] > label > div:first-child { display: none; }
-section[data-testid="stSidebar"] div[role="radiogroup"] > label p { margin: 0; color: inherit; font: inherit; }
-section[data-testid="stSidebar"] div[role="radiogroup"] > label::before {
+/* hide the native radio circle: direct-input layout (<=1.57) vs sr-only span layout (newer) */
+section[data-testid="stSidebar"] div[role="radiogroup"] label:has(> input) > div:first-child { display: none; }
+section[data-testid="stSidebar"] div[role="radiogroup"] label:has(> span > input) > div > div:first-child { display: none; }
+section[data-testid="stSidebar"] div[role="radiogroup"] label p { margin: 0; color: inherit; font: inherit; }
+section[data-testid="stSidebar"] div[role="radiogroup"] label::before {
     font-family: 'Material Symbols Outlined'; font-size: 18px; line-height: 1;
     width: 18px; height: 18px; flex: none; color: currentColor;
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
-section[data-testid="stSidebar"] div[role="radiogroup"] > label:nth-child(1)::before { content: 'dashboard'; }
-section[data-testid="stSidebar"] div[role="radiogroup"] > label:nth-child(2)::before { content: 'account_tree'; }
-section[data-testid="stSidebar"] div[role="radiogroup"] > label:nth-child(3)::before { content: 'hub'; }
-section[data-testid="stSidebar"] div[role="radiogroup"] > label:nth-child(4)::before { content: 'analytics'; }
-section[data-testid="stSidebar"] div[role="radiogroup"] > label:nth-child(5)::before { content: 'compare_arrows'; }
-section[data-testid="stSidebar"] div[role="radiogroup"] > label:nth-child(6)::before { content: 'gavel'; }
-section[data-testid="stSidebar"] div[role="radiogroup"] > label:nth-child(7)::before { content: 'shield'; }
+section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input[value="0"])::before { content: 'dashboard'; }
+section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input[value="1"])::before { content: 'account_tree'; }
+section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input[value="2"])::before { content: 'hub'; }
+section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input[value="3"])::before { content: 'analytics'; }
+section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input[value="4"])::before { content: 'compare_arrows'; }
+section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input[value="5"])::before { content: 'gavel'; }
+section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input[value="6"])::before { content: 'shield'; }
 
 /* ---------- generic widgets ---------- */
 .stTextInput input, .stSelectbox select, div[data-baseweb="select"] > div {
@@ -162,13 +173,13 @@ div[data-testid="stHorizontalBlock"] .stButton > button.chip {
 .j-crumb .sep { margin: 0 6px; color: #CBD5E1; }
 
 .j-topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px;
-            padding: 10px 0 14px 0; border-bottom: 1px solid #E2E8F0; margin-bottom: 18px; }
+            padding: 6px 0 10px 0; border-bottom: 1px solid #E2E8F0; margin-bottom: 14px; }
 .j-chip { display: inline-flex; align-items: center; gap: 8px; background: #EEF1F4; border-radius: 6px;
-          padding: 7px 12px; font-size: 13px; font-weight: 500; color: #132A1C; }
+          padding: 6px 10px; font-size: 13px; font-weight: 500; color: #132A1C; }
 .j-chip svg { color: #475569; }
-.j-avatar { width: 36px; height: 36px; border-radius: 9999px; background: #0F766E; color: #fff;
+.j-avatar { width: 32px; height: 32px; border-radius: 9999px; background: #0F766E; color: #fff;
             display: inline-flex; align-items: center; justify-content: center; flex: none; }
-.j-avatar svg { width: 18px; height: 18px; }
+.j-avatar svg { width: 16px; height: 16px; }
 
 .j-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .j-table th { text-align: left; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;

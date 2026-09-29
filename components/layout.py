@@ -10,7 +10,7 @@ def render_topbar(page: str):
         f"""
         <div class="j-topbar">
           <div style="display:flex;align-items:center;gap:12px;">
-            <div class="j-logo" style="width:34px;height:34px;">{LOGO_SVG}</div>
+            <div class="j-logo" style="width:30px;height:30px;">{LOGO_SVG}</div>
             <div class="j-crumb">
               Tim Pencegahan Fraud <span class="sep">›</span> JALA Core <span class="sep">›</span> <b>{title}</b>
             </div>
