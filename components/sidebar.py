@@ -16,7 +16,7 @@ def render_sidebar():
                 <div style="font-size:11px;font-weight:500;color:#64748B;">Fraud Analytics</div>
               </div>
             </div>
-            <div style="margin:10px 0 16px 0;"><span class="j-pill">Prototype / Proof of Concept</span></div>
+            <div style="margin:12px 0 3.25rem 0;"><span class="j-pill">Prototype / Proof of Concept</span></div>
             """,
             unsafe_allow_html=True,
         )
@@ -46,7 +46,7 @@ def render_sidebar():
             on_change=_on_nav,
         )
 
-        st.markdown("<div style='height:24px'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='height:2.25rem'></div>", unsafe_allow_html=True)
         st.markdown(
             """
             <div class="j-sidecard">

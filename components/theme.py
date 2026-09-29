@@ -65,6 +65,9 @@ html, body, [class*="css"] {
 [data-testid="stAppDeployButton"] { display: none !important; }
 .block-container { padding-top: 2.75rem; padding-bottom: 2rem; max-width: 1560px; }
 
+/* when the sidebar is collapsed, let the content stretch into the freed width */
+[data-testid="stAppViewContainer"]:has(section[data-testid="stSidebar"][aria-expanded="false"]) .block-container { max-width: none; }
+
 /* keep the fixed Streamlit/Cloud toolbar band compact so it never covers the JALA topbar */
 [data-testid="stHeader"], [data-testid="stHeader"] [data-testid="stToolbar"] {
     height: 2.25rem !important; min-height: 2.25rem !important; max-height: 2.25rem !important;
@@ -75,16 +78,16 @@ html, body, [class*="css"] {
 .tnum, [data-testid="stMetric"] { font-feature-settings: "tnum", "cv02", "cv03", "cv04"; }
 
 /* ---------- sidebar ---------- */
-section[data-testid="stSidebar"] { width: 264px !important; min-width: 264px !important; background: #F8FAFC; border-right: 1px solid #E2E8F0; }
-section[data-testid="stSidebar"] .block-container { padding: 1.25rem 1rem; }
+section[data-testid="stSidebar"] { width: 264px !important; min-width: 264px !important; background: #FFFFFF; border-right: 1px solid #E2E8F0; }
+section[data-testid="stSidebar"] .block-container { padding: 3.5rem 1rem 1.25rem; }
 
 /* radio rendered as the Stitch nav rail (Material Symbols glyphs via ligatures).
    Selectors avoid child combinators on the option list: Streamlit <=1.57 puts labels
    directly in the radiogroup, newer builds wrap each label in a div (react-aria). */
-section[data-testid="stSidebar"] div[role="radiogroup"] { gap: 4px; }
+section[data-testid="stSidebar"] div[role="radiogroup"] { gap: 6px; }
 section[data-testid="stSidebar"] div[role="radiogroup"] label {
     display: flex; align-items: center; gap: 12px;
-    padding: 8px 12px; border-radius: 8px; margin: 0;
+    padding: 10px 12px; border-radius: 8px; margin: 0;
     font-size: 14px; font-weight: 500; color: #334155; cursor: pointer;
 }
 section[data-testid="stSidebar"] div[role="radiogroup"] label:hover { background: #ECEFF2; color: #132A1C; }
