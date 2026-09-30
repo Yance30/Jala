@@ -1,4 +1,5 @@
-"""Design tokens + global CSS for the JALA Fraud Analytics dashboard.
+"""
+Design tokens + global CSS for the JALA Fraud Analytics dashboard.
 
 Source of truth: DESIGN.md (Precision Graph & Forensic Intelligence).
 """
@@ -19,14 +20,18 @@ TOKENS = {
     "container_2": "#F1F5F9",
 }
 
-# Vectorized rendition of assets/logo.png (teal squircle, linked white nodes,
-# orange convergence node) so the mark stays crisp at 34-38px.
+
+# =========================================================
+# LOGO
+# =========================================================
+
 LOGO_SVG = (
     '<svg viewBox="0 0 1024 1024" role="img" aria-label="JALA logo" '
     'style="width:100%;height:100%;display:block;">'
     '<rect width="1024" height="1024" rx="252" fill="#0F766E"/>'
     '<circle cx="512" cy="676" r="108" fill="#F97316"/>'
-    '<path d="M340 382 L512 664 L684 382" fill="none" stroke="#F8FAFC" stroke-width="44"/>'
+    '<path d="M340 382 L512 664 L684 382" fill="none" '
+    'stroke="#F8FAFC" stroke-width="44"/>'
     '<rect x="424" y="360" width="46" height="44" fill="#F8FAFC"/>'
     '<rect x="512" y="360" width="46" height="44" fill="#F8FAFC"/>'
     '<circle cx="340" cy="382" r="84" fill="#F8FAFC"/>'
@@ -34,10 +39,15 @@ LOGO_SVG = (
     "</svg>"
 )
 
+
+# =========================================================
+# ICONS
+# =========================================================
+
 ICON_CALENDAR_SVG = (
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
-    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" '
-    'style="width:15px;height:15px;flex:none;">'
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" '
+    'aria-hidden="true" style="width:15px;height:15px;flex:none;">'
     '<rect x="3" y="5" width="18" height="16" rx="2"/>'
     '<line x1="3" y1="10" x2="21" y2="10"/>'
     '<line x1="8" y1="3" x2="8" y2="7"/>'
@@ -45,201 +55,1771 @@ ICON_CALENDAR_SVG = (
     "</svg>"
 )
 
+
 ICON_USER_SVG = (
-    '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" '
-    'style="width:18px;height:18px;flex:none;">'
+    '<svg viewBox="0 0 24 24" fill="currentColor" '
+    'aria-hidden="true" style="width:18px;height:18px;flex:none;">'
     '<circle cx="12" cy="8" r="4"/>'
     '<path d="M4 21v-1c0-4.4 3.6-7 8-7s8 2.6 8 7v1z"/>'
     "</svg>"
 )
 
+
+# =========================================================
+# GLOBAL CSS
+# =========================================================
+
 CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 
-html, body, [class*="css"] {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+/* =========================================================
+   BASE
+   ========================================================= */
+
+html,
+body,
+[class*="css"] {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont,
+        'Segoe UI', sans-serif;
     color: #132A1C;
 }
-#MainMenu, footer { visibility: hidden; }
-[data-testid="stAppDeployButton"] { display: none !important; }
-.block-container { padding-top: 2.75rem; padding-bottom: 2rem; max-width: 1560px; }
 
-/* keep the fixed Streamlit/Cloud toolbar band compact so it never covers the JALA topbar */
-[data-testid="stHeader"], [data-testid="stHeader"] [data-testid="stToolbar"] {
-    height: 2.25rem !important; min-height: 2.25rem !important; max-height: 2.25rem !important;
+body {
+    background: #F8FAFC;
 }
-[data-testid="stHeader"] button { height: 2rem !important; min-height: 2rem !important; }
 
-/* tabular numbers for all metrics / tables */
-.tnum, [data-testid="stMetric"] { font-feature-settings: "tnum", "cv02", "cv03", "cv04"; }
+#MainMenu,
+footer {
+    visibility: hidden;
+}
 
-/* ---------- sidebar ---------- */
-section[data-testid="stSidebar"] { width: 264px !important; min-width: 264px !important; background: #F8FAFC; border-right: 1px solid #E2E8F0; }
-section[data-testid="stSidebar"] .block-container { padding: 1.25rem 1rem; }
+[data-testid="stAppDeployButton"] {
+    display: none !important;
+}
 
-/* radio rendered as the Stitch nav rail (Material Symbols glyphs via ligatures).
-   Selectors avoid child combinators on the option list: Streamlit <=1.57 puts labels
-   directly in the radiogroup, newer builds wrap each label in a div (react-aria). */
-section[data-testid="stSidebar"] div[role="radiogroup"] { gap: 4px; }
+
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
+
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    max-width: 1560px;
+}
+
+
+/* =========================================================
+   STREAMLIT HEADER
+   ========================================================= */
+
+[data-testid="stHeader"],
+[data-testid="stHeader"] [data-testid="stToolbar"] {
+    height: 2.25rem !important;
+    min-height: 2.25rem !important;
+    max-height: 2.25rem !important;
+}
+
+[data-testid="stHeader"] button {
+    height: 2rem !important;
+    min-height: 2rem !important;
+}
+
+
+/* =========================================================
+   TABULAR NUMBERS
+   ========================================================= */
+
+.tnum,
+[data-testid="stMetric"] {
+    font-feature-settings: "tnum", "cv02", "cv03", "cv04";
+}
+
+
+/* =========================================================
+   SIDEBAR  (latar gelap, tulisan menu putih)
+   ========================================================= */
+
+section[data-testid="stSidebar"] {
+    width: 264px !important;
+    min-width: 264px !important;
+    background: linear-gradient(180deg, #0B3F3B 0%, #132A1C 100%);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+}
+
+
+section[data-testid="stSidebar"] .block-container {
+    padding: 1.25rem 1rem;
+}
+
+
+/* tombol tutup sidebar */
+section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] button,
+section[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] button {
+    color: #FFFFFF;
+}
+
+
+section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] svg,
+section[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] svg {
+    color: #FFFFFF;
+    fill: currentColor;
+}
+
+
+section[data-testid="stSidebar"] div[role="radiogroup"] {
+    gap: 4px;
+}
+
+
 section[data-testid="stSidebar"] div[role="radiogroup"] label {
-    display: flex; align-items: center; gap: 12px;
-    padding: 8px 12px; border-radius: 8px; margin: 0;
-    font-size: 14px; font-weight: 500; color: #334155; cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: background 0.15s ease;
 }
-section[data-testid="stSidebar"] div[role="radiogroup"] label:hover { background: #ECEFF2; color: #132A1C; }
-section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input:checked) {
-    background: #0F766E; color: #FFFFFF; font-weight: 600;
-    box-shadow: 0 1px 2px rgba(19, 42, 28, 0.12);
+
+
+section[data-testid="stSidebar"] div[role="radiogroup"] label:hover {
+    background: rgba(255, 255, 255, 0.10);
+    color: #FFFFFF;
 }
-/* hide the native radio circle: direct-input layout (<=1.57) vs sr-only span layout (newer) */
-section[data-testid="stSidebar"] div[role="radiogroup"] label:has(> input) > div:first-child { display: none; }
-section[data-testid="stSidebar"] div[role="radiogroup"] label:has(> span > input) > div > div:first-child { display: none; }
-section[data-testid="stSidebar"] div[role="radiogroup"] label p { margin: 0; color: inherit; font: inherit; }
-section[data-testid="stSidebar"] div[role="radiogroup"] label::before {
-    font-family: 'Material Symbols Outlined'; font-size: 18px; line-height: 1;
-    width: 18px; height: 18px; flex: none; color: currentColor;
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+
+
+section[data-testid="stSidebar"] div[role="radiogroup"]
+label:has(input:checked) {
+    background: rgba(255, 255, 255, 0.18);
+    color: #FFFFFF;
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 #5EEAD4;
 }
-section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input[value="0"])::before { content: 'dashboard'; }
-section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input[value="1"])::before { content: 'account_tree'; }
-section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input[value="2"])::before { content: 'hub'; }
-section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input[value="3"])::before { content: 'analytics'; }
-section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input[value="4"])::before { content: 'compare_arrows'; }
-section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input[value="5"])::before { content: 'gavel'; }
-section[data-testid="stSidebar"] div[role="radiogroup"] label:has(input[value="6"])::before { content: 'shield'; }
 
-/* ---------- generic widgets ---------- */
-.stTextInput input, .stSelectbox select, div[data-baseweb="select"] > div {
-    border: 1px solid #E2E8F0 !important; border-radius: 4px !important;
-    background: #FFFFFF; min-height: 36px; font-size: 13px;
+
+section[data-testid="stSidebar"]
+div[role="radiogroup"]
+label:has(> input) > div:first-child {
+    display: none;
 }
-.stTextInput input:focus, div[data-baseweb="select"]:focus-within > div {
-    border-color: #0F766E !important; box-shadow: 0 0 0 1px #0F766E !important;
+
+
+section[data-testid="stSidebar"]
+div[role="radiogroup"]
+label:has(> span > input) > div > div:first-child {
+    display: none;
 }
-.stButton > button, .stDownloadButton > button {
-    border: 1px solid #E2E8F0; background: #FFFFFF; color: #132A1C;
-    border-radius: 4px; font-size: 13px; font-weight: 500; min-height: 36px;
-    padding: 6px 12px;
+
+
+section[data-testid="stSidebar"]
+div[role="radiogroup"] label p {
+    margin: 0;
+    color: #FFFFFF;
+    font: inherit;
 }
-.stButton > button:hover, .stDownloadButton > button:hover { background: #F8FAFC; border-color: #CBD5E1; }
-.stButton > button[kind="primary"], .stButton > button.primary {
-    background: #0F766E; border-color: transparent; color: #FFFFFF;
+
+
+section[data-testid="stSidebar"]
+div[role="radiogroup"] label::before {
+    font-family: 'Material Symbols Outlined';
+    font-size: 18px;
+    line-height: 1;
+    width: 18px;
+    height: 18px;
+    flex: none;
+    color: currentColor;
+
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
 }
-.stButton > button.primary:hover { background: #0D6861; }
-.stButton > button.tertiary { background: #F97316; border-color: transparent; color: #FFFFFF; }
-.stButton > button.danger { background: #DC2626; border-color: transparent; color: #FFFFFF; }
-div.stButton > button:focus { box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px #0F766E; }
 
-/* chips (filter pills) */
-div[data-testid="stHorizontalBlock"] .stButton > button.chip {
-    min-height: 30px; border-radius: 9999px; font-size: 12px; font-weight: 600;
-    background: #FFFFFF; color: #475569; border: 1px solid #E2E8F0; padding: 4px 14px;
+
+/* Ikon menu, urutan sesuai NAV_PAGES:
+   0 Dashboard, 1 Network Graph, 2 Risk Ranking, 3 Audit Action, 4 About */
+
+section[data-testid="stSidebar"]
+div[role="radiogroup"]
+label:has(input[value="0"])::before {
+    content: 'dashboard';
 }
-.stButton > button.chip-on { background: #0F766E !important; color: #FFFFFF !important; border-color: #0F766E !important; }
 
-/* ---------- JALA building blocks ---------- */
-.j-brand { display: flex; align-items: center; gap: 10px; }
-.j-logo { width: 38px; height: 38px; border-radius: 8px; overflow: hidden; flex: none;
-          display: flex; align-items: center; justify-content: center; }
-.j-logo svg { width: 100%; height: 100%; display: block; }
-.j-pill { display: inline-block; background: #E2E8F0; color: #334155; border-radius: 9999px;
-          font-size: 11px; font-weight: 600; letter-spacing: .04em; padding: 3px 10px; }
-.j-pill.teal { background: rgba(15,118,110,.08); color: #0F766E; border: 1px solid rgba(15,118,110,.2); }
-.j-pill.amber { background: rgba(249,115,22,.1); color: #C2410C; border: 1px solid rgba(249,115,22,.3); }
-.j-pill.red { background: #FEE2E2; color: #B91C1C; }
-.j-pill.red-solid { background: #DC2626; color: #fff; }
-.j-pill.green { background: #DCFCE7; color: #15803D; }
-.j-pill.grey { background: #E2E8F0; color: #475569; }
-.j-pill.brown { background: #9A3412; color: #fff; }
 
-.j-card { background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 1.25rem; }
-.j-card.tint { background: #F8FAFC; border-color: #CBD5E1; }
-.j-card.tealwash { background: linear-gradient(180deg, #E6F4F2 0%, #F2FAF8 100%); border-color: #B9DED9; }
-.j-label { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #64748B; }
-.j-value { font-size: 34px; font-weight: 700; color: #0F766E; letter-spacing: -0.02em;
-           font-feature-settings: "tnum", "cv02", "cv03", "cv04"; line-height: 1.15; }
-.j-value.dark { color: #132A1C; }
-.j-value.red { color: #DC2626; }
-.j-value.amber { color: #C2410C; }
-.j-sub { font-size: 12px; color: #64748B; }
-.j-note { background: #F8FAFC; border-radius: 6px; padding: 10px 12px; font-size: 12px; color: #475569;
-          display: flex; gap: 8px; align-items: flex-start; }
-.j-h1 { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; color: #132A1C; margin: 2px 0 6px 0; }
-.j-h2 { font-size: 18px; font-weight: 600; letter-spacing: -0.015em; color: #132A1C; margin: 0 0 4px 0; }
-.j-body { font-size: 14px; color: #475569; line-height: 1.55; }
-.j-crumb { font-size: 13px; color: #64748B; }
-.j-crumb b { color: #132A1C; font-weight: 600; }
-.j-crumb .sep { margin: 0 6px; color: #CBD5E1; }
+section[data-testid="stSidebar"]
+div[role="radiogroup"]
+label:has(input[value="1"])::before {
+    content: 'hub';
+}
 
-.j-topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px;
-            padding: 6px 0 10px 0; border-bottom: 1px solid #E2E8F0; margin-bottom: 14px; }
-.j-chip { display: inline-flex; align-items: center; gap: 8px; background: #EEF1F4; border-radius: 6px;
-          padding: 6px 10px; font-size: 13px; font-weight: 500; color: #132A1C; }
-.j-chip svg { color: #475569; }
-.j-avatar { width: 32px; height: 32px; border-radius: 9999px; background: #0F766E; color: #fff;
-            display: inline-flex; align-items: center; justify-content: center; flex: none; }
-.j-avatar svg { width: 16px; height: 16px; }
 
-.j-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.j-table th { text-align: left; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
-              color: #64748B; padding: 10px 12px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; }
-.j-table td { padding: 10px 12px; border-bottom: 1px solid #F1F5F9; vertical-align: top; color: #334155;
-              font-feature-settings: "tnum", "cv02", "cv03", "cv04"; }
-.j-table tr:hover td { background: #F8FAFC; }
-.j-table td.num { text-align: right; }
+section[data-testid="stSidebar"]
+div[role="radiogroup"]
+label:has(input[value="2"])::before {
+    content: 'analytics';
+}
 
-.j-bar { height: 6px; border-radius: 9999px; background: #E2E8F0; overflow: hidden; }
-.j-bar > span { display: block; height: 100%; border-radius: 9999px; }
 
-.j-kv { display: flex; flex-direction: column; gap: 2px; }
-.j-kv .k { font-size: 12px; color: #64748B; }
-.j-kv .v { font-size: 14px; font-weight: 600; color: #132A1C; }
+section[data-testid="stSidebar"]
+div[role="radiogroup"]
+label:has(input[value="3"])::before {
+    content: 'gavel';
+}
 
-.j-code { background: #F1F5F9; border-radius: 6px; padding: 10px 12px; font-family: 'JetBrains Mono', ui-monospace, monospace;
-          font-size: 12px; color: #334155; white-space: pre-wrap; }
-.j-alert-red { background: #FEE2E2; border-radius: 8px; padding: 12px 16px; color: #991B1B; font-size: 13px; }
-.j-alert-teal { background: #E6F4F2; border-radius: 8px; padding: 12px 16px; color: #0F5B54; font-size: 13px; }
-.j-rowsep { border: 0; border-top: 1px solid #F1F5F9; margin: 14px 0; }
-.j-why { background: #F8FAFC; border-radius: 6px; padding: 10px 12px; font-size: 12px; color: #475569; line-height: 1.5; }
-.j-iconbox { width: 34px; height: 34px; border-radius: 6px; display: inline-flex; align-items: center;
-             justify-content: center; font-size: 15px; }
-.j-iconbox.teal { background: #D7EDEA; color: #0F766E; }
-.j-iconbox.amber { background: #FFEDD5; color: #C2410C; }
-.j-iconbox.red { background: #FEE2E2; color: #B91C1C; }
-.j-iconbox.green { background: #DCFCE7; color: #15803D; }
-.j-iconbox.grey { background: #E2E8F0; color: #475569; }
 
-.j-footer { display: flex; gap: 18px; align-items: center; justify-content: space-between;
-            background: #EEF1F4; border-radius: 8px; padding: 10px 16px; font-size: 12px; color: #475569; margin-top: 18px; }
-.j-sidecard { background: #EEF1F4; border-radius: 8px; padding: 12px; font-size: 12px; color: #475569; }
-.dot { display: inline-block; width: 8px; height: 8px; border-radius: 9999px; margin-right: 6px; }
-.dot.teal { background: #0F766E; } .dot.amber { background: #F97316; } .dot.red { background: #DC2626; }
-.dot.green { background: #16A34A; }
+section[data-testid="stSidebar"]
+div[role="radiogroup"]
+label:has(input[value="4"])::before {
+    content: 'info';
+}
+
+
+/* elemen lain di dalam sidebar mengikuti latar gelap */
+
+section[data-testid="stSidebar"] .j-pill {
+    background: rgba(255, 255, 255, 0.14);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+
+section[data-testid="stSidebar"] .j-sidecard {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+
+section[data-testid="stSidebar"] .dot.teal {
+    background: #5EEAD4;
+}
+
+
+/* =========================================================
+   GENERIC INPUTS
+   ========================================================= */
+
+.stTextInput input,
+.stSelectbox select,
+div[data-baseweb="select"] > div {
+    border: 1px solid #DCE6E4 !important;
+
+    border-radius: 8px !important;
+
+    background: #FFFFFF;
+
+    min-height: 40px;
+
+    font-size: 13px;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+.stTextInput input:hover,
+div[data-baseweb="select"] > div:hover {
+    border-color: #B9DED9 !important;
+}
+
+.stTextInput input:focus,
+div[data-baseweb="select"]:focus-within > div {
+    border-color: #0F766E !important;
+
+    box-shadow:
+        0 0 0 3px rgba(15, 118, 110, 0.10) !important;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.stButton > button,
+.stDownloadButton > button {
+    border: 1px solid #DCE6E4;
+
+    background: #FFFFFF;
+
+    color: #132A1C;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    min-height: 40px;
+
+    padding: 7px 14px;
+
+    transition:
+        background .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease,
+        transform .18s ease;
+}
+
+.stButton > button:hover,
+.stDownloadButton > button:hover {
+    background: #F8FAFC;
+
+    border-color: #B9DED9;
+
+    box-shadow:
+        0 5px 14px rgba(15, 118, 110, 0.07);
+
+    transform: translateY(-1px);
+}
+
+
+/* Primary */
+
+.stButton > button[kind="primary"],
+.stButton > button.primary {
+    background:
+        linear-gradient(
+            135deg,
+            #0F766E 0%,
+            #0D6861 100%
+        );
+
+    border-color: transparent;
+
+    color: #FFFFFF;
+
+    box-shadow:
+        0 5px 14px rgba(15, 118, 110, 0.15);
+}
+
+.stButton > button[kind="primary"]:hover,
+.stButton > button.primary:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #0D6861 0%,
+            #095C56 100%
+        );
+
+    box-shadow:
+        0 7px 18px rgba(15, 118, 110, 0.20);
+}
+
+
+/* Orange */
+
+.stButton > button.tertiary {
+    background: #F97316;
+    border-color: transparent;
+    color: #FFFFFF;
+}
+
+
+/* Danger */
+
+.stButton > button.danger {
+    background: #DC2626;
+    border-color: transparent;
+    color: #FFFFFF;
+}
+
+
+/* Focus */
+
+div.stButton > button:focus {
+    box-shadow:
+        0 0 0 2px #FFFFFF,
+        0 0 0 4px rgba(15, 118, 110, .35);
+}
+
+
+/* =========================================================
+   CHIPS
+   ========================================================= */
+
+div[data-testid="stHorizontalBlock"]
+.stButton > button.chip {
+    min-height: 30px;
+
+    border-radius: 9999px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    background: #FFFFFF;
+
+    color: #475569;
+
+    border: 1px solid #DCE6E4;
+
+    padding: 4px 14px;
+}
+
+.stButton > button.chip-on {
+    background: #0F766E !important;
+
+    color: #FFFFFF !important;
+
+    border-color: #0F766E !important;
+}
+
+
+/* =========================================================
+   JALA BRAND
+   ========================================================= */
+
+.j-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.j-logo {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    flex: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow:
+        0 4px 12px rgba(15, 118, 110, 0.12);
+}
+
+.j-logo svg {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+}
+
+
+/* =========================================================
+   PILLS
+   ========================================================= */
+
+.j-pill {
+    display: inline-block;
+
+    background: #E2E8F0;
+
+    color: #334155;
+
+    border-radius: 9999px;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    letter-spacing: .04em;
+
+    padding: 4px 10px;
+}
+
+.j-pill.teal {
+    background: rgba(15,118,110,.08);
+
+    color: #0F766E;
+
+    border: 1px solid rgba(15,118,110,.20);
+}
+
+.j-pill.amber {
+    background: rgba(249,115,22,.10);
+
+    color: #C2410C;
+
+    border: 1px solid rgba(249,115,22,.30);
+}
+
+.j-pill.red {
+    background: #FEE2E2;
+    color: #B91C1C;
+}
+
+.j-pill.red-solid {
+    background: #DC2626;
+    color: #FFFFFF;
+}
+
+.j-pill.green {
+    background: #DCFCE7;
+    color: #15803D;
+}
+
+.j-pill.grey {
+    background: #E2E8F0;
+    color: #475569;
+}
+
+.j-pill.brown {
+    background: #9A3412;
+    color: #FFFFFF;
+}
+
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.j-card {
+    background: #FFFFFF;
+
+    border: 1px solid #E2E8F0;
+
+    border-radius: 12px;
+
+    padding: 1.25rem;
+
+    box-shadow:
+        0 3px 12px rgba(15, 23, 42, 0.025);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease;
+}
+
+.j-card:hover {
+    border-color: #D4E3E1;
+
+    box-shadow:
+        0 8px 24px rgba(15, 23, 42, 0.055);
+
+    transform: translateY(-1px);
+}
+
+.j-card.tint {
+    background: #F8FAFC;
+
+    border-color: #CBD5E1;
+}
+
+.j-card.tealwash {
+    background:
+        linear-gradient(
+            180deg,
+            #E8F6F3 0%,
+            #F7FCFB 100%
+        );
+
+    border-color: #B9DED9;
+
+    box-shadow:
+        0 8px 24px rgba(15, 118, 110, 0.055);
+}
+
+
+/* =========================================================
+   METRIC CARDS
+   ========================================================= */
+
+.j-metric-card {
+    min-height: 145px;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+.j-metric-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 120px;
+    height: 120px;
+
+    right: -42px;
+    bottom: -50px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(15, 118, 110, 0.045);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+.j-label {
+    font-size: 11px;
+
+    font-weight: 600;
+
+    letter-spacing: .05em;
+
+    text-transform: uppercase;
+
+    color: #64748B;
+}
+
+.j-value {
+    font-size: 34px;
+
+    font-weight: 700;
+
+    color: #0F766E;
+
+    letter-spacing: -0.025em;
+
+    font-feature-settings:
+        "tnum",
+        "cv02",
+        "cv03",
+        "cv04";
+
+    line-height: 1.15;
+}
+
+.j-value.dark {
+    color: #132A1C;
+}
+
+.j-value.red {
+    color: #DC2626;
+}
+
+.j-value.amber {
+    color: #C2410C;
+}
+
+.j-sub {
+    font-size: 12px;
+
+    color: #64748B;
+}
+
+.j-note {
+    background: #F8FAFC;
+
+    border-radius: 8px;
+
+    padding: 10px 12px;
+
+    font-size: 12px;
+
+    color: #475569;
+
+    display: flex;
+
+    gap: 8px;
+
+    align-items: flex-start;
+}
+
+.j-h1 {
+    font-size: 32px;
+
+    font-weight: 700;
+
+    letter-spacing: -0.025em;
+
+    color: #132A1C;
+
+    margin: 2px 0 7px 0;
+
+    line-height: 1.15;
+}
+
+.j-h2 {
+    font-size: 19px;
+
+    font-weight: 650;
+
+    letter-spacing: -0.018em;
+
+    color: #132A1C;
+
+    margin: 0 0 5px 0;
+}
+
+.j-body {
+    font-size: 14px;
+
+    color: #475569;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.j-pagehead {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 24px;
+
+    padding: 2px 0 8px;
+}
+
+.j-pagehead-main {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.j-pagehead-right {
+    flex: none;
+}
+
+
+/* =========================================================
+   BREADCRUMB
+   ========================================================= */
+
+.j-crumb {
+    font-size: 13px;
+
+    color: #64748B;
+}
+
+.j-crumb b {
+    color: #132A1C;
+
+    font-weight: 600;
+}
+
+.j-crumb .sep {
+    margin: 0 6px;
+
+    color: #CBD5E1;
+}
+
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+
+.j-topbar {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 14px;
+
+    padding: 7px 0 12px 0;
+
+    border-bottom: 1px solid #E2E8F0;
+
+    margin-bottom: 18px;
+}
+
+.j-chip {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    background: #FFFFFF;
+
+    border: 1px solid #E2E8F0;
+
+    border-radius: 8px;
+
+    padding: 7px 11px;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    color: #132A1C;
+
+    box-shadow:
+        0 2px 8px rgba(15, 23, 42, 0.025);
+}
+
+.j-chip svg {
+    color: #475569;
+}
+
+
+/* =========================================================
+   AVATAR
+   ========================================================= */
+
+.j-avatar {
+    width: 34px;
+    height: 34px;
+
+    border-radius: 9999px;
+
+    background: #0F766E;
+
+    color: #FFFFFF;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex: none;
+
+    box-shadow:
+        0 4px 10px rgba(15, 118, 110, 0.15);
+}
+
+.j-avatar svg {
+    width: 16px;
+    height: 16px;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.j-table {
+    width: 100%;
+
+    border-collapse: separate;
+
+    border-spacing: 0;
+
+    font-size: 13px;
+
+    overflow: hidden;
+
+    border: 1px solid #E2E8F0;
+
+    border-radius: 10px;
+}
+
+.j-table th {
+    text-align: left;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    letter-spacing: .04em;
+
+    text-transform: uppercase;
+
+    color: #64748B;
+
+    padding: 11px 12px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #F8FAFC 0%,
+            #F4F7F9 100%
+        );
+
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.j-table td {
+    padding: 11px 12px;
+
+    border-bottom: 1px solid #F1F5F9;
+
+    vertical-align: top;
+
+    color: #334155;
+
+    font-feature-settings:
+        "tnum",
+        "cv02",
+        "cv03",
+        "cv04";
+}
+
+.j-table tr:last-child td {
+    border-bottom: none;
+}
+
+.j-table tr:hover td {
+    background:
+        linear-gradient(
+            90deg,
+            #F8FCFB,
+            #FFFFFF
+        );
+}
+
+.j-table td.num {
+    text-align: right;
+}
+
+
+/* =========================================================
+   BARS
+   ========================================================= */
+
+.j-bar {
+    height: 7px;
+
+    border-radius: 9999px;
+
+    background: #E2E8F0;
+
+    overflow: hidden;
+}
+
+.j-bar > span {
+    display: block;
+
+    height: 100%;
+
+    border-radius: 9999px;
+}
+
+
+/* =========================================================
+   KEY VALUE
+   ========================================================= */
+
+.j-kv {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.j-kv .k {
+    font-size: 12px;
+
+    color: #64748B;
+}
+
+.j-kv .v {
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #132A1C;
+}
+
+
+/* =========================================================
+   CODE
+   ========================================================= */
+
+.j-code {
+    background: #F1F5F9;
+
+    border-radius: 8px;
+
+    padding: 10px 12px;
+
+    font-family:
+        'JetBrains Mono',
+        ui-monospace,
+        monospace;
+
+    font-size: 12px;
+
+    color: #334155;
+
+    white-space: pre-wrap;
+
+    border: 1px solid #E2E8F0;
+}
+
+
+/* =========================================================
+   ALERT
+   ========================================================= */
+
+.j-alert-red {
+    background:
+        linear-gradient(
+            135deg,
+            #FEF2F2,
+            #FFF8F8
+        );
+
+    border: 1px solid #FECACA;
+
+    border-radius: 10px;
+
+    padding: 12px 16px;
+
+    color: #991B1B;
+
+    font-size: 13px;
+}
+
+.j-alert-teal {
+    background:
+        linear-gradient(
+            135deg,
+            #E6F4F2,
+            #F5FBFA
+        );
+
+    border: 1px solid #B9DED9;
+
+    border-radius: 10px;
+
+    padding: 12px 16px;
+
+    color: #0F5B54;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   ROW SEPARATOR
+   ========================================================= */
+
+.j-rowsep {
+    border: 0;
+
+    border-top: 1px solid #F1F5F9;
+
+    margin: 16px 0;
+}
+
+
+/* =========================================================
+   WHY BOX
+   ========================================================= */
+
+.j-why {
+    background: #F8FAFC;
+
+    border: 1px solid #E8EDF2;
+
+    border-radius: 8px;
+
+    padding: 10px 12px;
+
+    font-size: 12px;
+
+    color: #475569;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   ICON BOX
+   ========================================================= */
+
+.j-iconbox {
+    width: 36px;
+    height: 36px;
+
+    border-radius: 9px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 15px;
+}
+
+.j-iconbox.teal {
+    background: #D7EDEA;
+
+    color: #0F766E;
+}
+
+.j-iconbox.amber {
+    background: #FFEDD5;
+
+    color: #C2410C;
+}
+
+.j-iconbox.red {
+    background: #FEE2E2;
+
+    color: #B91C1C;
+}
+
+.j-iconbox.green {
+    background: #DCFCE7;
+
+    color: #15803D;
+}
+
+.j-iconbox.grey {
+    background: #E2E8F0;
+
+    color: #475569;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.j-footer {
+    display: flex;
+
+    gap: 18px;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    background: #FFFFFF;
+
+    border: 1px solid #E2E8F0;
+
+    border-radius: 10px;
+
+    padding: 11px 16px;
+
+    font-size: 12px;
+
+    color: #475569;
+
+    margin-top: 20px;
+
+    box-shadow:
+        0 3px 12px rgba(15, 23, 42, 0.025);
+}
+
+
+/* =========================================================
+   SIDE CARD
+   ========================================================= */
+
+.j-sidecard {
+    background: #F8FAFC;
+
+    border: 1px solid #E2E8F0;
+
+    border-radius: 10px;
+
+    padding: 12px;
+
+    font-size: 12px;
+
+    color: #475569;
+}
+
+
+/* =========================================================
+   STATUS DOT
+   ========================================================= */
+
+.dot {
+    display: inline-block;
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 9999px;
+
+    margin-right: 6px;
+}
+
+.dot.teal {
+    background: #0F766E;
+}
+
+.dot.amber {
+    background: #F97316;
+}
+
+.dot.red {
+    background: #DC2626;
+}
+
+.dot.green {
+    background: #16A34A;
+}
+
+
+/* =========================================================
+   NETWORK GRAPH
+   ========================================================= */
+
+.network-canvas {
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(230,244,242,.80),
+            rgba(248,250,252,.95) 72%
+        );
+
+    border: 1px solid #D7EDEA;
+
+    border-radius: 14px;
+
+    padding: 8px;
+
+    box-shadow:
+        inset 0 0 40px rgba(15,118,110,.025);
+}
+
+
+/* =========================================================
+   COMPARISON
+   ========================================================= */
+
+.comparison-panel {
+    min-height: 500px;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+.comparison-panel.legacy {
+    border-top: 4px solid #94A3B8;
+}
+
+.comparison-panel.han {
+    border-top: 4px solid #0F766E;
+
+    box-shadow:
+        0 10px 28px rgba(15,118,110,.07);
+}
+
+
+/* =========================================================
+   CLAIM PROFILE
+   ========================================================= */
+
+.claim-profile-card {
+    position: relative;
+
+    overflow: hidden;
+}
+
+.claim-profile-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 4px;
+
+    background: #0F766E;
+}
+
+
+/* =========================================================
+   AUDIT RISK
+   ========================================================= */
+
+.audit-risk-card {
+    border-left: 4px solid #DC2626 !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #FFFFFF,
+            #FFF8F5
+        );
+
+    box-shadow:
+        0 8px 24px rgba(220,38,38,.055);
+}
+
+
+/* =========================================================
+   AUDIT SCORE
+   ========================================================= */
+
+.audit-score {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 96px;
+    height: 96px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #FFFFFF 58%,
+            #FEE2E2 59%,
+            #FEE2E2 100%
+        );
+
+    border: 6px solid #FECACA;
+
+    color: #DC2626;
+
+    font-size: 24px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   TOPBAR RESPONSIVE
+   ========================================================= */
+
+.j-q-short {
+    display: none;
+}
+
+@media (max-width: 640px) {
+
+    .j-q-full {
+        display: none;
+    }
+
+    .j-q-short {
+        display: inline;
+    }
+
+    .j-crumb-hide {
+        display: none;
+    }
+}
+
+
+/* =========================================================
+   MATERIAL SYMBOLS
+   ========================================================= */
+
+.ms {
+    font-family: 'Material Symbols Outlined';
+
+    font-weight: normal;
+
+    font-style: normal;
+
+    font-size: 18px;
+
+    line-height: 1;
+
+    vertical-align: middle;
+
+    display: inline-block;
+
+    letter-spacing: normal;
+
+    white-space: nowrap;
+
+    -webkit-font-smoothing: antialiased;
+
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+}
+
+
+/* =========================================================
+   RESPONSIVE PAGE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .j-pagehead {
+        flex-direction: column;
+    }
+
+    .j-pagehead-right {
+        width: 100%;
+    }
+
+    .j-h1 {
+        font-size: 27px;
+    }
+
+    .j-metric-card {
+        min-height: 130px;
+    }
+}
+
+@media (max-width: 640px) {
+
+    .block-container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .j-footer {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .j-card {
+        padding: 1rem;
+    }
+
+    .j-value {
+        font-size: 30px;
+    }
+}
+
+
+/* =========================================================
+   TABEL: SCROLL HORIZONTAL (desktop & mobile)
+   ========================================================= */
+
+.j-table-wrap {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+}
+
+
+.j-table-wrap::-webkit-scrollbar {
+    height: 8px;
+}
+
+
+.j-table-wrap::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 9999px;
+}
+
+
+.j-table-wrap::-webkit-scrollbar-track {
+    background: #F1F5F9;
+    border-radius: 9999px;
+}
+
+
+/* cegah kolom Streamlit melebar mengikuti isi tabel */
+[data-testid="stElementContainer"]:has(.j-table-wrap),
+[data-testid="stMarkdownContainer"]:has(.j-table-wrap),
+[data-testid="stVerticalBlock"]:has(> [data-testid="stElementContainer"] .j-table-wrap) {
+    min-width: 0;
+    max-width: 100%;
+}
+
+
+.j-table {
+    min-width: 640px;
+}
+
+
+.j-table-risk {
+    min-width: 900px;
+}
+
+
+.j-table-triage {
+    min-width: 980px;
+}
+
+
+.j-table-faskes {
+    min-width: 720px;
+}
+
+
+.j-table th,
+.j-table td.num {
+    white-space: nowrap;
+}
+
+
+.j-table-risk td:first-child {
+    min-width: 300px;
+}
+
+
+.j-table-risk td:last-child {
+    min-width: 260px;
+}
+
+
+.j-scrollhint {
+    display: none;
+    font-size: 11px;
+    color: #64748B;
+    text-align: right;
+    margin: 0 2px 6px 0;
+}
+
+
+@media (max-width: 900px) {
+    .j-scrollhint {
+        display: block;
+    }
+}
+
+
+@media (max-width: 640px) {
+    .j-table th,
+    .j-table td {
+        padding: 8px 10px;
+    }
+}
+
+
+/* =========================================================
+   AUDIT ACTION: kartu seragam
+   ========================================================= */
+
+.j-grid4 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    align-items: stretch;
+}
+
+
+.j-grid4 > .j-card {
+    margin: 0;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+}
+
+
+@media (max-width: 1100px) {
+    .j-grid4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+@media (max-width: 520px) {
+    .j-grid4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.j-actcard {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-height: 250px;
+}
+
+
+.j-actcard-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.j-actcard-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: #132A1C;
+    margin: 14px 0 6px 0;
+}
+
+
+.j-actcard-body {
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: #475569;
+}
+
+
+.j-actcard-note {
+    font-size: 12px;
+    line-height: 1.4;
+    color: #64748B;
+    text-align: center;
+    margin-top: 8px;
+    min-height: 2.8em;
+}
+
+
+/* tinggi tombol tindakan sama, teks panjang boleh turun baris */
+.st-key-audit_actions button {
+    min-height: 46px;
+    height: auto;
+    white-space: normal;
+    line-height: 1.25;
+}
+
+
+@media (max-width: 900px) {
+    .j-actcard {
+        min-height: 0;
+    }
+
+    .j-actcard-note {
+        min-height: 0;
+    }
+}
+
+
+/* =========================================================
+   PERBANDINGAN PARADIGMA (halaman About): judul & panel rapi
+   ========================================================= */
+
+.j-cmp-title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+    color: #132A1C;
+    margin: 16px 0 8px 0;
+    min-height: 2.6em;
+    text-wrap: balance;
+}
+
+
+.j-cmp-sub {
+    min-height: 3.2em;
+}
+
+
+.j-cmp-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+
+.j-cmp-diagram > div {
+    padding: 0 !important;
+}
+
+
+.j-cmp-diagram svg {
+    max-width: 100%;
+    height: auto;
+}
+
+
+.j-cmp-note {
+    text-align: center;
+    line-height: 1.5;
+    min-height: 3em;
+}
+
+
+.j-cmp-points {
+    min-height: 190px;
+}
+
+
+/* kartu memenuhi tinggi kolom, footer menempel di dasar */
+.j-cmp-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+
+.j-cmp-foot {
+    margin-top: auto;
+}
+
+
+[data-testid="stColumn"]:has(.j-cmp-card) [data-testid="stVerticalBlock"],
+[data-testid="stColumn"]:has(.j-cmp-card) [data-testid="stElementContainer"],
+[data-testid="stColumn"]:has(.j-cmp-card) [data-testid="stMarkdown"],
+[data-testid="stColumn"]:has(.j-cmp-card) [data-testid="stMarkdownContainer"] {
+    height: 100%;
+}
+
+
+@media (max-width: 900px) {
+    .j-cmp-title,
+    .j-cmp-sub,
+    .j-cmp-diagram,
+    .j-cmp-note,
+    .j-cmp-points {
+        min-height: 0;
+    }
+}
+
+
+/* =========================================================
+   HALAMAN ABOUT: jarak antar section
+   ========================================================= */
+
+.j-anchor {
+    scroll-margin-top: 72px;
+}
+
+
+.j-section-gap {
+    height: 40px;
+}
 """
 
 
+# =========================================================
+# THEME FUNCTIONS
+# =========================================================
+
 def inject_theme():
     import streamlit as st
-    st.markdown(f"<style>{CSS}</style>", unsafe_allow_html=True)
+
+    st.markdown(
+        f"<style>{CSS}</style>",
+        unsafe_allow_html=True,
+    )
 
 
 def patch_markdown():
-    """Strip whitespace-only lines from raw-HTML markdown payloads.
-
-    Streamlit renders unsafe HTML through markdown-it: a blank line terminates an
-    HTML block and the following indented lines would be emitted as a code block.
     """
+    Strip whitespace-only lines from raw-HTML markdown payloads.
+
+    Streamlit renders unsafe HTML through markdown-it:
+    a blank line terminates an HTML block and the following
+    indented lines would be emitted as a code block.
+    """
+
     import streamlit as st
 
     if getattr(st.markdown, "_jala_patched", False):
         return
+
     original = st.markdown
 
     def _markdown(body, *args, **kwargs):
         if isinstance(body, str) and kwargs.get("unsafe_allow_html"):
-            body = "\n".join(line for line in body.split("\n") if line.strip())
+            body = "\n".join(
+                line
+                for line in body.split("\n")
+                if line.strip()
+            )
+
         return original(body, *args, **kwargs)
 
     _markdown._jala_patched = True
+
     st.markdown = _markdown

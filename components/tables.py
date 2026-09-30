@@ -25,12 +25,13 @@ def risk_table_html(rows) -> str:
             """
         )
     return f"""
-    <table class="j-table">
+    <div class="j-scrollhint">← geser tabel ke samping →</div>
+    <div class="j-table-wrap"><table class="j-table j-table-risk">
       <thead><tr>
         <th>Entity / Ring Name</th><th>Network Risk Score</th><th>Fraud Type</th><th>Why Flagged</th>
       </tr></thead>
       <tbody>{''.join(body)}</tbody>
-    </table>
+    </table></div>
     """
 
 
@@ -61,14 +62,15 @@ def triage_table_html(rows, selected_id=None) -> str:
             """
         )
     return f"""
-    <table class="j-table">
+    <div class="j-scrollhint">← geser tabel ke samping →</div>
+    <div class="j-table-wrap"><table class="j-table j-table-triage">
       <thead><tr>
         <th>Klaster / Entitas Jaringan</th><th>Kategori Tipologi</th><th>Faskes / Dokter Terkait</th>
         <th style="text-align:right;">Volume Klaim</th><th style="text-align:right;">Nilai Anomali</th>
         <th style="text-align:right;">GNN Risk Score</th><th>Status</th>
       </tr></thead>
       <tbody>{''.join(body)}</tbody>
-    </table>
+    </table></div>
     """
 
 
@@ -87,11 +89,12 @@ def audit_faskes_html(rows) -> str:
             """
         )
     return f"""
-    <table class="j-table">
+    <div class="j-scrollhint">← geser tabel ke samping →</div>
+    <div class="j-table-wrap"><table class="j-table j-table-faskes">
       <thead><tr>
         <th>Kode Faskes / Nama</th><th>Tipe</th><th>Peran Klaster</th>
         <th style="text-align:right;">Vol Klaim</th><th style="text-align:right;">Total Nilai</th>
       </tr></thead>
       <tbody>{''.join(body)}</tbody>
-    </table>
+    </table></div>
     """

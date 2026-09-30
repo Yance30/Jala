@@ -4,6 +4,11 @@ import streamlit as st
 from components import cards, layout, tables
 from data.mock_data import AUDIT_ACTIONS, AUDIT_CLUSTER, AUDIT_FASKES, AUDIT_TEMPLATES
 
+def _apply_template(tpl: str):
+    prefix = f"[{tpl}] "
+    current = st.session_state.get("note_draft", "") or ""
+    if not current.startswith(prefix):
+        st.session_state.note_draft = prefix + current
 
 @st.dialog("Konfirmasi Otorisasi — Penangguhan Pembayaran Klaim")
 def _confirm_freeze():
@@ -33,7 +38,7 @@ def _confirm_freeze():
 def render():
     st.markdown(
         """
-        <div style="display:flex;align-items:center;gap:10px;">
+        <div style="display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap;">
           <span class="j-pill teal">HUMAN-IN-THE-LOOP TRIAGE · PROTOKOL AKSI VERIFIKATOR</span>
           <span class="j-sub">REF: AUD-ACT-2024-0921</span>
         </div>
@@ -45,7 +50,7 @@ def render():
         "Penetapan tindakan operasional investigasi lanjutan terhadap klaster sindikat anomali yang "
         "terdeteksi oleh Heterogeneous Graph Attention Network (HAN).",
         right_html=(
-            '<div style="display:flex;gap:8px;">'
+            '<div style="display:flex;gap:8px;flex-wrap:wrap;">'
             '<span class="j-chip">✅ Tingkat Otomatisasi: <b>Triage L3</b></span>'
             '<span class="j-chip">⏳ SLA Respon: <b style="color:#C2410C;">03:42:15</b></span></div>'
         ),
@@ -74,7 +79,7 @@ def render():
               </div>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px;">
+          <div class="j-grid4" style="margin-top:16px;">
             {''.join(
                 f'<div class="j-card tint" style="padding:12px;"><div class="j-label">{label}</div>'
                 f'<div style="font-weight:600;margin:4px 0 2px;color:{ {"dark": "#132A1C", "red": "#DC2626", "teal": "#0F766E"}[tone] };">'
@@ -89,13 +94,13 @@ def render():
             </div>
           </div>
           <div style="display:flex;justify-content:flex-end;margin-top:10px;">
-            <span class="j-chip">🕸 {a['density']} &nbsp;·&nbsp; Buka Network Graph ⧉</span>
+            <span class="j-chip"><span class="ms">hub</span> {a['density']}</span>
           </div>
         </div>
         """,
         unsafe_allow_html=True,
     )
-    if st.button("Buka Network Graph ⧉", key="open_graph"):
+    if st.button("Buka Network Graph", icon=":material/open_in_new:", key="open_graph"):
         layout.goto("network")
 
     st.markdown(
@@ -115,7 +120,7 @@ def render():
 
     st.markdown(
         """
-        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin:18px 0 10px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:8px;flex-wrap:wrap;margin:18px 0 10px;">
           <div>
             <div class="j-h2">Pilih Tindakan Operasional (Operational Action)</div>
             <div class="j-sub">Tentukan satu langkah hukum dan verifikasi yang sah untuk diaplikasikan
@@ -126,40 +131,48 @@ def render():
         """,
         unsafe_allow_html=True,
     )
-    cols = st.columns(3)
-    for col, act in zip(cols, AUDIT_ACTIONS):
-        with col:
-            st.markdown(
-                f"""
-                <div class="j-card" style="height:calc(100% - 60px);">
-                  <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <span class="j-iconbox {act['icon_tone']}" style="width:42px;height:42px;">{act['icon']}</span>
-                    {cards.badge(*act['tag'])}
-                  </div>
-                  <div style="font-size:16px;font-weight:600;margin:12px 0 6px;">{act['title']}</div>
-                  <div class="j-body" style="font-size:12.5px;">{act['body']}</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-            if st.button(act["button"], width="stretch",
-                         type="primary" if act["button_kind"] == "primary" else "secondary",
-                         key=f"act_{act['title']}"):
-                if act["button_kind"] == "primary":
-                    _confirm_freeze()
-                else:
-                    st.session_state.audit_log.append(f"{act['title']} dijadwalkan.")
-                    st.toast(f"{act['title']} — tercatat di audit trail.", icon="✅")
-            st.markdown(f'<div class="j-sub" style="text-align:center;margin-top:6px;">{act["note"]}</div>',
-                        unsafe_allow_html=True)
+
+    with st.container(key="audit_actions"):
+        cols = st.columns(3)
+        for i, (col, act) in enumerate(zip(cols, AUDIT_ACTIONS)):
+            with col:
+                st.markdown(
+                    f"""
+                    <div class="j-card j-actcard">
+                      <div class="j-actcard-top">
+                        <span class="j-iconbox {act['icon_tone']}" style="width:42px;height:42px;">{act['icon']}</span>
+                        {cards.badge(*act['tag'])}
+                      </div>
+                      <div class="j-actcard-title">{act['title']}</div>
+                      <div class="j-actcard-body">{act['body']}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+                if st.button(
+                    act["button"],
+                    width="stretch",
+                    type="primary" if act["button_kind"] == "primary" else "secondary",
+                    key=f"act_{i}_{act['title']}",
+                ):
+                    if act["button_kind"] == "primary":
+                        _confirm_freeze()
+                    else:
+                        st.session_state.audit_log.append(f"{act['title']} dijadwalkan.")
+                        st.toast(f"{act['title']} — tercatat di audit trail.", icon="✅")
+
+                st.markdown(
+                    f'<div class="j-actcard-note">{act["note"]}</div>',
+                    unsafe_allow_html=True,
+                )
 
     st.markdown('<div style="height:18px"></div>', unsafe_allow_html=True)
     l, r = st.columns([3, 2])
     with l:
         st.markdown(
             """
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-              <div class="j-h2">🕸 5 Faskes dalam Klaster HAN-089</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+              <div class="j-h2"><span class="ms">hub</span> 5 Faskes dalam Klaster HAN-089</div>
               <span class="j-sub">Terfilter: 5 Titik Simpul</span>
             </div>
             """,
@@ -190,11 +203,13 @@ def render():
                           unsafe_allow_html=True)
         for col, tpl in zip(chips[1:], AUDIT_TEMPLATES):
             with col:
-                if st.button(tpl, key=f"tpl_{tpl}", width="stretch"):
-                    st.session_state.note_draft = (
-                        f"[{tpl}] " + st.session_state.get("note_draft", "")
-                    )
-                    st.rerun()
+                st.button(
+                    tpl,
+                    key=f"tpl_{tpl}",
+                    width="stretch",
+                    on_click=_apply_template,
+                    args=(tpl,),
+                )
         st.markdown(
             """
             <div class="j-card tint" style="margin-top:14px;">

@@ -1,6 +1,7 @@
 """Synthetic mock data mirroring the Stitch export (no real BPJS data)."""
 
 QUARTER = "Q3 2024 (1 Jul - 30 Sep)"
+QUARTER_SHORT = QUARTER.split(" (")[0]  # "Q3 2024" — dipakai di versi mobile
 QUARTERS = ["Q3 2024 (1 Jul - 30 Sep)", "Q2 2024 (1 Apr - 30 Jun)", "Q1 2025 (Jan - Mar)"]
 
 DASHBOARD_KPIS = [
@@ -39,60 +40,6 @@ DASHBOARD_FOOTER = [
     {"icon": "🕸", "label": "Total Monitored Nodes", "value": "2.4M Entities (Faskes, Dokter, Peserta)", "tone": "dark"},
     {"icon": "❋", "label": "Flagged Subgraph Density", "value": "0.084", "extra": "(High Anomaly Concentration)", "tone": "dark"},
     {"icon": "", "label": "Next Verifikator Action Queue", "value": "18 High-Priority Clusters pending field review", "tone": "red"},
-]
-
-PIPELINE_STEPS = [
-    {
-        "step": "Step 01", "title": "Graph Modeler", "tag": ("ETL / HIN", "teal"), "icon": "🕸",
-        "body": "Transforms BPJS claim data into a Neo4j graph database (Heterogeneous Information "
-                "Network): nodes = Faskes, Dokter, Pasien, Diagnosis Code (ICD-10).",
-        "metric_label": "Schema Topology", "metric_value": "4 Types",
-        "metric_note": "Nodes: Faskes · Dokter · Pasien · ICD-10",
-        "chips": [("Nodes: Faskes · Dokter", "grey"), ("Pasien · ICD-10", "grey"), ("Neo4j Graph DB", "teal")],
-    },
-    {
-        "step": "Step 02", "title": "Analytics Engine", "tag": ("Topology", "teal"), "icon": "🔍",
-        "body": "Scans network topology using Louvain community detection and bipartite patient-sharing "
-                "analysis to uncover dense operational cliques.",
-        "metric_label": "Community Modularity", "metric_value": "Q = 0.742",
-        "metric_note": "Sparse Subgraphs → Dense Cliques",
-        "chips": [("Louvain Detection", "grey"), ("Bipartite Patient-Sharing", "teal"), ("Jaccard Affinity", "grey")],
-    },
-    {
-        "step": "Step 03", "title": "Risk Classifier", "tag": ("GNN Core", "brown"), "icon": "🧠",
-        "body": "Heterogeneous Graph Attention Network (HAN) scores each cluster's Network Risk Score "
-                "using node-level and semantic-level attention mechanisms.",
-        "metric_label": "Meta-Path Attention Weights", "metric_value": "HAN v4",
-        "metric_note": "Faskes–Dokter–Pasien (F-D-P) 0.89 · Dokter–ICD–Dokter (Upcoding Loop) 0.64",
-        "chips": [("HAN Attention Layers", "teal"), ("Score: 0.00 – 1.00", "amber"), ("Anomaly Embeddings", "grey")],
-    },
-    {
-        "step": "Step 04", "title": "Verifier Dashboard", "tag": ("HITL", "green"), "icon": "✅",
-        "body": "Presents flagged rings to BPJS Verifikator for evidentiary review, case justification, "
-                "and direct operational freeze/audit action.",
-        "metric_label": "Triage Resolution Queue", "metric_value": "42 Cases Flagged",
-        "metric_note": "Ring #JALA-JKT-0982 (RSPK) 0.94 Risk · Ring #JALA-SBY-0412 (Klinik) 0.82 Risk",
-        "chips": [("Human-in-the-Loop", "teal"), ("Priority Queue", "grey"), ("BAPK Export", "grey")],
-    },
-]
-
-PIPELINE_MAPPING = [
-    ("Faskes → Dokter", "EMPLOYED_AT / SERVES"),
-    ("Dokter → Pasien", "TREATED / OPERATED"),
-    ("Pasien → ICD-10", "DIAGNOSED_WITH"),
-]
-
-PIPELINE_FORMULAS = (
-    "h_i' = σ(∑ α_ij · W · h_j)\n"
-    "Meta-Path Semantic Fusion: β_Φ = Softmax(q^T · tanh(W_Φ · z_Φ + b))\n"
-    "Modularity Q: ∑ [A_vw - (k_v k_w)/(2m)] δ(c_v, c_w)"
-)
-
-PIPELINE_HEALTH = [
-    ("Pipeline Health:", "Optimal (99.8% Sync)"),
-    ("Ingestion Schedule:", "Daily Batch (02:00 WIB)"),
-    ("Active Graph Nodes:", "2,418,904 Entities"),
-    ("Resolved Edges:", "14.8M Relationships"),
 ]
 
 RISK_LEVELS = ["All Risk Levels", "Critical Anomaly (Score > 0.85)", "Moderate Risk", "Normal / Baseline"]
@@ -418,21 +365,17 @@ FOOTER_CUTOFF = "Data cut-off: 30-Sep-2024 23:59:59 WIB"
 
 NAV_PAGES = [
     ("dashboard", "Dashboard"),
-    ("pipeline", "Pipeline"),
     ("network", "Network Graph"),
     ("risk", "Risk Ranking"),
-    ("comparison", "Comparison"),
     ("audit", "Audit Action"),
-    ("about", "About/Privacy"),
+    ("about", "About"),
 ]
 
 PAGE_TITLES = {
     "dashboard": "Dashboard",
-    "pipeline": "Detection Pipeline",
     "network": "Network Graph",
     "risk": "Risk Ranking",
     "claim": "Claim Details",
-    "comparison": "Comparison View",
     "audit": "Audit Action",
-    "about": "About & Privacy",
+    "about": "About JALA",
 }
