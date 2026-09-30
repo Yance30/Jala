@@ -118,16 +118,3 @@ def render_content():
         st.markdown(_panel("legacy", "grey"), unsafe_allow_html=True)
     with c2:
         st.markdown(_panel("han", "teal"), unsafe_allow_html=True)
-
-
-def render():
-    render_content()
-    st.markdown(
-        """
-        <div class="j-footer">
-          <div><span class="dot teal"></span>PoC Node 04 · Aktif - Model GNN v2.4 (Sync OK)</div>
-          <div>JALA Engine © 2024 BPJS Kesehatan RI &nbsp;•&nbsp; Unit Audit Forensik &amp; Investigasi Khusus</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )

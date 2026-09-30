@@ -2,7 +2,7 @@
 
 QUARTER = "Q3 2024 (1 Jul - 30 Sep)"
 QUARTER_SHORT = QUARTER.split(" (")[0]  # "Q3 2024" — dipakai di versi mobile
-QUARTERS = ["Q3 2024 (1 Jul - 30 Sep)", "Q2 2024 (1 Apr - 30 Jun)", "Q1 2025 (Jan - Mar)"]
+QUARTERS = ["Q3 2024 (1 Jul - 30 Sep)", "Q2 2024 (1 Apr - 30 Jun)", "Q1 2024 (Jan - Mar)"]
 
 DASHBOARD_KPIS = [
     {

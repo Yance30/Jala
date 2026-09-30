@@ -6,7 +6,7 @@ import streamlit as st
 from data.mock_data import NAV_PAGES
 
 # Ganti sesuai lokasi & nama file logo kamu (png / jpg / svg)
-LOGO_PATH = Path("assets/logo.png")
+LOGO_PATH = Path(__file__).resolve().parent.parent / "assets" / "logo.png"
 
 _MIME = {
     ".png": "image/png",

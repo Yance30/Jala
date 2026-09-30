@@ -29,24 +29,26 @@ def _base_layout(fig, height=320):
     return fig
 
 
+def _hex_to_rgba(hex_color: str, alpha: float) -> str:
+    h = hex_color.lstrip("#")
+    r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+    return f"rgba({r},{g},{b},{alpha})"
+
+
 # ---------------------------------------------------------------------------
 # Trend mingguan (dashboard): 3 tipologi fraud
 # ---------------------------------------------------------------------------
 def trend_chart():
-    weeks = [f"W{i:02d}" for i in range(1, 13)]
-    series = [
-        ("Phantom Billing", [36, 44, 62, 74, 95, 110, 118, 126, 138, 144, 150, 157], TEAL, True),
-        ("Repeat Billing", [18, 24, 32, 44, 58, 52, 66, 81, 75, 92, 99, 110], "#9A3412", False),
-        ("Self-Referral", [8, 12, 16, 22, 28, 33, 38, 42, 48, 54, 60, 66], "#475569", False),
-    ]
     fig = go.Figure()
-    for name, ys, color, fill in series:
+    for i, (name, ys) in enumerate(md.TREND_SERIES.items()):
+        color = md.TREND_COLORS.get(name, TEAL)
+        fill = i == 0  # seri pertama (Phantom Billing) diberi area fill
         fig.add_trace(go.Scatter(
-            x=weeks, y=ys, name=name, mode="lines+markers",
+            x=md.TREND_WEEKS, y=ys, name=name, mode="lines+markers",
             line=dict(color=color, width=2.5),
             marker=dict(size=6, color=color),
             fill="tozeroy" if fill else None,
-            fillcolor="rgba(15,118,110,.08)" if fill else None,
+            fillcolor=_hex_to_rgba(color, .08) if fill else None,
         ))
     fig = _base_layout(fig, height=420)
     fig.update_layout(
@@ -58,41 +60,41 @@ def trend_chart():
 
 
 # ---------------------------------------------------------------------------
-# Lonjakan frekuensi klaim
+# Lonjakan frekuensi klaim vs ambang normal (Claim Details)
 # ---------------------------------------------------------------------------
-def claim_spike_chart():
-    days = getattr(md, "SPIKE_DAYS", None) or [f"H{i}" for i in range(1, 15)]
-    vals = getattr(md, "SPIKE_VALUES", None) or [3, 4, 3, 5, 4, 4, 5, 6, 5, 19, 22, 18, 6, 5]
-    colors = [ORANGE if v >= 15 else TEAL for v in vals]
-    fig = go.Figure(go.Bar(x=days, y=vals, marker_color=colors, name="Klaim/hari"))
-    return _base_layout(fig, height=280)
-
-
-# ---------------------------------------------------------------------------
-# Graf HIN statis (plotly)
-# ---------------------------------------------------------------------------
-def network_figure(zoom: float = 1.0, isolate: bool = False):
-    nodes = [n for n in GRAPH_NODES if (n["risk"] or not isolate)]
-    byid = {n["id"]: n for n in nodes}
-    edges = [e for e in GRAPH_EDGES if e["src"] in byid and e["dst"] in byid
-             and not (isolate and e.get("faint"))]
+def freq_chart(labels, baseline, spike, peak=""):
+    """Bar klaim terdeteksi + garis ambang normal, dengan anotasi puncak."""
+    base_max = max(baseline) if baseline else 0
+    colors = [
+        RED if v >= base_max * 2 else ORANGE if v > base_max else TEAL
+        for v in spike
+    ]
     fig = go.Figure()
-    for e in edges:
-        a, b = byid[e["src"]], byid[e["dst"]]
-        color = RED if e.get("risk") else ("#CBD5E1" if e.get("faint") else TEAL)
-        fig.add_trace(go.Scatter(x=[a["x"], b["x"]], y=[a["y"], b["y"]], mode="lines",
-                                 line=dict(color=color, width=1.6), hoverinfo="skip", showlegend=False))
+    fig.add_trace(go.Bar(
+        x=labels, y=spike, name="Klaim Terdeteksi",
+        marker_color=colors,
+        hovertemplate="%{x}<br>%{y} klaim/hr<extra></extra>",
+    ))
     fig.add_trace(go.Scatter(
-        x=[n["x"] for n in nodes], y=[n["y"] for n in nodes],
-        mode="markers+text", text=[n["label"] for n in nodes], textposition="bottom center",
-        marker=dict(size=[(22 if n["type"] == "faskes" else 16) * zoom for n in nodes],
-                    color=[ORANGE if n["risk"] else TEAL for n in nodes],
-                    line=dict(color="#fff", width=2)),
-        hovertext=[f'{n["label"]}<br>{n.get("sub", n["type"])}' for n in nodes],
-        hoverinfo="text", showlegend=False))
-    fig.update_xaxes(visible=False)
-    fig.update_yaxes(visible=False)
-    return _base_layout(fig, height=520)
+        x=labels, y=baseline, name="Ambang Normal",
+        mode="lines+markers",
+        line=dict(color=MUTED, width=2, dash="dash"),
+        marker=dict(size=6, color=MUTED),
+        hovertemplate="%{x}<br>baseline %{y}<extra></extra>",
+    ))
+    fig = _base_layout(fig, height=260)
+    fig.update_layout(
+        margin=dict(l=10, r=10, t=40, b=10),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        bargap=0.35,
+    )
+    if peak and spike:
+        fig.add_annotation(
+            x=labels[spike.index(max(spike))], y=max(spike),
+            text=f"Puncak {peak}", showarrow=True, arrowhead=2, ay=-30,
+            font=dict(size=11, color=RED, family="Inter, sans-serif"),
+        )
+    return fig
 
 
 # ---------------------------------------------------------------------------
@@ -286,7 +288,7 @@ _NETWORK_HTML = """
 
 
 def network_animated_html(zoom: float = 1.0, isolate: bool = False) -> str:
-    """Self-contained animated HIN graph. Same data + filters as network_figure()."""
+    """Self-contained animated HIN graph (SVG + requestAnimationFrame)."""
     nodes = [n for n in GRAPH_NODES if (n["risk"] or not isolate)]
     ids = {n["id"] for n in nodes}
     edges = [e for e in GRAPH_EDGES if e["src"] in ids and e["dst"] in ids and not (isolate and e.get("faint"))]
@@ -296,22 +298,3 @@ def network_animated_html(zoom: float = 1.0, isolate: bool = False) -> str:
         .replace("__EDGES__", json.dumps(edges))
         .replace("__ZOOM__", str(float(zoom)))
     )
-
-
-# ---------------------------------------------------------------------------
-# Pengaman: fungsi grafik lain yang belum ada tidak membuat halaman error,
-# melainkan menampilkan grafik kosong dengan nama fungsinya.
-# ---------------------------------------------------------------------------
-def __getattr__(name):
-    if name.startswith("_"):
-        raise AttributeError(name)
-
-    def _placeholder(*args, **kwargs):
-        fig = go.Figure()
-        fig.add_annotation(text=f"Grafik '{name}' belum tersedia", showarrow=False,
-                           font=dict(size=14, color=MUTED))
-        fig.update_xaxes(visible=False)
-        fig.update_yaxes(visible=False)
-        return _base_layout(fig, height=260)
-
-    return _placeholder

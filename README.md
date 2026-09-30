@@ -1,7 +1,8 @@
 # JALA Fraud Analytics (Streamlit)
 
-Working Streamlit implementation of the 8 Stitch screens for the JALA BPJS healthcare-claims
-fraud-detection dashboard. Synthetic data only — no real participant data (UU PDP compliant).
+Working Streamlit implementation of the JALA BPJS healthcare-claims fraud-detection dashboard,
+based on the 8 Stitch screen designs in `assets/stitch_reference/`. Synthetic data only — no real
+participant data (UU PDP compliant).
 
 ## Quick start
 
@@ -15,22 +16,24 @@ Verified on Python 3.14 with streamlit 1.57, plotly, pandas.
 
 ## Screens & navigation
 
-Sidebar nav rail (styled per `DESIGN.md`) exposes 7 modules; deep links work via `?page=<key>`:
+Sidebar nav rail (styled per `DESIGN.md`) exposes 5 modules; every route is also deep-linkable
+via `?page=<key>`:
 
 | Key | Screen |
 |---|---|
 | `dashboard` | Fraud Intelligence Dashboard (KPIs, weekly HAN trend chart) |
-| `pipeline` | Detection Pipeline (4-stage GNN: ETL → Topology → HAN → HITL) |
 | `network` | Network Graph (interactive HIN topology, zoom / isolate / filters) |
 | `risk` | Risk Ranking (filter chips, search, score bars, CSV export) |
-| `claim` | Claim Details — triage queue + forensic side panel (open from Risk Ranking) |
-| `comparison` | Rule-Based (legacy) vs HAN paradigm comparison |
+| `claim` | Claim Details — triage queue + forensic side panel (opened from Risk Ranking; deep-linkable but not shown in the rail) |
 | `audit` | Audit Action (3 operational actions, freeze confirmation dialog, audit log) |
-| `about` | Data source & privacy notes |
+| `about` | About — Rule-Based (legacy) vs HAN paradigm comparison + data source & privacy notes |
 
-Cross-links reproduced from the mockups: Pipeline → Network Graph; Network Graph → Risk
-Ranking / Audit Action / isolate subgraph; Risk Ranking → Claim Details / Sub-Graph;
-Audit Action → Network Graph.
+`?page=comparison` is aliased to `about` (the comparison view now lives as a section inside
+About). The `pipeline` screen from the original mockups is not implemented.
+
+Cross-links reproduced from the mockups: Risk Ranking → Claim Details / Network Graph
+(Sub-Graph); Claim Details → Risk Ranking; Network Graph → Risk Ranking / Audit Action /
+isolate subgraph; Audit Action → Network Graph.
 
 ## Structure
 
@@ -58,4 +61,4 @@ Icons use emoji approximations of the Material Symbols (font unavailable offline
 Period selector · entity search · risk/typology filters & chips · graph zoom/reset/isolate ·
 cluster selection driving the Claim Details panel · CSV downloads · verifikator notes with
 quick templates · `st.dialog` freeze authorization with session audit trail · plotly charts
-(trends, claim-frequency spike, HIN network).
+(detection trends, claim-frequency) · animated SVG HIN network graph (rendered in an iframe).

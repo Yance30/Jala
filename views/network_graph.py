@@ -39,7 +39,7 @@ def render():
         with t4:
             # ikon Material (bukan glyph unicode) supaya selalu terlihat di HP
             with st.container(key="net_zoom"):
-                b1, b2, b3, b4, b5 = st.columns(5)
+                b1, b2, b3, b4 = st.columns(4)
                 if b1.button("", icon=":material/refresh:", help="Reset View", key="z_reset", width="stretch"):
                     st.session_state.zoom = 1.0
                     st.session_state.isolate = False
@@ -52,9 +52,6 @@ def render():
                     st.rerun()
                 if b4.button("", icon=":material/fit_screen:", help="Fit", key="z_fit", width="stretch"):
                     st.session_state.zoom = 1.0
-                    st.rerun()
-                if b5.button("", icon=":material/my_location:", help="Center on Critical Cluster", key="z_center", width="stretch"):
-                    st.session_state.isolate = True
                     st.rerun()
 
     isolate = st.session_state.get("isolate", False)
