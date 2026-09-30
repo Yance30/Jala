@@ -1,16 +1,21 @@
 import streamlit as st
 from pathlib import Path
 
-from components import layout, sidebar, theme
-from views import about, audit_action, claim_details, comparison, dashboard, network_graph, risk_ranking
-
+from components import intro, layout, sidebar, theme
+from views import about, audit_action, claim_details, dashboard, network_graph, risk_ranking
 
 LOGO_PATH = Path(__file__).resolve().parent / "assets" / "logo.png"
 
-st.set_page_config(page_title="JALA Fraud Analytics", page_icon=str(LOGO_PATH), layout="wide")
+st.set_page_config(
+    page_title="JALA Fraud Analytics",
+    page_icon=str(LOGO_PATH),
+    layout="wide"
+)
 
 if "page" not in st.session_state:
     st.session_state.page = "dashboard"
+if "intro_done" not in st.session_state:
+    st.session_state.intro_done = False
 if "audit_log" not in st.session_state:
     st.session_state.audit_log = []
 if "zoom" not in st.session_state:
@@ -21,18 +26,29 @@ ROUTES = {
     "network": network_graph.render,
     "risk": risk_ranking.render,
     "claim": claim_details.render,
-    "comparison": comparison.render,
     "audit": audit_action.render,
     "about": about.render,
 }
 
+# Comparison sekarang menjadi section di halaman About
+ALIASES = {"comparison": "about"}
+
 requested = st.query_params.get("page")
+requested = ALIASES.get(requested, requested)
+
 if requested in ROUTES and requested != st.session_state.get("qp_seen"):
     st.session_state.page = requested
     st.session_state.qp_seen = requested
 
 theme.patch_markdown()
 theme.inject_theme()
+
+# Animasi pembuka: tampil sekali per sesi,
+# lalu otomatis lanjut ke halaman tujuan (default: dashboard)
+if not st.session_state.intro_done:
+    intro.render()
+    st.stop()
+
 sidebar.render_sidebar()
 layout.render_topbar(st.session_state.page)
 
