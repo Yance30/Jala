@@ -2,7 +2,8 @@ import streamlit as st
 from pathlib import Path
 
 from components import layout, sidebar, theme
-from views import about, audit_action, claim_details, comparison, dashboard, network_graph, pipeline, risk_ranking
+from views import about, audit_action, claim_details, comparison, dashboard, network_graph, risk_ranking
+
 
 LOGO_PATH = Path(__file__).resolve().parent / "assets" / "logo.png"
 
@@ -17,7 +18,6 @@ if "zoom" not in st.session_state:
 
 ROUTES = {
     "dashboard": dashboard.render,
-    "pipeline": pipeline.render,
     "network": network_graph.render,
     "risk": risk_ranking.render,
     "claim": claim_details.render,
