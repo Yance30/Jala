@@ -1900,9 +1900,17 @@ div[data-testid="stHorizontalBlock"] {
     margin-bottom: 0 !important;
 }
 
-/* Keep the title and plot joined inside _chart_card's Streamlit container. */
-[data-testid="stVerticalBlock"]:has(> [data-testid="stElementContainer"] .j-eqhead) {
+/* Collapse spacing only inside explicitly keyed chart panels. */
+[class*="st-key-chart_panel_"] [data-testid="stVerticalBlock"] {
     gap: 0 !important;
+}
+
+/* Dashboard summary items need breathing room below the chart. */
+.j-dashboard-summary-item {
+    min-height: 64px;
+    box-sizing: border-box;
+    padding: 8px 10px;
+    border-radius: 10px;
 }
 
 [data-testid="stElementContainer"]:has(.j-eqhead) + [data-testid="stElementContainer"]:has([data-testid="stPlotlyChart"]),

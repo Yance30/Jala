@@ -167,7 +167,10 @@ def _temporal_impact():
 
 def _chart_card(title: str, sub: str, fig) -> None:
     """Keep the heading and chart adjacent in a scoped block, without negative margins."""
-    with st.container():
+    panel_key = "chart_panel_" + "".join(
+        char.lower() if char.isalnum() else "_" for char in title
+    ).strip("_")
+    with st.container(key=panel_key):
         st.markdown(
             f'<div class="j-card j-eqhead"><div class="j-h2" style="color:#0F766E;">{title}</div>'
             f'<div class="j-sub">{sub}</div></div>',

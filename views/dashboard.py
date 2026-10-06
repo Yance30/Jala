@@ -130,24 +130,30 @@ def render():
                 unsafe_allow_html=True,
             )
 
-    st.markdown('<div style="height:16px"></div>', unsafe_allow_html=True)
-    st.markdown(
-        """
-        <div class="j-card j-eqhead">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-            <div>
-              <div class="j-h2" style="color:#0F766E;">Tren klaim ditandai per jenis dugaan
-                (per minggu kunjungan)</div>
-              <div class="j-sub">Jumlah klaim ditandai per minggu menurut dugaan jenis kecurangan; W13 hanya sisa hari periode</div>
+    st.markdown('<div style="height:20px"></div>', unsafe_allow_html=True)
+    with st.container(key="chart_panel_dashboard_trend"):
+        st.markdown(
+            """
+            <div class="j-card j-eqhead">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div>
+                  <div class="j-h2" style="color:#0F766E;">Tren klaim ditandai per jenis dugaan
+                    (per minggu kunjungan)</div>
+                  <div class="j-sub">Jumlah klaim ditandai per minggu menurut dugaan jenis kecurangan; W13 hanya sisa hari periode</div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    weeks, series = live.trend()
-    st.plotly_chart(charts.trend_chart(weeks, series), width="stretch", config={"displayModeBar": False})
+            """,
+            unsafe_allow_html=True,
+        )
+        weeks, series = live.trend()
+        st.plotly_chart(
+            charts.trend_chart(weeks, series),
+            width="stretch",
+            config={"displayModeBar": False},
+        )
 
+    st.markdown('<div style="height:14px"></div>', unsafe_allow_html=True)
     cols = st.columns(3)
     for col, item in zip(cols, live.dashboard_footer()):
         with col:
@@ -155,7 +161,7 @@ def render():
             extra = f' <span style="color:#C2410C;font-size:12px;">{item["extra"]}</span>' if item.get("extra") else ""
             st.markdown(
                 f"""
-                <div style="display:flex;gap:12px;align-items:flex-start;">
+                <div class="j-dashboard-summary-item" style="display:flex;gap:12px;align-items:center;">
                   <span class="j-iconbox {'red' if item['tone'] == 'red' else 'grey'}">{item['icon']}</span>
                   <div>
                     <div class="j-label">{item['label']}</div>
