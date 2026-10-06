@@ -45,27 +45,35 @@ def _connect() -> sqlite3.Connection:
 
 
 def append_event(event: dict) -> int:
-    with _connect() as connection:
-        cursor = connection.execute(
-            """INSERT INTO review_events
-               (case_id, action, note, happened_at, actor, score_before, score_after)
-               VALUES (?, ?, ?, ?, ?, ?, ?)""",
-            (event["case_id"], event["action"], event.get("note", ""), event["at"], event["actor"],
-             event.get("score_before"), event.get("score_after")),
-        )
-        return int(cursor.lastrowid)
+    connection = _connect()
+    try:
+        with connection:
+            cursor = connection.execute(
+                """INSERT INTO review_events
+                   (case_id, action, note, happened_at, actor, score_before, score_after)
+                   VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                (event["case_id"], event["action"], event.get("note", ""), event["at"], event["actor"],
+                 event.get("score_before"), event.get("score_after")),
+            )
+            return int(cursor.lastrowid)
+    finally:
+        connection.close()
 
 
 def list_events(case_id: str | None = None) -> list[dict]:
-    with _connect() as connection:
-        if case_id is None:
-            rows = connection.execute(
-                "SELECT event_id, case_id, action, note, happened_at AS at, actor, score_before, score_after "
-                "FROM review_events ORDER BY event_id"
-            ).fetchall()
-        else:
-            rows = connection.execute(
-                "SELECT event_id, case_id, action, note, happened_at AS at, actor, score_before, score_after "
-                "FROM review_events WHERE case_id = ? ORDER BY event_id", (case_id,)
-            ).fetchall()
-    return [dict(row) for row in rows]
+    connection = _connect()
+    try:
+        with connection:
+            if case_id is None:
+                rows = connection.execute(
+                    "SELECT event_id, case_id, action, note, happened_at AS at, actor, score_before, score_after "
+                    "FROM review_events ORDER BY event_id"
+                ).fetchall()
+            else:
+                rows = connection.execute(
+                    "SELECT event_id, case_id, action, note, happened_at AS at, actor, score_before, score_after "
+                    "FROM review_events WHERE case_id = ? ORDER BY event_id", (case_id,)
+                ).fetchall()
+        return [dict(row) for row in rows]
+    finally:
+        connection.close()

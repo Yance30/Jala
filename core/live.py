@@ -477,7 +477,7 @@ def evaluate_clusters(live: Live) -> dict:
     rec, per = 0, {}
     for g in groups:
         gm = fl[(fl.group == g) & (fl.is_fraud == 1)]
-        if gm.empty:
+        if gm.empty or not live.clusters:
             per[g] = False
             continue
         best = max(live.clusters, key=lambda c: gm.index.isin(c["idx"]).sum())

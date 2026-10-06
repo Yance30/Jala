@@ -1,3 +1,5 @@
+from html import escape
+
 from .cards import badge, score_bar
 from .typology import label as typology_label
 
@@ -10,18 +12,18 @@ def risk_table_html(rows) -> str:
             <tr>
               <td style="width:38%;">
                 <div style="display:flex;gap:10px;align-items:flex-start;">
-                  <span class="j-iconbox {r['icon_tone']}">{r['icon']}</span>
+                  <span class="j-iconbox {escape(str(r['icon_tone']))}">{escape(str(r['icon']))}</span>
                   <div>
                     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                      <b style="font-size:14px;color:#132A1C;">{r['name']}</b>{badge(*r['status'])}
+                      <b style="font-size:14px;color:#132A1C;">{escape(str(r['name']))}</b>{badge(*r['status'])}
                     </div>
-                    <div class="j-sub" style="margin-top:3px;">{r['subtitle']}</div>
+                    <div class="j-sub" style="margin-top:3px;">{escape(str(r['subtitle']))}</div>
                   </div>
                 </div>
               </td>
               <td style="width:16%;">{score_bar(r['score'], r['conf'], r['metric'])}</td>
               <td style="width:12%;">{badge(*r['typology'])}</td>
-              <td style="width:34%;"><div class="j-why">{r['why']}</div></td>
+              <td style="width:34%;"><div class="j-why">{escape(str(r['why']))}</div></td>
             </tr>
             """
         )
@@ -48,15 +50,15 @@ def triage_table_html(rows, selected_id=None) -> str:
                 <div style="display:flex;gap:8px;align-items:flex-start;">
                   <span class="dot {dot}" style="margin-top:6px;"></span>
                   <div>
-                    <b style="color:#132A1C;">{r['name']}</b>
-                    <div class="j-sub">{r['nodes']}</div>
+                    <b style="color:#132A1C;">{escape(str(r['name']))}</b>
+                    <div class="j-sub">{escape(str(r['nodes']))}</div>
                   </div>
                 </div>
               </td>
               <td>{badge(typology_label(r['typology']), 'amber' if r['typology'] in ('Phantom Billing', 'Repeat Billing', 'Upcoding Prosedur', 'Ghost Prescription') else 'grey')}</td>
-              <td>{r['faskes']}</td>
+              <td>{escape(str(r['faskes']))}</td>
               <td class="num">{r['volume']}</td>
-              <td class="num" style="color:#B91C1C;font-weight:600;">{r['value']}</td>
+              <td class="num" style="color:#B91C1C;font-weight:600;">{escape(str(r['value']))}</td>
               <td class="num"><b style="color:{'#DC2626' if r['score'] >= 90 else '#132A1C'};">{r['score']}%</b></td>
               <td>{badge(*r['status'])}</td>
             </tr>
@@ -81,11 +83,11 @@ def audit_faskes_html(rows) -> str:
         body.append(
             f"""
             <tr>
-              <td><b style="color:#132A1C;">{code}</b><div class="j-sub">{region}</div></td>
-              <td>{tipe}</td>
+              <td><b style="color:#132A1C;">{escape(str(code))}</b><div class="j-sub">{escape(str(region))}</div></td>
+              <td>{escape(str(tipe))}</td>
               <td>{badge(*role)}</td>
               <td class="num">{vol}</td>
-              <td class="num" style="color:#B91C1C;font-weight:600;">{nilai}</td>
+              <td class="num" style="color:#B91C1C;font-weight:600;">{escape(str(nilai))}</td>
             </tr>
             """
         )

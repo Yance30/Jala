@@ -269,5 +269,6 @@ if __name__ == "__main__":
     _print(res)
     if a.json:
         os.makedirs(os.path.dirname(a.json) or ".", exist_ok=True)
-        json.dump(res, open(a.json, "w"), indent=1, ensure_ascii=False)
+        with open(a.json, "w", encoding="utf-8") as fh:
+            json.dump(res, fh, indent=1, ensure_ascii=False)
         print("ditulis:", a.json)

@@ -1,4 +1,5 @@
 """Hasil evaluasi nyata (core.evaluate) untuk dipakai di layar. Dihitung sekali per sesi server."""
+import hashlib
 import json
 import os
 import tempfile
@@ -17,15 +18,33 @@ from core.synthetic import SEED, World, generate_world
 
 _ENGINE_CACHE_VERSION = 2
 _ENGINE_CACHE_DIR = Path(__file__).resolve().parents[1] / ".jala" / "cache"
+_CORE_DIR = Path(__file__).resolve().parents[1] / "core"
+
+
+def _core_fingerprint() -> str:
+    """Hash source core/ agar cache engine otomatis invalid ketika kode berubah,
+    tanpa mengandalkan kenaikan _ENGINE_CACHE_VERSION secara manual. Mencegah pickle
+    basi dibangkitkan dengan layout class yang tidak lagi cocok (sumber AttributeError)."""
+    hasher = hashlib.sha256()
+    for path in sorted(_CORE_DIR.rglob("*.py")):
+        try:
+            hasher.update(path.relative_to(_CORE_DIR).as_posix().encode("utf-8"))
+            hasher.update(path.read_bytes())
+        except OSError:
+            continue
+    return hasher.hexdigest()[:12]
 
 
 @st.cache_resource(show_spinner="Menghitung skor dan klaster pada data sintetis…")
 def _engine(seed: int = SEED):
     """Satu kali per server: dunia sintetis, skor (validasi silang per faskes), dan klaster hasil Louvain."""
-    cache_path = _ENGINE_CACHE_DIR / f"engine-v{_ENGINE_CACHE_VERSION}-seed-{seed}.joblib"
+    fingerprint = _core_fingerprint()
+    cache_path = _ENGINE_CACHE_DIR / f"engine-v{_ENGINE_CACHE_VERSION}-{fingerprint}-seed-{seed}.joblib"
     try:
         payload = joblib.load(cache_path)
-        if payload.get("version") == _ENGINE_CACHE_VERSION and payload.get("seed") == seed:
+        if (payload.get("version") == _ENGINE_CACHE_VERSION
+                and payload.get("fingerprint") == fingerprint
+                and payload.get("seed") == seed):
             return payload["benchmark"], payload["live"]
     except Exception:
         pass
@@ -36,7 +55,7 @@ def _engine(seed: int = SEED):
         cache_path.parent.mkdir(parents=True, exist_ok=True)
         fd, tmp_path = tempfile.mkstemp(prefix="engine-", suffix=".tmp", dir=cache_path.parent)
         os.close(fd)
-        joblib.dump({"version": _ENGINE_CACHE_VERSION, "seed": seed,
+        joblib.dump({"version": _ENGINE_CACHE_VERSION, "fingerprint": fingerprint, "seed": seed,
                      "benchmark": bm, "live": live}, tmp_path)
         os.replace(tmp_path, cache_path)
     except OSError:
