@@ -9,6 +9,7 @@ from data.mock_data import FOOTER_CUTOFF, QUARTER
 
 from components import bench, cards
 from core import evidence, feedback, modus, whatif
+from core.synthetic import SEED
 
 _REVIEW_CSV_COLUMNS = [
     "event_id", "case_id", "at", "actor", "action", "note", "score_before", "score_after",
@@ -37,9 +38,14 @@ def review_timeline(cid: str, key: str) -> None:
         storage_error = st.session_state.get("review_history_error")
         if storage_error:
             st.warning(storage_error + " Catatan hanya tersedia pada sesi aktif.")
-        else:
+        elif bench.review_history_persistent():
             st.caption(
                 "Tersimpan di basis data lokal instance demo dan dapat terlihat oleh pengguna instance ini. "
+                "Gunakan ID serta catatan sintetis; jangan masukkan data pribadi atau data nyata."
+            )
+        else:
+            st.caption(
+                "Catatan hanya tersimpan pada sesi aktif Anda dan hilang saat sesi berakhir. "
                 "Gunakan ID serta catatan sintetis; jangan masukkan data pribadi atau data nyata."
             )
         if not history:
@@ -76,10 +82,25 @@ def review_timeline(cid: str, key: str) -> None:
 
 
 # ---------------------------------------------------------------- berkas bukti
-def evidence_button(live, cid: str, key: str) -> None:
+def _feedback_signature(feedback: dict) -> tuple:
+    """Bentuk hashable dari keputusan verifikator agar cache paket bukti invalid saat umpan balik berubah."""
+    return tuple(sorted(
+        (cid, item.get("verdict"), item.get("note", ""), item.get("at", ""))
+        for cid, item in feedback.items()
+    ))
+
+
+@st.cache_data(show_spinner=False)
+def _build_evidence_pack(cid: str, role: str, signature: tuple, seed: int) -> bytes:
+    live = bench.get_live(seed)
+    return evidence.build_pack(live, cid, bench.get_feedback(), role=role)
+
+
+def evidence_button(cid: str, key: str) -> None:
     role = st.session_state.get("demo_role", "Verifikator")
+    pack = _build_evidence_pack(cid, role, _feedback_signature(bench.get_feedback()), SEED)
     st.download_button(
-        "Unduh paket pemeriksaan (.zip)", evidence.build_pack(live, cid, bench.get_feedback(), role=role),
+        "Unduh paket pemeriksaan (.zip)", pack,
         file_name=f"jala_bukti_{cid}.zip", mime="application/zip", width="stretch", key=key,
         help="Ringkasan, klaim terkait, faskes, dokter, dampak jika dokter dikeluarkan, dan gambar subgraf, "
              "untuk diserahkan ke pemeriksa dokumen.",

@@ -164,7 +164,7 @@ def render():
         if st.button("Buka Peta Jaringan", icon=":material/open_in_new:", key="open_graph"):
             layout.goto("network", cluster=cid)
     with b2:
-        verifier_tools.evidence_button(live, cid, key="evidence_audit")
+        verifier_tools.evidence_button(cid, key="evidence_audit")
     verifier_tools.modus_note(live.by_id[cid]["typology"])
     verifier_tools.feedback_card(live, cid)
 

@@ -110,7 +110,7 @@ def render():
         if st.button("Buka alasan penandaan →", type="primary", width="stretch"):
             st.session_state.selected_cluster = list(names.keys())[list(names.values()).index(pick)]
             st.rerun()
-        verifier_tools.evidence_button(live, selected, key="evidence_claim")
+        verifier_tools.evidence_button(selected, key="evidence_claim")
         verifier_tools.modus_note(live.by_id[selected]["typology"])
 
     with right:

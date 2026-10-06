@@ -6,13 +6,24 @@ import sqlite3
 from pathlib import Path
 
 
-def database_path() -> Path:
+def database_path() -> Path | None:
+    """Path SQLite untuk riwayat persisten, atau None bila dinonaktifkan.
+
+    Default None: riwayat hanya hidup di sesi aktif pengguna. Ini mencegah catatan
+    antar-pengunjung tercampur pada deployment multi-pengguna (mis. Streamlit Community
+    Cloud, di mana folder app juga bersifat sementara). Set JALA_REVIEW_HISTORY_DB untuk
+    mengaktifkan penyimpanan persisten pada instance single-user/lokal.
+    """
     configured = os.environ.get("JALA_REVIEW_HISTORY_DB")
-    return Path(configured).expanduser() if configured else Path(__file__).resolve().parents[1] / ".jala" / "review_history.sqlite3"
+    return Path(configured).expanduser() if configured else None
 
 
 def _connect() -> sqlite3.Connection:
     path = database_path()
+    if path is None:
+        raise RuntimeError(
+            "Riwayat persisten dinonaktifkan; set JALA_REVIEW_HISTORY_DB untuk mengaktifkannya."
+        )
     path.parent.mkdir(parents=True, exist_ok=True)
     connection = sqlite3.connect(path, timeout=10)
     connection.row_factory = sqlite3.Row

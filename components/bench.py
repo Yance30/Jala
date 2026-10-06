@@ -87,9 +87,18 @@ def apply_verdict(cid: str, verdict: str, note: str = "") -> None:
     st.session_state["feedback"] = fb_mod.record(get_feedback(), cid, verdict, note)
 
 
+def review_history_persistent() -> bool:
+    """True bila riwayat disimpan ke SQLite (JALA_REVIEW_HISTORY_DB di-set).
+
+    Default False: riwayat hanya hidup pada sesi ini, sehingga catatan tidak bocor
+    antar-pengunjung pada deployment multi-pengguna seperti Streamlit Community Cloud.
+    """
+    return review_store.database_path() is not None
+
+
 def record_review_event(cid: str, action: str, note: str = "", score_before: int | None = None,
                         score_after: int | None = None) -> None:
-    """Tambahkan event pemeriksaan berstruktur ke riwayat lokal yang persisten."""
+    """Catat event pemeriksaan berstruktur ke riwayat sesi (dan ke SQLite bila diaktifkan)."""
     history = st.session_state.setdefault("review_history", [])
     event = {
         "case_id": cid,
@@ -102,24 +111,24 @@ def record_review_event(cid: str, action: str, note: str = "", score_before: int
     }
     history.append(event)
     del history[:-500]
-    try:
-        event["event_id"] = review_store.append_event(event)
-        st.session_state.pop("review_history_error", None)
-    except (OSError, ValueError, TypeError):
-        st.session_state["review_history_error"] = "Riwayat tidak dapat disimpan ke basis data lokal."
-    except Exception:
-        st.session_state["review_history_error"] = "Riwayat tidak dapat disimpan ke basis data lokal."
+    if review_history_persistent():
+        try:
+            event["event_id"] = review_store.append_event(event)
+            st.session_state.pop("review_history_error", None)
+        except Exception:
+            st.session_state["review_history_error"] = "Riwayat tidak dapat disimpan ke basis data lokal."
 
 
 def get_review_history(cid: str | None = None) -> list[dict]:
-    try:
-        history = review_store.list_events(cid)
-        st.session_state.pop("review_history_error", None)
-        return history
-    except Exception:
-        st.session_state["review_history_error"] = "Riwayat lokal tidak dapat dibaca dari basis data."
-        history = st.session_state.get("review_history", [])
-        return [event for event in history if cid is None or event.get("case_id") == cid]
+    if review_history_persistent():
+        try:
+            history = review_store.list_events(cid)
+            st.session_state.pop("review_history_error", None)
+            return history
+        except Exception:
+            st.session_state["review_history_error"] = "Riwayat lokal tidak dapat dibaca dari basis data."
+    history = st.session_state.get("review_history", [])
+    return [event for event in history if cid is None or event.get("case_id") == cid]
 
 
 def undo_verdict(cid: str) -> None:

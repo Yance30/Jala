@@ -1,4 +1,4 @@
-import time
+from datetime import timedelta
 
 import streamlit as st
 
@@ -548,8 +548,15 @@ def render():
         unsafe_allow_html=True,
     )
 
-    time.sleep(INTRO_SECONDS)
+    # Animasi berjalan di sisi klien (CSS). Fragment dengan run_every memicu rerun
+    # setelah INTRO_SECONDS tanpa menahan thread server (penting di Streamlit Cloud).
+    @st.fragment(run_every=timedelta(seconds=INTRO_SECONDS))
+    def _advance():
+        if st.session_state.get("_intro_started"):
+            st.session_state.intro_done = True
+            st.session_state.pop("_intro_started", None)
+            st.rerun()
+        else:
+            st.session_state["_intro_started"] = True
 
-    st.session_state.intro_done = True
-
-    st.rerun()
+    _advance()
