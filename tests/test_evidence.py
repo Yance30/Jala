@@ -9,7 +9,7 @@ import pytest
 
 from core import evidence, feedback
 
-FILES = {"ringkasan.md", "klaim_terkait.csv", "faskes.csv", "dokter.csv", "subgraf.svg", "subgraf.json"}
+FILES = {"metadata.json", "ringkasan.md", "klaim_terkait.csv", "faskes.csv", "dokter.csv", "subgraf.svg", "subgraf.json"}
 
 
 def _open(lv, cid, **kw):

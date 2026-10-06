@@ -5,24 +5,26 @@ from components import bench, cards, charts, guide, layout
 from data.mock_data import GRAPH_LEGEND_EDGES, GRAPH_LEGEND_NODES
 from core.live import AUTO_FLAG
 from core.privacy import mask_graph
+from components.typology import label as typology_label
 
 
 def render():
     live = bench.get_live()
     layout.page_header(
-        "", "teal", "Network Graph · Peta Hubungan",
+        "", "teal", "Peta Jaringan",
         "Peta hubungan antara fasilitas kesehatan, dokter, pasien, dan diagnosis dalam satu kelompok klaim. "
-        "Kelompok dibentuk otomatis dari klaim berskor tinggi; skornya dari prototipe.",
+        "Kelompok dibentuk dari data sintetis untuk membantu peninjauan; hubungan yang tampak bukan bukti pelanggaran.",
         right_html=(
             '<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">'
             '<span class="j-chip"><span class="dot amber"></span>Data sintetis · prototipe</span>'
-            f'<span class="j-chip"><span class="ms">hub</span> Kelompok terdeteksi: {len(live.clusters)}</span>'
+            f'<span class="j-chip"><span class="ms">hub</span> Klaster dalam data: {len(live.clusters)}</span>'
             '<span class="j-chip"><span class="ms">schedule</span> Garis menunjukkan waktu kunjungan</span></div>'
         ),
     )
     guide.render_page_guide("network")
+    guide.render_typology_glossary()
     st.markdown(
-        '<div style="margin:-6px 0 12px 0;"><span class="j-pill teal">Peta hubungan</span></div>',
+        '<div style="margin:4px 0 14px 0;"><span class="j-pill teal">Peta hubungan</span></div>',
         unsafe_allow_html=True,
     )
 
@@ -34,21 +36,27 @@ def render():
     with st.container(border=True):
         t1, t2, t3, t4 = st.columns([2, 1.4, 1.4, 1.6])
         with t1:
-            query = st.text_input("search", placeholder="Cari nama faskes, dokter, atau ID klaster…",
-                                  label_visibility="collapsed")
+            query = st.text_input("Cari entitas", placeholder="Nama faskes, dokter, atau ID klaster")
         hit = live.find(query)
         if hit:
             st.session_state.selected_cluster = hit
+        elif query:
+            st.info("Tidak ada hasil untuk pencarian ini. Periksa kata kunci atau hapus pencarian.")
+            layout.render_footer()
+            return
         typos = ["Semua tipologi"] + sorted({c["typology"] for c in live.clusters})
         with t3:
-            typo = st.selectbox("typo", typos, index=0, label_visibility="collapsed")
-        pool = [c for c in live.clusters if typo == typos[0] or c["typology"] == typo]
+            typo = st.selectbox("Tipologi", typos, index=0, format_func=typology_label)
+        pool = ([live.by_id[hit]] if hit else
+                [c for c in live.clusters if typo == typos[0] or c["typology"] == typo])
+        if not pool:
+            st.info("Tidak ada klaster untuk filter ini. Pilih tipologi lain atau hapus filter pencarian.")
+            return
         with t2:
             ids = [c["id"] for c in pool]
             cur = st.session_state.get("selected_cluster")
-            sel = st.selectbox("klaster", ids, index=ids.index(cur) if cur in ids else 0,
-                               format_func=lambda i: f"{live.by_id[i]['score']}% · {live.by_id[i]['name']}",
-                               label_visibility="collapsed")
+            sel = st.selectbox("Pilih klaster", ids, index=ids.index(cur) if cur in ids else 0,
+                               format_func=lambda i: f"{live.by_id[i]['score']}% · {live.by_id[i]['name']}")
             st.session_state.selected_cluster = sel
         with t4:
             # ikon Material (bukan glyph unicode) supaya selalu terlihat di HP

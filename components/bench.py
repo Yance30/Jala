@@ -154,6 +154,7 @@ def reset_demo() -> None:
     st.session_state["isolate"] = False
     st.session_state["tour_step"] = 0
     st.session_state.pop("risk_chip", None)
+    st.session_state.pop("risk_query", None)
     st.session_state["case_search_query"] = ""
     st.session_state["case_search_filter"] = "Semua pola"
 

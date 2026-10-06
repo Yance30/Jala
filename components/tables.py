@@ -1,4 +1,5 @@
 from .cards import badge, score_bar
+from .typology import label as typology_label
 
 
 def risk_table_html(rows) -> str:
@@ -52,7 +53,7 @@ def triage_table_html(rows, selected_id=None) -> str:
                   </div>
                 </div>
               </td>
-              <td>{badge(r['typology'], 'amber' if r['typology'] in ('Phantom Billing', 'Repeat Billing', 'Upcoding Prosedur', 'Ghost Prescription') else 'grey')}</td>
+              <td>{badge(typology_label(r['typology']), 'amber' if r['typology'] in ('Phantom Billing', 'Repeat Billing', 'Upcoding Prosedur', 'Ghost Prescription') else 'grey')}</td>
               <td>{r['faskes']}</td>
               <td class="num">{r['volume']}</td>
               <td class="num" style="color:#B91C1C;font-weight:600;">{r['value']}</td>

@@ -46,5 +46,7 @@ def test_review_history_csv_preserves_indonesian_notes_and_quotes():
     }])
 
     text = exported.decode("utf-8-sig")
-    assert text.splitlines()[0] == "event_id,case_id,at,actor,action,note,score_before,score_after"
+    assert text.splitlines()[0].startswith("event_id,case_id,at,actor,action,note,score_before,score_after,")
+    assert "lingkungan_data,periode_data,batas_data,waktu_ekspor" in text.splitlines()[0]
+    assert "Data sintetis; prototipe" in text
     assert '"Periksa ""jadwal layanan"", lalu cocokkan dengan bukti sumber."' in text

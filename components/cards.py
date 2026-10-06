@@ -1,14 +1,18 @@
 def badge(text: str, tone: str = "grey") -> str:
+    from .typology import label
+    text = label(text)
     return f'<span class="j-pill {tone}">{text}</span>'
 
 
 def metric_card(label: str, value: str, badge_html: str = "", note: str = "", icon: str = "",
                 value_tone: str = "", label_lines: int = 1, card_class: str = "") -> str:
     tone_cls = f" {value_tone}" if value_tone else ""
-    card_cls = f" {card_class}" if card_class else ""
+    card_classes = "j-card j-metric-card"
+    if card_class:
+        card_classes += f" {card_class}"
     note_html = f'<div class="j-note" style="margin-top:14px;">{icon}&nbsp;<span>{note}</span></div>' if note else ""
     return (
-        f'<div class="j-card{card_cls}">'
+        f'<div class="{card_classes}">'
         f'<div style="display:flex;justify-content:space-between;align-items:{"flex-start" if label_lines > 1 else "center"};gap:8px;'
         f'min-height:{label_lines * 18 if label_lines > 1 else 0}px;">'
         f'<span class="j-label">{label}</span>{badge_html}</div>'

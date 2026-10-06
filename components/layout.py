@@ -249,6 +249,36 @@ def render_topbar(page: str):
     )
 
 
+def render_demo_notice():
+    """Persistent, plain-language scope notice for the synthetic demo."""
+    st.markdown(
+        '<div class="j-demo-notice" role="status" aria-label="Batas lingkungan demo">'
+        '<b>Mode demo</b><span>Data sintetis</span><span>Tindakan tidak dikirim ke sistem BPJS</span>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def render_workflow_stepper(page: str):
+    """Show the user's place in the review flow; Network is supporting evidence."""
+    if page == "about":
+        return
+    steps = ["Ringkasan", "Prioritas", "Bukti", "Tindak lanjut"]
+    active = {"dashboard": 0, "risk": 1, "claim": 2, "network": 2, "audit": 3}.get(page, 0)
+    items = []
+    for i, label in enumerate(steps):
+        state = "active" if i == active else ("done" if i < active else "")
+        current = ' aria-current="step"' if i == active else ""
+        items.append(
+            f'<li class="{state}"{current}><span class="j-step-number">{i + 1}</span>'
+            f'<span>{label}</span></li>'
+        )
+    st.markdown(
+        f'<nav class="j-workflow" aria-label="Tahap pemeriksaan"><ol>{"".join(items)}</ol></nav>',
+        unsafe_allow_html=True,
+    )
+
+
 # =========================================================
 # PAGE HEADER
 # =========================================================

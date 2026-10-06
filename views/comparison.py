@@ -128,13 +128,13 @@ def render_content():
 
 def _human_error_scenarios():
     report = bench.get_error_dismissal_report()
-    st.markdown("### Jika verifikator keliru men-dismiss klaster fraud")
-    st.caption("Simulasi Monte Carlo 100 kali. Persentase salah adalah peluang klaster fraud yang ditinjau ikut di-dismiss. "
+    st.markdown("### Jika pola fraud keliru ditandai wajar")
+    st.caption("Simulasi Monte Carlo 100 kali. Persentase salah adalah peluang klaster fraud yang ditinjau ikut ditandai wajar. "
                "Ini uji risiko pada label sintetis, bukan ukuran kesalahan petugas nyata.")
     cols = st.columns(3)
     cols[0].metric("Presisi antrean awal", f"{report['baseline_precision']:.1%}")
     for col, scenario in zip(cols[1:], report["scenarios"]):
-        col.metric(f"Salah dismiss {scenario['error_rate']:.0%}",
+        col.metric(f"Salah tandai wajar {scenario['error_rate']:.0%}",
                    f"{scenario['precision_mean']:.1%}",
                    f"rentang P10–P90: {scenario['precision_p10']:.1%}–{scenario['precision_p90']:.1%}")
     st.caption("Rata-rata klaster fraud yang skornya ikut turun: " + " · ".join(
@@ -283,7 +283,8 @@ def _evidence():
         fair_cols[1].dataframe(fairness["by_region"], hide_index=True, use_container_width=True)
 
     rows = ""
-    names = {"phantom": "Phantom Billing", "repeat": "Repeat Billing", "selfref": "Self-Referral"}
+    names = {"phantom": "Phantom Billing (Klaim Palsu)", "repeat": "Repeat Billing",
+             "selfref": "Rujukan tidak sesuai (Self-referral)"}
     for t, v in m["per_typology"].items():
         rows += (
             f'<tr><td>{names[t]}</td><td style="text-align:right;">{v["n"]}</td>'
@@ -299,12 +300,12 @@ def _evidence():
             f"""
             <div class="j-card">
               <div class="j-h2">Per tipologi (tipologi itu vs klaim sah)</div>
-              <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:10px;">
+              <div class="j-inline-table-wrap"><table class="j-inline-table">
                 <thead><tr style="text-align:right;color:#64748B;">
                   <th style="text-align:left;">Tipologi</th><th>Klaim fraud</th><th>AUC aturan</th>
                   <th>AUC Isolation Forest (tanpa label)</th><th>AUC JALA</th><th>AP JALA</th></tr></thead>
                 <tbody>{rows}</tbody>
-              </table>
+              </table></div>
               <div class="j-sub" style="margin-top:10px;">Tingkat faskes: AUC {m['faskes_level']['auc']:.2f};
                 {int(m['faskes_level']['precision_at_10'] * 10)} dari 10 faskes berisiko tertinggi memang faskes
                 fraud ({m['faskes_level']['n_fraud_faskes']} dari {m['n_faskes']} faskes).</div>
@@ -395,10 +396,10 @@ def _robustness():
             f"""
             <div class="j-card">
               <div class="j-h2">Klaim sah yang paling sering salah ditandai</div>
-              <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:10px;">
+              <div class="j-inline-table-wrap"><table class="j-inline-table">
                 <thead><tr style="text-align:right;color:#64748B;"><th style="text-align:left;">Jenis klaim sah</th>
                   <th>Jumlah</th><th>Ditandai</th><th>Tingkat</th></tr></thead><tbody>{rows}</tbody>
-              </table>
+              </table></div>
               <div class="j-sub" style="margin-top:10px;">Di {fp['k']} teratas: {clean_txt}{plain} klaim sah biasa
                 ikut tertandai. Dialisis dan kunjungan ulang UGD paling rawan karena pola waktunya mirip klaim berulang.</div>
             </div>
@@ -412,14 +413,14 @@ def _robustness():
               <div class="j-h2">Perbaikan Repeat Billing (titik terlemah)</div>
               <div class="j-body" style="font-size:13px;margin-top:8px;">Tiga fitur ditambahkan (selisih tarif, pasangan faskes
                 yang saling menagih ulang, intensitas per faskes). Average precision Repeat Billing:</div>
-              <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;">
+              <div class="j-inline-table-wrap"><table class="j-inline-table">
                 <thead><tr style="text-align:right;color:#64748B;"><th style="text-align:left;">Ukuran</th><th>19 fitur</th><th>22 fitur</th></tr></thead>
                 <tbody>
                   <tr><td>Rata-rata 5 dunia (seed 1-5)</td><td style="text-align:right;">{ms['v1']['ap_repeat']:.2f}</td><td style="text-align:right;color:#0F766E;font-weight:600;">{ms['v2']['ap_repeat']:.2f}</td></tr>
                   <tr><td>Transfer dunia A ke B</td><td style="text-align:right;">{trf[0]:.2f}</td><td style="text-align:right;color:#0F766E;font-weight:600;">{trf[1]:.2f}</td></tr>
                   <tr><td>Dunia utama saja (seed 2026)</td><td style="text-align:right;">{one[0]:.2f}</td><td style="text-align:right;">{one[1]:.2f}</td></tr>
                 </tbody>
-              </table>
+              </table></div>
               <div class="j-sub" style="margin-top:10px;">Di seed 2026 sendiri tidak ada perbaikan; hasilnya baru terlihat
                 lintas seed dan lintas dunia. Fitur dirancang setelah melihat pembangkit, jadi anggap peningkatan ini optimistis.</div>
             </div>

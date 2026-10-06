@@ -10,6 +10,7 @@ Tidak ada angka tetap di teks ini agar tidak basi; angka selalu datang dari skor
 import html
 
 import streamlit as st
+from components.typology import label as typology_label
 
 PAGES = {
     "dashboard": {
@@ -19,7 +20,7 @@ PAGES = {
             "Grafik tren menunjukkan apakah dugaan kecurangan naik atau turun dari waktu ke waktu.",
             "Daftar di bawah berisi kelompok yang paling mendesak untuk diperiksa.",
         ],
-        "next": "Klik nama kelompok di daftar untuk melihat detailnya.",
+        "next": "Pilih kelompok di daftar untuk melihat alasan dan buktinya.",
     },
     "risk": {
         "purpose": "Daftar kelompok klaim mencurigakan, diurutkan dari yang paling berisiko.",
@@ -34,28 +35,28 @@ PAGES = {
         "purpose": "Peta hubungan antara rumah sakit/klinik, dokter, pasien, dan diagnosis.",
         "read": [
             "Setiap titik adalah satu pihak; setiap garis adalah hubungan di antara mereka.",
-            "Hubungan yang terlalu rapat atau berulang di antara pihak yang sama patut dicurigai.",
+            "Hubungan yang rapat atau berulang adalah petunjuk untuk diperiksa, bukan bukti pelanggaran.",
             "Faskes yang pudar adalah faskes sejenis yang wajar, dipakai sebagai pembanding.",
         ],
-        "next": "Buka Claim Details untuk membaca alasan penandaan dalam bahasa biasa.",
+        "next": "Buka alasan penandaan untuk membaca konteks dan bukti terkait.",
     },
     "claim": {
-        "purpose": "Penjelasan mengapa kelompok ini ditandai, lengkap dengan buktinya.",
+        "purpose": "Alasan sebuah kelompok mendapat prioritas tinjauan, beserta konteks dan bukti yang dapat diperiksa.",
         "read": [
-            "Ringkasan di atas menjelaskan kecurigaannya dengan kalimat biasa.",
-            "Bukti terukur menunjukkan angka yang mendasari penandaan.",
-            "Daftar klaim memperlihatkan klaim mana yang paling mencurigakan.",
+            "Skor mengurutkan prioritas; skor bukan probabilitas atau bukti kecurangan.",
+            "Bukti terukur menunjukkan pola pada data sintetis dan perlu diperiksa bersama konteks layanan.",
+            "Daftar klaim menampilkan contoh klaim terkait, bukan putusan atas pihak tertentu.",
         ],
-        "next": "Unduh Berkas Bukti untuk diserahkan ke pemeriksa, lalu tentukan tindakan.",
+        "next": "Periksa klaim sumber, catat alasan, lalu pilih tindak lanjut simulasi.",
     },
     "audit": {
         "purpose": "Tempat memutuskan tindakan dan mencatat alasannya.",
         "read": [
             "Tulis catatan lebih dulu agar keputusan punya jejak yang jelas.",
-            "Ada tiga pilihan: tahan pembayaran (simulasi), kirim pemeriksa ke lapangan, atau tandai sebagai wajar.",
-            "Salah memilih? Tombol Batalkan mengembalikan keadaan semula.",
+            "Tiga pilihan mencatat simulasi penangguhan, rencana pemeriksaan lapangan, atau penandaan pola wajar.",
+            "Catatan dan keputusan tersimpan di riwayat lokal; tidak ada tindakan yang dikirim ke sistem BPJS.",
         ],
-        "next": "Setelah memutuskan, kembali ke Risk Ranking untuk melihat urutan yang diperbarui.",
+        "next": "Tinjau ringkasan status dan riwayat klaster sebelum kembali ke antrean.",
     },
     "about": {
         "purpose": "Bukti seberapa baik JALA bekerja, batasannya, dan catatan privasi data.",
@@ -71,14 +72,30 @@ PAGES = {
 # Istilah teknis -> penjelasan sehari-hari. Urutan = urutan tampil.
 GLOSSARY = [
     ("Klaster", "Sekelompok rumah sakit, dokter, dan pasien yang klaimnya saling berkaitan erat dan terlihat bergerak bersama."),
-    ("Skor risiko", "Indeks prioritas 0–100 dari model untuk mengurutkan pemeriksaan. Bukan probabilitas dan bukan bukti kecurangan."),
-    ("Auto-Flagged", "Ditandai otomatis karena skornya melewati batas. Artinya diprioritaskan untuk diperiksa, bukan terbukti curang."),
+    ("Skor prioritas", "Indeks 0–100 dari model untuk mengurutkan pemeriksaan. Bukan probabilitas dan bukan bukti kecurangan."),
+    ("Skor risiko", "Istilah lama untuk skor prioritas; angkanya bukan probabilitas dan bukan bukti kecurangan."),
+    ("Tipologi", "Nama pola yang dicari model. Ini dugaan untuk ditinjau, bukan kesimpulan tentang pelanggaran."),
+    ("Phantom Billing (Klaim Palsu)", "Dugaan klaim atas layanan atau kunjungan yang perlu dicocokkan dengan catatan pelayanan."),
+    ("Repeat Billing", "Dugaan pola klaim berulang yang perlu dicocokkan dengan tanggal layanan dan dokumen klaim."),
+    ("Rujukan tidak sesuai (Self-referral)", "Dugaan pola rujukan yang perlu diperiksa terhadap kebutuhan klinis, aturan, dan konteks layanan."),
+    ("AUC / AP", "Ukuran pembanding model pada data sintetis yang jawabannya diketahui. Angka ini tidak menyatakan kinerja pada data nyata."),
+    ("Prioritas otomatis", "Skor klaster melewati ambang antrean awal. Artinya diperiksa lebih dulu, bukan terbukti curang."),
     ("Faskes", "Fasilitas kesehatan: rumah sakit, klinik, atau puskesmas."),
     ("Verifikator", "Petugas yang memeriksa dan memutuskan. JALA hanya membantu menyusun urutan pemeriksaan."),
-    ("Dismiss", "Menandai bahwa kelompok ini ternyata wajar. Skornya turun dan kelompok yang mirip ikut diturunkan sedikit."),
+    ("Dismiss", "Istilah teknis untuk mencatat pola wajar. Kalibrasi demo dapat mengubah prioritas kelompok yang serupa."),
+    ("Pola wajar", "Catatan verifikator bahwa pola ini punya penjelasan yang wajar."),
     ("Data sintetis", "Data buatan yang meniru pola nyata. Tidak ada data peserta sungguhan di aplikasi ini."),
     ("Prototipe", "Versi percobaan untuk menunjukkan cara kerja, belum dipakai untuk keputusan sungguhan."),
 ]
+
+
+def render_typology_glossary() -> None:
+    """Compact, contextual descriptions for the typology labels used in the queue."""
+    terms = {typology_label("Phantom Billing"), "Repeat Billing", typology_label("Self-Referral")}
+    with st.expander("Arti label pola (dugaan, bukan putusan)"):
+        st.markdown(
+            "\n".join(f"- **{term}:** {description}" for term, description in GLOSSARY if term in terms)
+        )
 
 
 def render_page_guide(page: str) -> None:

@@ -19,6 +19,7 @@ from core import modus, whatif
 from core.detect import explain
 from core.live import AUTO_FLAG, Live
 from core.synthetic import TYPE_LABEL
+from data.mock_data import FOOTER_CUTOFF, QUARTER
 
 CHECKLIST = {
     "Phantom Billing": [
@@ -167,12 +168,12 @@ def summary_md(live: Live, cid: str, feedback: dict | None, generated_at: str, d
     c = live.by_id[cid]
     fl = live.flagged.loc[c["idx"]]
     s = c["score"]
-    status = "Auto-Flagged" if s >= AUTO_FLAG else "Standard Review"
+    status = "Prioritas otomatis" if s >= AUTO_FLAG else "Tinjauan awal"
     fb = (feedback or {}).get(cid)
     score_line = f"{s}% ({status})"
     if c.get("score_base") is not None and c["score_base"] != s:
         score_line += f", skor dasar {c['score_base']}% sebelum umpan balik verifikator"
-    L = [f"# Berkas Bukti Klaster {cid}", "",
+    L = [f"# Paket Pemeriksaan Klaster {cid}", "",
          f"Dibuat: {generated_at}", "",
          "> **Prototipe pada data sintetis.** Berkas ini memprioritaskan pemeriksaan, bukan temuan. "
          "Keputusan akhir ada pada verifikator. JALA berposisi sebagai lapisan penyaring sebelum pemeriksaan dokumen.", "",
@@ -229,7 +230,7 @@ def build_pack(live: Live, cid: str, feedback: dict | None = None, generated_at:
                role: str = "Supervisor") -> bytes:
     from datetime import datetime
     from core.privacy import mask_graph, mask_participant_id
-    ts = generated_at or datetime.now().strftime("%Y-%m-%d %H:%M")
+    ts = generated_at or datetime.now().astimezone().isoformat(timespec="seconds")
     cl, fk, dk = claims_table(live, cid), faskes_table(live, cid), doctor_table(live, cid)
     nodes, edges = live.graph(cid)[:2]
     if role == "Verifikator":
@@ -238,6 +239,14 @@ def build_pack(live: Live, cid: str, feedback: dict | None = None, generated_at:
     nodes_j = [{k: (float(v) if k in ("x", "y") else v) for k, v in n.items()} for n in nodes]
     svg = subgraph_svg(nodes_j, edges, f"Subgraf {cid} · {live.by_id[cid]['typology']}")
     files = {
+        "metadata.json": json.dumps({
+            "case_id": cid,
+            "environment": "synthetic_prototype",
+            "period": QUARTER,
+            "data_cutoff": FOOTER_CUTOFF,
+            "exported_at": ts,
+            "external_systems_contacted": False,
+        }, ensure_ascii=False, indent=2),
         "ringkasan.md": summary_md(live, cid, feedback, ts, dk, fk, cl),
         "klaim_terkait.csv": cl.to_csv(index=False),
         "faskes.csv": fk.to_csv(index=False),

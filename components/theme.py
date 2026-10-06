@@ -340,6 +340,24 @@ div[data-baseweb="select"]:focus-within > div {
         0 0 0 3px rgba(15, 118, 110, 0.10) !important;
 }
 
+.stButton > button:focus-visible,
+.stDownloadButton > button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #0F766E !important;
+    outline-offset: 2px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
 
 /* =========================================================
    BUTTONS
@@ -971,6 +989,46 @@ div[data-testid="stHorizontalBlock"]
     text-align: right;
 }
 
+/* Tables inside comparison cards keep the same spacing and can scroll on phones. */
+.j-inline-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    margin-top: 10px;
+}
+
+.j-inline-table {
+    width: 100%;
+    min-width: 520px;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.j-inline-table th,
+.j-inline-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #E2E8F0;
+    text-align: right;
+    vertical-align: top;
+    line-height: 1.45;
+}
+
+.j-inline-table th:first-child,
+.j-inline-table td:first-child {
+    text-align: left;
+}
+
+.j-inline-table th {
+    color: #64748B;
+    font-size: 11px;
+    font-weight: 600;
+    background: #F8FAFC;
+}
+
+.j-inline-table tr:last-child td {
+    border-bottom: 0;
+}
+
 
 /* =========================================================
    BARS
@@ -1387,6 +1445,60 @@ div[data-testid="stHorizontalBlock"]
    TOPBAR RESPONSIVE
    ========================================================= */
 
+.j-demo-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px 14px;
+    flex-wrap: wrap;
+    margin: 8px 0 10px;
+    padding: 9px 12px;
+    border: 1px solid #B9DED9;
+    border-radius: 9px;
+    background: #F0FDFA;
+    color: #334155;
+    font-size: 12px;
+}
+
+.j-demo-notice b { color: #0F766E; }
+
+.j-workflow { margin: 0 0 18px; }
+.j-workflow ol {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.j-workflow li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    padding: 8px 10px;
+    border-bottom: 2px solid #E2E8F0;
+    color: #64748B;
+    font-size: 12px;
+}
+.j-workflow li.done { color: #0F766E; border-color: #99D5CE; }
+.j-workflow li.active { color: #132A1C; border-color: #0F766E; font-weight: 700; }
+.j-step-number {
+    display: inline-flex;
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    font-size: 11px;
+}
+
+@media (max-width: 560px) {
+    .j-workflow ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .j-workflow li { padding: 7px 4px; }
+}
+
 .j-q-short {
     display: none;
 }
@@ -1757,6 +1869,24 @@ div[data-testid="stHorizontalBlock"]
 
     .j-actcard-note {
         min-height: 0;
+    }
+}
+
+@media (max-width: 900px) {
+    .st-key-audit_actions [data-testid="stHorizontalBlock"] {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .st-key-audit_actions [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
+        flex: 1 1 calc(50% - 12px);
+        min-width: min(100%, 260px);
+    }
+}
+
+@media (max-width: 560px) {
+    .st-key-audit_actions [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
+        flex-basis: 100%;
     }
 }
 

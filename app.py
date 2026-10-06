@@ -51,6 +51,8 @@ if not st.session_state.intro_done:
 
 sidebar.render_sidebar()
 layout.render_topbar(st.session_state.page)
+layout.render_demo_notice()
+layout.render_workflow_stepper(st.session_state.page)
 
 ROUTES[st.session_state.page]()
 

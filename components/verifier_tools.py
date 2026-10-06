@@ -2,14 +2,17 @@
 from html import escape
 import csv
 import io
+from datetime import datetime
 
 import streamlit as st
+from data.mock_data import FOOTER_CUTOFF, QUARTER
 
 from components import bench, cards
 from core import evidence, feedback, modus, whatif
 
 _REVIEW_CSV_COLUMNS = [
     "event_id", "case_id", "at", "actor", "action", "note", "score_before", "score_after",
+    "lingkungan_data", "periode_data", "batas_data", "waktu_ekspor",
 ]
 
 
@@ -19,7 +22,11 @@ def review_history_csv(history: list[dict]) -> bytes:
     writer = csv.DictWriter(stream, fieldnames=_REVIEW_CSV_COLUMNS, extrasaction="ignore")
     writer.writeheader()
     for event in history:
-        writer.writerow({column: event.get(column, "") for column in _REVIEW_CSV_COLUMNS})
+        row = {column: event.get(column, "") for column in _REVIEW_CSV_COLUMNS}
+        row.update({"lingkungan_data": "Data sintetis; prototipe", "periode_data": QUARTER,
+                    "batas_data": FOOTER_CUTOFF,
+                    "waktu_ekspor": datetime.now().astimezone().isoformat(timespec="seconds")})
+        writer.writerow(row)
     return stream.getvalue().encode("utf-8-sig")
 
 
@@ -72,7 +79,7 @@ def review_timeline(cid: str, key: str) -> None:
 def evidence_button(live, cid: str, key: str) -> None:
     role = st.session_state.get("demo_role", "Verifikator")
     st.download_button(
-        "⬇ Berkas Bukti Klaster (.zip)", evidence.build_pack(live, cid, bench.get_feedback(), role=role),
+        "Unduh paket pemeriksaan (.zip)", evidence.build_pack(live, cid, bench.get_feedback(), role=role),
         file_name=f"jala_bukti_{cid}.zip", mime="application/zip", width="stretch", key=key,
         help="Ringkasan, klaim terkait, faskes, dokter, dampak jika dokter dikeluarkan, dan gambar subgraf, "
              "untuk diserahkan ke pemeriksa dokumen.",
@@ -94,13 +101,13 @@ def feedback_card(live, cid: str) -> None:
     rank = [x["id"] for x in live.clusters].index(cid) + 1
     base = c["score_base"]
     if info["kind"] == "dismiss":
-        head = f"Klaster ini di-dismiss pada {fb[cid]['at']}. Skor {base}% → <b>{c['score']}%</b>, peringkat saat ini #{rank}."
+        head = f"Pola ditandai wajar pada {fb[cid]['at']}. Skor {base}% → <b>{c['score']}%</b>, urutan saat ini #{rank}."
     elif info["kind"] == "similar":
-        head = (f"Skor diturunkan {base}% → <b>{c['score']}%</b> (peringkat #{rank}) karena pola diagnosis serupa "
-                f"({info['sim']:.2f}) dengan {info['source']} yang di-dismiss. Klaster ini sendiri belum diputuskan: "
-                f"tinjau, atau batalkan dismiss di {info['source']} bila keliru.")
+        head = (f"Skor diturunkan {base}% → <b>{c['score']}%</b> (urutan #{rank}) karena pola diagnosis serupa "
+                f"({info['sim']:.2f}) dengan {info['source']} yang ditandai wajar. Klaster ini sendiri belum diputuskan: "
+                f"tinjau, atau batalkan catatan pola wajar di {info['source']} bila keliru.")
     else:
-        head = f"Klaster ini dikonfirmasi (freeze) pada {fb[cid]['at']}. Klaster yang sudah dikonfirmasi tidak ikut diturunkan."
+        head = f"Simulasi penangguhan dikonfirmasi pada {fb[cid]['at']}. Tidak ada pembayaran yang ditangguhkan."
     effects = [feedback.describe(x) for x in _changes(live) if x["source"] == cid and x["id"] != cid]
     lis = "".join(f"<li>{e}</li>" for e in effects)
     st.markdown(

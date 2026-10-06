@@ -56,8 +56,8 @@ def _status(c: dict, default: tuple) -> tuple:
     fb = c.get("fb")
     if not fb:
         return default
-    return {"dismiss": ("Di-dismiss", "grey"), "similar": ("Diturunkan (serupa)", "amber"),
-            "confirm": ("Dikonfirmasi", "red")}.get(fb["kind"], default)
+    return {"dismiss": ("Pola wajar (simulasi)", "grey"), "similar": ("Prioritas diturunkan", "amber"),
+            "confirm": ("Penangguhan simulasi dikonfirmasi", "teal")}.get(fb["kind"], default)
 
 
 def _fb_suffix(c: dict) -> str:
@@ -85,19 +85,19 @@ class Live:
         s = c["score"]
         return {
             "id": c["id"], "name": c["name"], "subtitle": c["subtitle"],
-            "status": _status(c, ("Auto-Flagged", "red") if s >= AUTO_FLAG else ("Standard Review", "grey")),
-            "score": s, "conf": "Confidence Max" if s >= 90 else ("Confidence High" if s >= AUTO_FLAG else "Standard Review"),
+            "status": _status(c, ("Prioritas otomatis", "red") if s >= AUTO_FLAG else ("Tinjauan awal", "grey")),
+            "score": s, "conf": "Prioritas sangat tinggi" if s >= 90 else ("Prioritas tinggi" if s >= AUTO_FLAG else "Tinjauan awal"),
             "metric": c["metric"] + _fb_suffix(c), "typology": (c["typology"], tone), "why": c["why"],
-            "actions": ["Lihat Sub-Graph"], "icon": icon, "icon_tone": tone,
+            "actions": ["Lihat subgraf"], "icon": icon, "icon_tone": tone,
         }
 
     def risk_stats(self, audited: int = 0) -> list:
         n_auto = sum(c["score"] >= AUTO_FLAG for c in self.clusters)
         dens = float(np.mean([c["density"] for c in self.clusters])) if self.clusters else 0.0
         return [
-            {"label": "Klaster Ditandai", "value": str(len(self.clusters)), "tone": "dark", "icon": "🕸", "icon_tone": "grey",
+            {"label": "Klaster dalam antrean", "value": str(len(self.clusters)), "tone": "dark", "icon": "🕸", "icon_tone": "grey",
              "note": f"dari {self.flagged.faskes_id.nunique()} faskes dengan klaim ditandai"},
-            {"label": f"Auto-Flagged (≥{AUTO_FLAG}%)", "value": str(n_auto), "tone": "red", "icon": "⚠", "icon_tone": "red",
+            {"label": f"Prioritas otomatis (≥{AUTO_FLAG}%)", "value": str(n_auto), "tone": "red", "icon": "⚠", "icon_tone": "red",
              "note": "Antrean verifikator prioritas"},
             {"label": "Diaudit di Sesi Ini", "value": str(audited), "tone": "dark", "icon": "✅", "icon_tone": "amber", "note": ""},
             {"label": "Kepadatan Rata-rata Klaster", "value": f"{dens:.2f}", "tone": "teal", "icon": "❋", "icon_tone": "green",
@@ -113,7 +113,7 @@ class Live:
                 "id": c["id"], "name": c["name"],
                 "nodes": f"{len(c['faskes'])} Faskes · {c['n_doctors']} Dokter · Wilayah {', '.join(c['regions'])}",
                 "typology": c["typology"], "faskes": c["faskes_names"], "volume": c["n"], "value": rp(c["value"]),
-                "score": s, "status": _status(c, ("Auto-Flagged", "red") if s >= AUTO_FLAG else ("Review Pending", "amber")),
+                "score": s, "status": _status(c, ("Prioritas otomatis", "red") if s >= AUTO_FLAG else ("Menunggu tinjauan", "amber")),
             })
         return out
 
@@ -121,7 +121,7 @@ class Live:
         crit = sum(c["score"] >= 90 for c in self.clusters)
         exp = sum(c["value"] for c in self.clusters)
         stats = [
-            {"label": "Klaster Terdeteksi", "value": str(len(self.clusters)), "delta": "", "note": f"{len(self.flagged):,} klaim ditandai dari {len(self.df):,}", "tone": "dark"},
+            {"label": "Klaster dalam antrean", "value": str(len(self.clusters)), "delta": "", "note": f"{len(self.flagged):,} klaim masuk tinjauan awal dari {len(self.df):,}", "tone": "dark"},
             {"label": "Prioritas Sangat Tinggi (≥90%)", "value": str(crit), "delta": "", "note": "Tinjau lebih dahulu; bukan keputusan otomatis", "tone": "amber"},
             {"label": "Nilai Klaim Ditandai", "value": rp(exp), "delta": "", "note": "Total tarif klaim ditandai (sintetis)", "tone": "dark"},
         ]
@@ -136,7 +136,7 @@ class Live:
         names = c["faskes_names"]
         return {
             "title": c["name"], "typology": (c["typology"], tone),
-            "flag": f"AUTO-FLAGGED ({c['score']}%)" if c["score"] >= AUTO_FLAG else f"REVIEW ({c['score']}%)",
+            "flag": f"Prioritas otomatis ({c['score']}%)" if c["score"] >= AUTO_FLAG else f"Tinjauan awal ({c['score']}%)",
             "profile": [
                 ("Fasilitas Kesehatan", names), ("Periode Observasi", "Q3 2026 (Jul - Sep)"),
                 ("Total Klaim Ditandai", f"{c['n']} klaim", "red"), ("Keterikatan Metapath", METAPATH.get(c["typology"], "—"), "teal"),
@@ -153,7 +153,7 @@ class Live:
         tone, _ = TYPO.get(c["typology"], ("grey", "◆"))
         s = c["score"]
         return {
-            "id": c["id"], "name": c["name"], "flag": f"AUTO-FLAGGED ({s}%)" if s >= AUTO_FLAG else f"REVIEW ({s}%)",
+            "id": c["id"], "name": c["name"], "flag": f"Prioritas otomatis ({s}%)" if s >= AUTO_FLAG else f"Tinjauan awal ({s}%)",
             "typology": (c["typology"], tone), "algo": "Deteksi: prototipe fitur graf pada data sintetis (arsitektur target: HAN)",
             "score": s, "score_note": "Kategori: Sangat Tinggi" if s >= 90 else ("Kategori: Tinggi" if s >= AUTO_FLAG else "Kategori: Sedang"),
             "cards": [
@@ -258,9 +258,9 @@ class Live:
     def kpis(self) -> list:
         counts = self.typ.value_counts()
         clusters = pd.Series([c["typology"] for c in self.clusters]).value_counts()
-        spec = [("Phantom Billing", "Phantom Billing Flagged", "", "Peserta luar wilayah, kiriman serentak, dokter lintas faskes"),
-                ("Repeat Billing", "Repeat Billing Flagged", "⧉", "Klaim ulang peserta + diagnosis sama dalam 48 jam, lintas faskes"),
-                ("Self-Referral", "Self-Referral Flagged", "⇄", "Dokter merujuk ke faskes tempat ia terdaftar, rujukan dua arah")]
+        spec = [("Phantom Billing", "Dugaan Phantom Billing (Klaim Palsu)", "", "Peserta luar wilayah, kiriman serentak, dokter lintas faskes"),
+                ("Repeat Billing", "Dugaan Repeat Billing", "⧉", "Klaim ulang peserta + diagnosis sama dalam 48 jam, lintas faskes"),
+                ("Self-Referral", "Dugaan Rujukan tidak sesuai (Self-referral)", "⇄", "Dokter merujuk ke faskes tempat ia terdaftar, rujukan dua arah")]
         out = []
         for key, label, icon, note in spec:
             k = int(clusters.get(key, 0))
@@ -346,8 +346,8 @@ def _evidence(fl: pd.DataFrame, typ: str) -> list:
 
 
 def _why(typ: str, ev: list, n: int) -> str:
-    head = {"Phantom Billing": "Dugaan Phantom Billing", "Repeat Billing": "Dugaan Repeat Billing",
-            "Self-Referral": "Dugaan Self-Referral"}.get(typ, "Anomali jaringan")
+    head = {"Phantom Billing": "Dugaan Phantom Billing (Klaim Palsu)", "Repeat Billing": "Dugaan Repeat Billing",
+            "Self-Referral": "Dugaan Rujukan tidak sesuai (Self-referral)"}.get(typ, "Anomali jaringan")
     body = "; ".join(e[2] for e in ev[:2])
     return f"{head} pada {n} klaim ditandai: {body}."
 

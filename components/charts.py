@@ -4,6 +4,7 @@ import json
 import plotly.graph_objects as go
 
 import data.mock_data as md
+from components.typology import label as typology_label
 
 TEAL = "#0F766E"
 ORANGE = "#F97316"
@@ -43,7 +44,7 @@ def trend_chart(weeks, series):
         color = md.TREND_COLORS.get(name, TEAL)
         fill = i == 0  # seri pertama (Phantom Billing) diberi area fill
         fig.add_trace(go.Scatter(
-            x=weeks, y=ys, name=name, mode="lines+markers",
+            x=weeks, y=ys, name=typology_label(name), mode="lines+markers",
             line=dict(color=color, width=2.5),
             marker=dict(size=6, color=color),
             fill="tozeroy" if fill else None,
@@ -372,7 +373,7 @@ def weekly_replay_capacity_chart(report: dict, selected_capacity: int):
 # ---------------------------------------------------------------------------
 # Uji ketahanan (hasil core.robustness, dibaca dari docs/robustness.json)
 # ---------------------------------------------------------------------------
-_TYP_NAMES = {"phantom": "Phantom Billing", "repeat": "Repeat Billing", "selfref": "Self-Referral"}
+_TYP_NAMES = {"phantom": "Phantom Billing (Klaim Palsu)", "repeat": "Repeat Billing", "selfref": "Rujukan tidak sesuai (Self-referral)"}
 
 
 def ablation_chart(rob: dict):

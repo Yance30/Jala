@@ -86,11 +86,6 @@ def render_sidebar():
                 </div>
             </div>
 
-            <div style="margin:12px 0 3.25rem 0;">
-                <span class="j-pill">
-                    Prototype / Proof of Concept
-                </span>
-            </div>
             """,
             unsafe_allow_html=True,
         )
@@ -141,35 +136,5 @@ def render_sidebar():
 
         st.markdown(
             "<div style='height:1.25rem'></div>",
-            unsafe_allow_html=True,
-        )
-
-        # =========================
-        # VERIFIKATOR CARD
-        # =========================
-        st.markdown(
-            """
-            <div class="j-sidecard">
-
-                <div style="
-                    font-weight:600;
-                    color:#FFFFFF;
-                    display:flex;
-                    align-items:center;
-                ">
-                    <span class="dot teal"></span>
-                    LINGKUNGAN DEMO
-                </div>
-
-                <div style="margin-top:4px;">
-                    Alur kerja verifikator
-                </div>
-
-                <div>
-                    Prototipe · data sintetis
-                </div>
-
-            </div>
-            """,
             unsafe_allow_html=True,
         )

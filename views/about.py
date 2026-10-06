@@ -59,6 +59,8 @@ def _privacy():
 def render():
     _hero()
     guide.render_page_guide("about")
+    with st.expander("Arti istilah dan metrik"):
+        st.markdown(guide.glossary_html(), unsafe_allow_html=True)
     _divider("comparison")
     comparison.render_content()
     _divider("privacy")

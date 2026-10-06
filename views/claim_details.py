@@ -1,6 +1,6 @@
 import streamlit as st
 
-from components import cards, charts, guide, layout, tables, verifier_tools
+from components import cards, charts, export_context, guide, layout, tables, verifier_tools
 from components import bench
 from core import evidence as evidence_core
 from core.privacy import mask_participant_id
@@ -9,19 +9,30 @@ from core.privacy import mask_participant_id
 def render():
     live = bench.get_live()
     TRIAGE_QUEUE = live.triage_rows()
+    if not TRIAGE_QUEUE:
+        layout.page_header("", "teal", "Alasan Penandaan", "Belum ada kelompok klaim untuk ditinjau.")
+        st.info("Antrean kosong. Kembali ke Prioritas Klaster atau periksa status filter.")
+        if st.button("Kembali ke Prioritas Klaster", type="primary"):
+            layout.goto("risk")
+        layout.render_footer()
+        return
     selected = st.session_state.get("selected_cluster")
     if selected not in live.by_id:
         selected = TRIAGE_QUEUE[0]["id"]
     detail = live.detail(selected)
     queue_row = next(q for q in TRIAGE_QUEUE if q["id"] == selected)
     auc = bench.get_metrics()["scorers"]["graph_gbm"]["auc"]
+    action_status = st.session_state.get("audited", {}).get(selected)
     review = bench.get_feedback().get(selected)
-    if review and review.get("verdict") == "confirm":
-        review_status, review_tone = "Dikonfirmasi untuk tindak lanjut", "teal"
-        next_step = "Pilih tindakan pemeriksaan dan catat alasannya di Audit Action."
+    if action_status == "field_audit":
+        review_status, review_tone = "Rencana pemeriksaan lapangan dicatat", "teal"
+        next_step = "Rencana tercatat dalam simulasi; belum ada surat tugas yang diterbitkan."
+    elif review and review.get("verdict") == "confirm":
+        review_status, review_tone = "Simulasi penangguhan dikonfirmasi", "teal"
+        next_step = "Status hanya berlaku pada demo ini; tidak ada pembayaran yang ditangguhkan."
     elif review and review.get("verdict") == "dismiss":
-        review_status, review_tone = "Ditandai sebagai pola wajar", "grey"
-        next_step = "Jika keputusan ini perlu ditinjau ulang, batalkan umpan balik dari Audit Action."
+        review_status, review_tone = "Pola wajar dicatat (simulasi)", "grey"
+        next_step = "Jika catatan perlu dikoreksi, batalkan umpan balik pada halaman Tindak Lanjut."
     else:
         review_status, review_tone = "Belum ada keputusan verifikator", "amber"
         next_step = "Periksa klaim sumber dan konteksnya, lalu catat keputusan atau permintaan pemeriksaan."
@@ -36,15 +47,16 @@ def render():
         unsafe_allow_html=True,
     )
     layout.page_header(
-        "", "teal", "Claim Details · Alasan Penandaan",
-        "Penjelasan mengapa kelompok klaim ini ditandai, disertai bukti dan klaim yang paling mencurigakan.",
+        "", "teal", "Alasan Penandaan",
+        "Alasan kelompok ini mendapat prioritas tinjauan, disertai konteks dan contoh klaim terkait. Skor bukan bukti atau putusan.",
         right_html=(
             '<div style="display:flex;gap:8px;">'
-            '<span class="j-chip">Skor ≥50: tinjauan awal</span>'
+            '<span class="j-chip">Skor mengurutkan tinjauan; bukan putusan</span>'
             '<span class="j-chip">Prioritas tertinggi ditinjau dahulu</span></div>'
         ),
     )
     guide.render_page_guide("claim")
+    guide.render_typology_glossary()
 
     action_col, info_col = st.columns([1, 2])
     with action_col:
@@ -63,7 +75,7 @@ def render():
             f'</div>',
             unsafe_allow_html=True,
         )
-    if st.button("Buka Audit Action", type="primary", icon=":material/arrow_forward:",
+    if st.button("Buka Tindak Lanjut", type="primary", icon=":material/arrow_forward:",
                  key="claim_open_audit", width="stretch"):
         layout.goto("audit", cluster=selected)
 
@@ -82,7 +94,7 @@ def render():
         st.markdown(
             f"""
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-              <div class="j-h2">Klaster Sindikat Terdeteksi</div>
+              <div class="j-h2">Klaster Prioritas Pemeriksaan</div>
               <span class="j-pill grey">Q3 2026 Periode</span>
             </div>
             <div class="j-sub" style="margin-bottom:8px;">Menampilkan {len(TRIAGE_QUEUE)} klaster, urut skor jaringan</div>
@@ -93,9 +105,9 @@ def render():
             st.markdown(tables.triage_table_html(TRIAGE_QUEUE, selected), unsafe_allow_html=True)
         st.markdown('<div style="height:10px"></div>', unsafe_allow_html=True)
         names = {q["id"]: q["name"] for q in TRIAGE_QUEUE}
-        pick = st.selectbox("Buka detail klaster", list(names.values()),
-                            index=list(names.keys()).index(selected), label_visibility="collapsed")
-        if st.button("Buka Claim Details →", type="primary", width="stretch"):
+        pick = st.selectbox("Pilih klaster", list(names.values()),
+                            index=list(names.keys()).index(selected))
+        if st.button("Buka alasan penandaan →", type="primary", width="stretch"):
             st.session_state.selected_cluster = list(names.keys())[list(names.values()).index(pick)]
             st.rerun()
         verifier_tools.evidence_button(live, selected, key="evidence_claim")
@@ -165,7 +177,7 @@ def render():
                 """,
                 unsafe_allow_html=True,
             )
-        if st.button("✕ Tutup panel (kembali ke Risk Ranking)", width="stretch"):
+        if st.button("Kembali ke Prioritas Klaster", width="stretch"):
             layout.goto("risk")
 
     # Klaim sumber dapat diperiksa langsung; batasi tabel layar agar tetap ringan.
@@ -173,8 +185,9 @@ def render():
         claim_rows = evidence_core.claims_table(live, selected)
         if st.session_state.get("demo_role", "Verifikator") == "Verifikator":
             claim_rows["patient_id"] = claim_rows["patient_id"].map(mask_participant_id)
+        shown_count = min(25, len(claim_rows))
         st.caption(
-            f"Menampilkan 25 dari {len(claim_rows)} klaim terkait, diurutkan menurut skor. "
+            f"Menampilkan {shown_count} dari {len(claim_rows)} klaim terkait, diurutkan menurut skor. "
             + ("ID peserta disamarkan pada tampilan Verifikator. "
                if st.session_state.get("demo_role", "Verifikator") == "Verifikator" else "")
             + "Ini simulasi peran; data peserta tetap sintetis dan ini bukan kontrol akses produksi."
@@ -186,10 +199,13 @@ def render():
             "visit_ts": "Waktu layanan", "skor": "Skor model", "dugaan_tipologi": "Pola dugaan",
             "alasan": "Alasan terukur",
         })
-        st.dataframe(visible, width="stretch", hide_index=True, height=420)
+        if visible.empty:
+            st.info("Belum ada klaim sumber yang tersedia untuk ditampilkan.")
+        else:
+            st.dataframe(visible, width="stretch", hide_index=True, height=420)
         st.download_button(
             "Unduh seluruh klaim sumber (.CSV)",
-            claim_rows.to_csv(index=False).encode("utf-8"),
+            export_context.csv_bytes(claim_rows),
             file_name=f"jala_{selected}_klaim_sumber.csv",
             mime="text/csv",
             width="stretch",

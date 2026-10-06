@@ -3,7 +3,7 @@ import html
 import pandas as pd
 import streamlit as st
 
-from components import bench, cards, guide, layout, tables, verifier_tools
+from components import bench, cards, export_context, guide, layout, tables, verifier_tools
 from data.mock_data import AUDIT_ACTIONS, AUDIT_TEMPLATES
 from core.live import rp
 
@@ -21,6 +21,21 @@ _ACTION_TAGS = {
     "Inspeksi On-Site": "Pemeriksaan lapangan",
     "Kliring Kasus": "Klarifikasi pola",
     "Tindakan Preventif": "Tindak lanjut",
+}
+_ACTION_BUTTONS = {
+    "Suspend Claims for This Ring": "Simulasikan penangguhan",
+    "Trigger Targeted Field Audit": "Catat rencana pemeriksaan",
+    "Dismiss as False Positive": "Tandai pola wajar",
+}
+_ACTION_BODIES = {
+    "Suspend Claims for This Ring": "Catat simulasi penangguhan klaim untuk klaster ini. Tidak ada pembayaran yang ditangguhkan atau sistem eksternal yang dihubungi.",
+    "Trigger Targeted Field Audit": "Catat rencana pemeriksaan lapangan. Tidak ada tim yang ditugaskan atau surat tugas yang diterbitkan.",
+    "Dismiss as False Positive": "Catat penjelasan bahwa pola memiliki konteks yang wajar. Kalibrasi skor hanya berlaku di sesi demo ini.",
+}
+_ACTION_NOTES = {
+    "Suspend Claims for This Ring": "Simulasi; pembayaran tetap tidak berubah",
+    "Trigger Targeted Field Audit": "Rencana demo; surat tugas tidak diterbitkan",
+    "Dismiss as False Positive": "Sertakan catatan konteks pendukung",
 }
 
 def _apply_template(tpl: str):
@@ -44,7 +59,7 @@ def _confirm_freeze(a: dict):
     for item in [
         "Menangguhkan pencairan klaim terkait di sistem pembayaran",
         "Memberi notifikasi ke unit pengampu faskes",
-        "Membuat draft berita acara pemeriksaan",
+        "Menyiapkan rancangan berita acara untuk ditinjau petugas",
     ]:
         st.markdown(f'<div style="font-size:13px;margin-bottom:6px;">• {item}</div>', unsafe_allow_html=True)
     st.markdown('<div style="height:10px"></div>', unsafe_allow_html=True)
@@ -65,6 +80,13 @@ def _confirm_freeze(a: dict):
 
 def render():
     live = bench.get_live()
+    if not live.clusters:
+        layout.page_header("", "teal", "Tindak Lanjut Audit", "Belum ada klaster yang dapat ditinjau.")
+        st.info("Antrean tindak lanjut kosong. Buka Prioritas Klaster untuk memeriksa kasus yang tersedia.")
+        if st.button("Buka Prioritas Klaster", type="primary"):
+            layout.goto("risk")
+        layout.render_footer()
+        return
     cid = st.session_state.get("selected_cluster")
     if cid not in live.by_id:
         cid = live.clusters[0]["id"]
@@ -81,7 +103,7 @@ def render():
         unsafe_allow_html=True,
     )
     layout.page_header(
-        "", "teal", "Audit Action: Putuskan Tindakan",
+        "", "teal", "Tindak Lanjut Audit",
         "Tinjau dugaan, periksa bukti, lalu catat tindak lanjut. JALA hanya menyusun prioritas; "
         "skor bukan bukti dan keputusan akhir ada pada verifikator.",
         right_html=(
@@ -91,6 +113,8 @@ def render():
         ),
     )
     guide.render_page_guide("audit")
+    if st.button("Kembali ke Prioritas Klaster", icon=":material/arrow_back:", key="audit_back_to_queue"):
+        layout.goto("risk", cluster=cid)
 
     st.markdown(
         f"""
@@ -124,7 +148,7 @@ def render():
           <div class="j-note" style="margin-top:14px;align-items:flex-start;">
             <span>ⓘ</span>
             <div>
-              <b>Ringkasan Bukti Forensik Algoritma:</b>
+              <b>Ringkasan pola terukur:</b>
               <div style="margin-top:4px;">{_esc(a['evidence'])}</div>
             </div>
           </div>
@@ -137,12 +161,28 @@ def render():
     )
     b1, b2 = st.columns(2)
     with b1:
-        if st.button("Buka Network Graph", icon=":material/open_in_new:", key="open_graph"):
+        if st.button("Buka Peta Jaringan", icon=":material/open_in_new:", key="open_graph"):
             layout.goto("network", cluster=cid)
     with b2:
         verifier_tools.evidence_button(live, cid, key="evidence_audit")
     verifier_tools.modus_note(live.by_id[cid]["typology"])
     verifier_tools.feedback_card(live, cid)
+
+    audited_status = st.session_state.get("audited", {}).get(cid)
+    action_notice = st.session_state.pop("audit_action_notice", None)
+    if action_notice:
+        st.success(action_notice)
+    if audited_status:
+        labels = {
+            "freeze": "Penangguhan dicatat sebagai simulasi",
+            "field_audit": "Rencana pemeriksaan lapangan dicatat",
+            "dismiss": "Pola ditandai wajar dalam simulasi",
+        }
+        st.info(f"Status klaster: {labels.get(audited_status, 'Tindak lanjut dicatat')} · hanya berlaku pada demo ini.")
+        if audited_status == "field_audit" and st.button("Batalkan rencana pada demo ini", key=f"undo_field_{cid}"):
+            st.session_state["audited"].pop(cid, None)
+            bench.record_review_event(cid, "Rencana pemeriksaan dibatalkan")
+            st.rerun()
 
     st.markdown(
         """
@@ -175,7 +215,12 @@ def render():
     with st.container(key="audit_actions"):
         cols = st.columns(3)
         for i, (col, act) in enumerate(zip(cols, AUDIT_ACTIONS)):
-            act = {**act, "body": act["body"].replace("5 faskes", f"{a['n_faskes']} faskes")}
+            act = {
+                **act,
+                "body": _ACTION_BODIES.get(act["title"], act["body"]),
+                "button": _ACTION_BUTTONS.get(act["title"], act["button"]),
+                "note": _ACTION_NOTES.get(act["title"], act["note"]),
+            }
             action_title = _ACTION_TITLES.get(act["title"], act["title"])
             action_tag = ( _ACTION_TAGS.get(act["tag"][0], act["tag"][0]), act["tag"][1] )
             with col:
@@ -208,12 +253,16 @@ def render():
                             st.session_state.setdefault("audited", {})[cid] = "dismiss"
                             bench.apply_verdict(cid, "dismiss", note)
                             score_after = bench.get_live().by_id[cid]["score"]
+                        elif act["title"].startswith("Trigger"):
+                            st.session_state.setdefault("audited", {})[cid] = "field_audit"
+                            score_after = score_before
                         else:
                             score_after = score_before
                         bench.record_review_event(cid, action_title, note, score_before, score_after)
                         if act["title"].startswith("Dismiss"):
                             st.rerun()
-                        st.toast(f"{action_title} — tercatat sebagai simulasi.", icon="✅")
+                        st.session_state["audit_action_notice"] = f"{action_title} tercatat di riwayat lokal. Tidak ada tindakan eksternal yang dijalankan."
+                        st.rerun()
 
                 st.markdown(
                     f'<div class="j-actcard-note">{_esc(act["note"])}</div>',
@@ -232,13 +281,12 @@ def render():
             """,
             unsafe_allow_html=True,
         )
-        with st.container(border=True):
-            st.markdown(tables.audit_faskes_html(AUDIT_FASKES), unsafe_allow_html=True)
+        st.markdown(tables.audit_faskes_html(AUDIT_FASKES), unsafe_allow_html=True)
         st.markdown('<div style="height:8px"></div>', unsafe_allow_html=True)
         df = pd.DataFrame(AUDIT_FASKES, columns=["kode", "wilayah", "tipe", "peran", "vol", "nilai"])
         c1, c2 = st.columns([1, 1])
         c1.markdown(f'<div class="j-sub">Menampilkan {len(AUDIT_FASKES)} dari {len(AUDIT_FASKES)} faskes terkait</div>', unsafe_allow_html=True)
-        c2.download_button("⬇ Ekspor Daftar Entitas (.CSV)", df.to_csv(index=False).encode("utf-8"),
+        c2.download_button("Ekspor daftar faskes (.CSV)", export_context.csv_bytes(df),
                            file_name=f"jala_{cid}_faskes.csv", width="stretch")
         verifier_tools.whatif_panel(live, cid)
     with r:
@@ -246,12 +294,12 @@ def render():
             """
             <div class="j-h2">✎ Catatan Verifikator</div>
             <div class="j-sub" style="margin:4px 0 10px;">Tambahkan justifikasi forensik sebelum menekan
-              tombol tindakan, untuk dilampirkan di berkas bukti dan draft berita acara.</div>
+              tombol tindakan, agar tercatat dalam paket pemeriksaan simulasi. Catatan ini bukan berita acara resmi.</div>
             """,
             unsafe_allow_html=True,
         )
-        note = st.text_area("catatan", placeholder="Tuliskan catatan pertimbangan hukum atau indikasi "
-                                                    "lapangan di sini…", label_visibility="collapsed",
+        note = st.text_area("Catatan verifikator", placeholder="Tuliskan pertimbangan atau konteks lapangan "
+                                                    "yang perlu dicatat…",
                             height=120, key="note_draft")
         chips = st.columns(len(AUDIT_TEMPLATES) + 1)
         chips[0].markdown('<div class="j-sub" style="padding-top:6px;">Template Cepat:</div>',
@@ -268,7 +316,7 @@ def render():
         st.markdown(
             """
             <div class="j-card tint" style="margin-top:14px;">
-              <div style="font-weight:600;color:#0F766E;font-size:13px;">🔐 Digital Signature Verification</div>
+              <div style="font-weight:600;color:#0F766E;font-size:13px;">Contoh verifikasi tanda tangan digital</div>
               <div class="j-sub" style="margin-top:6px;">Data petugas dan sertifikat berikut hanya contoh sintetis; tidak mewakili identitas atau sertifikat BPJS nyata.</div>
             </div>
             """,
@@ -278,7 +326,7 @@ def render():
     st.markdown(
         f"""
         <div class="j-footer" style="margin-top:18px;">
-          <div>🕐 Setiap tindakan dicatat ke riwayat audit SQLite lokal dan masuk ke Berkas Bukti Klaster.
+          <div>🕐 Setiap tindak lanjut dicatat di riwayat lokal dan dapat disertakan dalam paket pemeriksaan.
             Prototipe: belum terintegrasi dengan sistem BPJS.</div>
           <div>KLASTER: {cid}</div>
         </div>
