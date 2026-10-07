@@ -2124,7 +2124,13 @@ def patch_markdown():
     original = st.markdown
 
     def _markdown(body, *args, **kwargs):
-        if isinstance(body, str) and kwargs.get("unsafe_allow_html"):
+        # unsafe_allow_html adalah parameter posisional ke-2 st.markdown;
+        # deteksi baik saat dilewat sebagai kwarg maupun posisional.
+        unsafe = kwargs.get("unsafe_allow_html")
+        if unsafe is None and args:
+            unsafe = args[0]
+
+        if isinstance(body, str) and unsafe:
             body = "\n".join(
                 line
                 for line in body.split("\n")

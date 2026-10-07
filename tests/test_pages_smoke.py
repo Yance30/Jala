@@ -72,7 +72,17 @@ def test_dashboard_contrast_case_opens_claim_review():
 
     assert not at.exception
     assert at.session_state["page"] == "claim"
-    assert at.session_state["selected_cluster"] == "JALA-F006"
+
+    # Klaster pembanding dipilih dinamis (yang paling didominasi klaim dialisis
+    # terjadwal N18.6), bukan hardcoded; pastikan klaster yang dibuka memang
+    # memuat klaim N18.6 sesuai niat kartu "kasus pembanding".
+    from components import bench
+
+    selected = at.session_state["selected_cluster"]
+    assert selected is not None
+    live = bench.get_live()
+    claims = live.flagged.loc[live.by_id[selected]["idx"]]
+    assert (claims.icd == "N18.6").any()
 
 
 def test_claim_details_frequency_chart_is_real():

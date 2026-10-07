@@ -8,6 +8,29 @@ from core.live import AUTO_FLAG, THRESH
 from data.mock_data import QUARTER
 from core.synthetic import SEED
 
+# Kode diagnosis dialisis terjadwal; klaim berulang di sini sah secara klinis,
+# sehingga dipakai sebagai contoh "pola mirip fraud padahal layanan terjadwal".
+_DIALYSIS_ICD = "N18.6"
+
+
+def _find_contrast_cluster(live):
+    """Pilih klaster yang paling didominasi klaim dialisis terjadwal.
+
+    Menggantikan ID klaster hardcoded agar tetap benar bila seed/data berubah.
+    Return (cluster, claims, dialysis_share) atau None bila tidak ada klaim N18.6.
+    """
+    best = None
+    best_share = 0.0
+    for cluster in live.clusters:
+        claims = live.flagged.loc[cluster["idx"]]
+        if not len(claims):
+            continue
+        share = float((claims.icd == _DIALYSIS_ICD).mean())
+        if share > best_share:
+            best_share = share
+            best = (cluster, claims, share)
+    return best
+
 
 def render():
     live = bench.get_live()
@@ -67,10 +90,9 @@ def render():
         st.caption("Alur demo: telusuri alasan → periksa klaim sumber → catat tindak lanjut. Skor hanya menentukan prioritas.")
 
     # Kasus kontras mengingatkan bahwa pola statistik serupa juga dapat muncul pada layanan terjadwal.
-    contrast = live.by_id.get("JALA-F006")
-    if contrast:
-        contrast_claims = live.flagged.loc[contrast["idx"]]
-        dialysis_share = float((contrast_claims.icd == "N18.6").mean()) if len(contrast_claims) else 0.0
+    contrast_match = _find_contrast_cluster(live)
+    if contrast_match:
+        contrast, contrast_claims, dialysis_share = contrast_match
         st.markdown(
             f'<div class="j-card j-demo-case j-demo-caution">'
             f'<span class="j-pill teal">KASUS PEMBANDING · DATA SINTETIS</span>'
