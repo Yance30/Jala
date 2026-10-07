@@ -28,7 +28,7 @@ Prototipe untuk **BPJS Kesehatan Healthkathon 2026** (kategori *Efisiensi Risiko
 - Replay waktu deteksi dapat dibuat dengan `python -m core.temporal_impact`; hasil disimpan ke `docs/temporal_impact.json`. Model replay hanya dilatih dari minggu yang sudah lewat, tetapi tetap merupakan simulasi retrospektif sintetis.
 - Dokumen untuk penilaian: [model card](docs/model-card.md), [one-pager](docs/one-pager.md), [rencana pilot](docs/pilot-plan.md), dan [latihan tanya jawab](docs/juri-faq.md).
 - Jalankan lokal di Windows dengan `run_demo.bat`, atau bangun Docker dengan `docker build -t jala-demo .` lalu jalankan `docker run --rm -p 8501:8501 -v jala-data:/app/.jala jala-demo`.
-- `requirements-lock.txt` dan `requirements-lock-win.txt` mengunci closure dependensi runtime untuk CPython 3.12 di Linux dan Windows. Regenerasi dengan `python scripts/resolve_runtime_lock.py --python-version 3.12 --platform linux` atau `--platform windows` setelah mengubah paket.
+- `requirements-lock.txt` dan `requirements-lock-win.txt` mengunci closure dependensi runtime untuk CPython 3.12 di Linux dan Windows. Regenerasi dengan `python scripts/resolve_runtime_lock.py --python-version 3.12 --platform linux` atau `--platform windows` setelah mengubah paket. CI, Docker, dan `run_demo.bat` meng-install dari lock ini (bukan `requirements.txt`), sehingga lingkungan uji identik dengan yang di-deploy; `python scripts/check_lock.py requirements-lock.txt requirements-lock-win.txt` memverifikasi lock masih memenuhi rentang di `requirements.txt`.
 - Tampilan peran dan ID peserta tersamar adalah simulasi, bukan autentikasi, kontrol akses, atau bukti kepatuhan UU PDP.
 
 ## Kesesuaian dengan BPJS Kesehatan Healthkathon 2026
