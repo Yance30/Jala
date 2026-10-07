@@ -198,7 +198,7 @@ def test_audit_page_shows_whatif_panel():
 
 def test_dismiss_flow_lowers_score_shows_banner_and_can_be_undone():
     at = _audit_with("JALA-F006")
-    next(b for b in at.button if b.key and "Dismiss" in b.key).click().run()
+    next(b for b in at.button if b.key and "dismiss" in b.key).click().run()
     assert not at.exception
     assert {k: v["verdict"] for k, v in at.session_state["feedback"].items()} == {"JALA-F006": "dismiss"}
     assert at.session_state["review_history"][-1]["action"] == "Tandai sebagai pola wajar"
@@ -220,7 +220,7 @@ def test_dismiss_flow_lowers_score_shows_banner_and_can_be_undone():
 
 def test_feedback_reset_button_clears_everything():
     at = _audit_with("JALA-F006")
-    next(b for b in at.button if b.key and "Dismiss" in b.key).click().run()
+    next(b for b in at.button if b.key and "dismiss" in b.key).click().run()
     at.session_state["page"] = "risk"
     at.run()
     next(b for b in at.button if b.key == "fb_reset").click().run()

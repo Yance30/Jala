@@ -172,15 +172,14 @@ def build_features(claims, faskes, affiliations, patients) -> pd.DataFrame:
     share_doc = pd.Series([pair_doc[(f, d_)] / into[f] if (f, d_) in pair_doc.index and into.get(f, 0) >= 8 else 0.0
                            for f, d_ in zip(df.faskes_id, df.referral_from_doctor)], index=df.index)
     out["f_ref_doc_share"] = share_doc.where(is_ref, 0.0).values
-    pc = r.groupby(["referral_from_faskes", "faskes_id"]).claim_id.count().to_dict()
-    recip = []
-    for rf, f, flag in zip(df.referral_from_faskes, df.faskes_id, is_ref):
-        if not flag:
-            recip.append(0.0)
-            continue
-        a, c = pc.get((rf, f), 0), pc.get((f, rf), 0)
-        recip.append(min(a, c) / max(a, c) if min(a, c) >= 3 else 0.0)
-    out["f_ref_reciprocity"] = recip
+    pc = r.groupby(["referral_from_faskes", "faskes_id"]).claim_id.count()
+    rf_arr, f_arr = df.referral_from_faskes.to_numpy(), df.faskes_id.to_numpy()
+    fwd = np.nan_to_num(pc.reindex(pd.MultiIndex.from_arrays([rf_arr, f_arr])).to_numpy(float))
+    rev = np.nan_to_num(pc.reindex(pd.MultiIndex.from_arrays([f_arr, rf_arr])).to_numpy(float))
+    lo, hi = np.minimum(fwd, rev), np.maximum(fwd, rev)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        ratio = np.where(hi > 0, lo / hi, 0.0)
+    out["f_ref_reciprocity"] = np.where(is_ref.to_numpy() & (lo >= 3), ratio, 0.0)
 
     # --- tarif & volume ---
     out["f_tarif_ratio"] = (df.tarif / df.icd.map(ICD_CAP)).values

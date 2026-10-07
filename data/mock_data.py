@@ -24,29 +24,31 @@ GRAPH_LEGEND_EDGES = [
 
 AUDIT_ACTIONS = [
     {
-        "icon": "⚖", "icon_tone": "teal", "tag": ("Tindakan Preventif", "red"),
-        "title": "Suspend Claims for This Ring",
-        "body": "Simulasi penangguhan pembayaran klaim sementara untuk klaster ini. Pada alur sungguhan, "
-                "instruksi diteruskan ke sistem pembayaran (rancangan, belum terhubung).",
-        "button": "Simulasikan Penangguhan (Freeze)", "button_kind": "primary",
-        "note": "Otorisasi: verifikator berwenang (rancangan alur)",
+        "id": "suspend",
+        "icon": "⚖", "icon_tone": "teal", "tag": ("Tindak lanjut", "red"),
+        "title": "Simulasi penangguhan klaim",
+        "body": "Catat simulasi penangguhan klaim untuk klaster ini. Tidak ada pembayaran yang "
+                "ditangguhkan atau sistem eksternal yang dihubungi.",
+        "button": "Simulasikan penangguhan", "button_kind": "primary",
+        "note": "Simulasi; pembayaran tetap tidak berubah",
     },
     {
-        "icon": "🔎", "icon_tone": "grey", "tag": ("Inspeksi On-Site", "grey"),
-        "title": "Trigger Targeted Field Audit",
-        "body": "Tugaskan tim pemeriksa lapangan untuk audit fisik ke faskes dalam klaster, sampling berkas "
-                "rekam medis manual, dan wawancara peserta.",
-        "button": "Bentuk Tim Pemeriksa Lapangan", "button_kind": "secondary",
-        "note": "Penerbitan surat tugas pemeriksaan (rancangan alur)",
+        "id": "field_audit",
+        "icon": "🔎", "icon_tone": "grey", "tag": ("Pemeriksaan lapangan", "grey"),
+        "title": "Jadwalkan pemeriksaan lapangan",
+        "body": "Catat rencana pemeriksaan lapangan. Tidak ada tim yang ditugaskan atau surat "
+                "tugas yang diterbitkan.",
+        "button": "Catat rencana pemeriksaan", "button_kind": "secondary",
+        "note": "Rencana demo; surat tugas tidak diterbitkan",
     },
     {
-        "icon": "🛡", "icon_tone": "grey", "tag": ("Kliring Kasus", "grey"),
-        "title": "Dismiss as False Positive",
-        "body": "Tandai sebagai anomali wajar (cth: bencana alam/rujukan massal terkonfirmasi). Skor klaster "
-                "turun, klaster berpola diagnosis serupa ikut diturunkan, dan peringkat berubah (kalibrasi ringan, "
-                "belum melatih ulang model).",
-        "button": "Arsipkan & Turunkan Skor", "button_kind": "secondary",
-        "note": "Sertakan catatan klarifikasi di kotak Catatan Verifikator",
+        "id": "dismiss",
+        "icon": "🛡", "icon_tone": "grey", "tag": ("Klarifikasi pola", "grey"),
+        "title": "Tandai sebagai pola wajar",
+        "body": "Catat penjelasan bahwa pola memiliki konteks yang wajar. Kalibrasi skor hanya "
+                "berlaku di sesi demo ini.",
+        "button": "Tandai pola wajar", "button_kind": "secondary",
+        "note": "Sertakan catatan konteks pendukung",
     },
 ]
 

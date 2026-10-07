@@ -107,16 +107,20 @@ def render():
         """
         <style>
 
+        /* Semua aturan di-scope ke area konten utama halaman ini agar tidak
+           bocor ke sidebar / halaman lain; !important tidak diperlukan karena
+           spesifisitas [data-testid="stMain"] sudah mengalahkan chrome widget. */
+
         /* ==================================================
            SEARCH INPUT
            ================================================== */
 
-        div[data-testid="stTextInput"] input {
-            height: 48px !important;
-            min-height: 48px !important;
-            box-sizing: border-box !important;
+        [data-testid="stMain"] div[data-testid="stTextInput"] input {
+            height: 48px;
+            min-height: 48px;
+            box-sizing: border-box;
             border-radius: 6px !important;
-            font-size: 15px !important;
+            font-size: 15px;
         }
 
 
@@ -124,30 +128,22 @@ def render():
            FILTER BUTTON
            ================================================== */
 
-        div[data-testid="stButton"] > button {
-            height: 48px !important;
-            min-height: 48px !important;
-            max-height: 48px !important;
-
-            width: 100% !important;
-
-            box-sizing: border-box !important;
-
-            padding: 0 10px !important;
-
-            border-radius: 6px !important;
-
-            font-size: 16px !important;
-            line-height: 1.2 !important;
-
-            white-space: nowrap !important;
-
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
+        [data-testid="stMain"] div[data-testid="stButton"] > button {
+            height: 48px;
+            min-height: 48px;
+            max-height: 48px;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0 10px;
+            border-radius: 6px;
+            font-size: 16px;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
 
@@ -155,9 +151,9 @@ def render():
            BUTTON CONTAINER
            ================================================== */
 
-        div[data-testid="stButton"] {
-            height: 48px !important;
-            min-height: 48px !important;
+        [data-testid="stMain"] div[data-testid="stButton"] {
+            height: 48px;
+            min-height: 48px;
         }
 
 
@@ -165,8 +161,8 @@ def render():
            FILTER COLUMN
            ================================================== */
 
-        div[data-testid="column"] {
-            box-sizing: border-box !important;
+        [data-testid="stMain"] div[data-testid="column"] {
+            box-sizing: border-box;
         }
 
 
@@ -174,8 +170,8 @@ def render():
            DOWNLOAD BUTTON
            ================================================== */
 
-        div[data-testid="stDownloadButton"] > button {
-            min-height: 42px !important;
+        [data-testid="stMain"] div[data-testid="stDownloadButton"] > button {
+            min-height: 42px;
         }
 
 
@@ -183,8 +179,8 @@ def render():
            SELECTBOX
            ================================================== */
 
-        div[data-testid="stSelectbox"] > div {
-            min-height: 42px !important;
+        [data-testid="stMain"] div[data-testid="stSelectbox"] > div {
+            min-height: 42px;
         }
 
 
@@ -192,8 +188,8 @@ def render():
            REMOVE EXTRA SPACE AROUND FILTER
            ================================================== */
 
-        div[data-testid="stHorizontalBlock"] {
-            align-items: center !important;
+        [data-testid="stMain"] div[data-testid="stHorizontalBlock"] {
+            align-items: center;
         }
 
         </style>

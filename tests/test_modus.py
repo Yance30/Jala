@@ -73,7 +73,7 @@ def test_no_invented_integrations_or_regulations_in_ui_copy():
 def test_freeze_is_labelled_simulation_everywhere():
     from data.mock_data import AUDIT_ACTIONS
     freeze = AUDIT_ACTIONS[0]
-    assert "Simulasi" in freeze["button"] and "belum terhubung" in freeze["body"]
+    assert "Simulasi" in freeze["button"] and "sistem eksternal yang dihubungi" in freeze["body"]
     src = (ROOT / "views" / "audit_action.py").read_text(encoding="utf-8")
     assert "(Simulasi)" in src and "tidak ada sistem BPJS yang dihubungi" in src
     assert re.search(r"FREEZE dicatat \(simulasi", src)

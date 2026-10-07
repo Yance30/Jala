@@ -12,31 +12,6 @@ def _esc(value) -> str:
     """Escape plain text before embedding it in the HTML snippets below."""
     return html.escape(str(value), quote=True)
 
-_ACTION_TITLES = {
-    "Suspend Claims for This Ring": "Simulasi penangguhan klaim",
-    "Trigger Targeted Field Audit": "Jadwalkan pemeriksaan lapangan",
-    "Dismiss as False Positive": "Tandai sebagai pola wajar",
-}
-_ACTION_TAGS = {
-    "Inspeksi On-Site": "Pemeriksaan lapangan",
-    "Kliring Kasus": "Klarifikasi pola",
-    "Tindakan Preventif": "Tindak lanjut",
-}
-_ACTION_BUTTONS = {
-    "Suspend Claims for This Ring": "Simulasikan penangguhan",
-    "Trigger Targeted Field Audit": "Catat rencana pemeriksaan",
-    "Dismiss as False Positive": "Tandai pola wajar",
-}
-_ACTION_BODIES = {
-    "Suspend Claims for This Ring": "Catat simulasi penangguhan klaim untuk klaster ini. Tidak ada pembayaran yang ditangguhkan atau sistem eksternal yang dihubungi.",
-    "Trigger Targeted Field Audit": "Catat rencana pemeriksaan lapangan. Tidak ada tim yang ditugaskan atau surat tugas yang diterbitkan.",
-    "Dismiss as False Positive": "Catat penjelasan bahwa pola memiliki konteks yang wajar. Kalibrasi skor hanya berlaku di sesi demo ini.",
-}
-_ACTION_NOTES = {
-    "Suspend Claims for This Ring": "Simulasi; pembayaran tetap tidak berubah",
-    "Trigger Targeted Field Audit": "Rencana demo; surat tugas tidak diterbitkan",
-    "Dismiss as False Positive": "Sertakan catatan konteks pendukung",
-}
 
 def _apply_template(tpl: str):
     prefix = f"[{tpl}] "
@@ -215,21 +190,14 @@ def render():
     with st.container(key="audit_actions"):
         cols = st.columns(3)
         for i, (col, act) in enumerate(zip(cols, AUDIT_ACTIONS)):
-            act = {
-                **act,
-                "body": _ACTION_BODIES.get(act["title"], act["body"]),
-                "button": _ACTION_BUTTONS.get(act["title"], act["button"]),
-                "note": _ACTION_NOTES.get(act["title"], act["note"]),
-            }
-            action_title = _ACTION_TITLES.get(act["title"], act["title"])
-            action_tag = ( _ACTION_TAGS.get(act["tag"][0], act["tag"][0]), act["tag"][1] )
+            action_title = act["title"]
             with col:
                 st.markdown(
                     f"""
                     <div class="j-card j-actcard">
                       <div class="j-actcard-top">
                         <span class="j-iconbox {act['icon_tone']}" style="width:42px;height:42px;">{act['icon']}</span>
-                        {cards.badge(*action_tag)}
+                        {cards.badge(*act["tag"])}
                       </div>
                       <div class="j-actcard-title">{_esc(action_title)}</div>
                       <div class="j-actcard-body">{_esc(act['body'])}</div>
@@ -241,7 +209,7 @@ def render():
                     act["button"],
                     width="stretch",
                     type="primary" if act["button_kind"] == "primary" else "secondary",
-                    key=f"act_{i}_{act['title']}",
+                    key=f"act_{i}_{act['id']}",
                 ):
                     if act["button_kind"] == "primary":
                         _confirm_freeze(a)
@@ -249,17 +217,17 @@ def render():
                         note = st.session_state.get("note_draft", "") or ""
                         score_before = live.by_id[cid]["score"]
                         st.session_state.audit_log.append(f"[{cid}] {action_title} dicatat (simulasi).")
-                        if act["title"].startswith("Dismiss"):
+                        if act["id"] == "dismiss":
                             st.session_state.setdefault("audited", {})[cid] = "dismiss"
                             bench.apply_verdict(cid, "dismiss", note)
                             score_after = bench.get_live().by_id[cid]["score"]
-                        elif act["title"].startswith("Trigger"):
+                        elif act["id"] == "field_audit":
                             st.session_state.setdefault("audited", {})[cid] = "field_audit"
                             score_after = score_before
                         else:
                             score_after = score_before
                         bench.record_review_event(cid, action_title, note, score_before, score_after)
-                        if act["title"].startswith("Dismiss"):
+                        if act["id"] == "dismiss":
                             st.rerun()
                         st.session_state["audit_action_notice"] = f"{action_title} tercatat di riwayat lokal. Tidak ada tindakan eksternal yang dijalankan."
                         st.rerun()
