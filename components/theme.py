@@ -152,14 +152,14 @@ section[data-testid="stSidebar"] {
 }
 
 
-section[data-testid="stSidebar"] .block-container {
-    padding: 1.5rem 1.1rem 2rem;
+section[data-testid="stSidebar"] [data-testid="stSidebarUserContent"] {
+    padding: 1.75rem 1.25rem 2.5rem;
 }
 
 
 /* jarak napas antar blok sidebar (brand, nav, peran, tombol, pencarian) */
-section[data-testid="stSidebar"] .block-container [data-testid="stVerticalBlock"] > * {
-    margin-bottom: 0.6rem;
+section[data-testid="stSidebar"] [data-testid="stVerticalBlock"] > * {
+    margin-bottom: 1rem;
 }
 
 
@@ -178,7 +178,7 @@ section[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] svg {
 
 
 section[data-testid="stSidebar"] div[role="radiogroup"] {
-    gap: 6px;
+    gap: 8px;
 }
 
 
@@ -186,7 +186,7 @@ section[data-testid="stSidebar"] div[role="radiogroup"] label {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px;
+    padding: 13px 14px;
     border-radius: 8px;
     margin: 0;
     font-size: 14px;

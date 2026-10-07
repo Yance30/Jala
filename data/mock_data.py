@@ -104,11 +104,11 @@ FOOTER_STATUS = [
 FOOTER_CUTOFF = "Batas data simulasi: 30 Sep 2026, 23.59 WIB"
 
 NAV_PAGES = [
-    ("dashboard", "Ringkasan"),
-    ("network", "Peta Jaringan"),
-    ("risk", "Prioritas Klaster"),
-    ("audit", "Tindak Lanjut"),
-    ("about", "Tentang JALA"),
+    ("dashboard", "Dashboard"),
+    ("network", "Network Graph"),
+    ("risk", "Risk Ranking"),
+    ("audit", "Audit Action"),
+    ("about", "About"),
 ]
 
 PAGE_TITLES = {

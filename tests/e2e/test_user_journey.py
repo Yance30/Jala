@@ -27,7 +27,7 @@ def _text(page, needle):
 
 
 def _go_to_audit(page):
-    _nav(page, "Prioritas Klaster")
+    _nav(page, "Risk Ranking")
     expect(_text(page, "Prioritas Klaster")).to_be_visible()
     page.get_by_role("button", name="Buka alasan penandaan").click()
     page.get_by_role("button", name="Buka Tindak Lanjut").click()
@@ -51,7 +51,7 @@ def test_journey_dashboard_to_audit_with_dismiss_and_undo(app_url, page, js_erro
     assert "JALA-F031" in csv_content and "Tandai sebagai pola wajar" in csv_content
     expect(page.get_by_text("→ 40%").first).to_be_visible()                     # skor turun ke 40% dari skor dasar
 
-    _nav(page, "Prioritas Klaster")
+    _nav(page, "Risk Ranking")
     expect(_text(page, "UMPAN BALIK VERIFIKATOR AKTIF")).to_be_visible()        # peringkat berubah di layar
     page.get_by_role("button", name="Atur ulang umpan balik").click()
     expect(page.get_by_text("UMPAN BALIK VERIFIKATOR AKTIF")).to_have_count(0)
@@ -136,7 +136,7 @@ def test_dashboard_provenance_and_reset_demo(app_url, page):
     _go_to_audit(page)
     page.get_by_role("button", name="Tandai pola wajar").click()
     expect(_text(page, "UMPAN BALIK VERIFIKATOR")).to_be_visible()
-    _nav(page, "Ringkasan")
+    _nav(page, "Dashboard")
     page.get_by_role("button", name="Reset demo").click()
-    _nav(page, "Prioritas Klaster")
+    _nav(page, "Risk Ranking")
     expect(page.get_by_text("UMPAN BALIK VERIFIKATOR AKTIF")).to_have_count(0)
