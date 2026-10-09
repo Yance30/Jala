@@ -113,8 +113,12 @@ flowchart LR
 |---|---|---|---|---|---|
 | Aturan per klaim (cara lama) | 0.551 | 0.067 | 12.5% | 15.1% | 22.5% |
 | Isolation Forest (tanpa label) | 0.974 | 0.679 | 44.0% | 70.0% | 93.2% |
-| **JALA: fitur graf + GBM** | 0.996 | 0.930 | 64.8% | 93.4% | 100.0% |
+| **JALA: fitur graf + GBM** | 0.996 | 0.940 | 65.1% | 94.7% | 100.0% |
 | Acak | 0.500 | 0.043 | 2.9% | 5.7% | 4.3% |
+
+Angka pada tabel ini bersumber dari `docs/benchmark.json` (pipeline evaluasi utama). Tabel *Uji ketahanan → Ablasi*
+di bagian bawah bersumber dari `docs/robustness.json`, yang memakai pipeline validasi silang berbeda; karena itu AP JALA
+di sana terbaca 0.93, sedikit lebih rendah dari 0.94 di sini. Keduanya benar untuk pipeline masing-masing.
 
 Per tipologi (tipologi itu vs klaim sah):
 
@@ -159,7 +163,7 @@ Penilaian terhadap label tersembunyi (`evaluate_clusters`, hanya untuk mengukur)
 | Kelompok fraud yang terpulihkan sebagai klaster murni | **7 dari 8** (3 phantom, 2 repeat, 2 self-referral) |
 | Klaster berisi mayoritas fraud dengan dugaan tipologi benar | 9 dari 9; satu kelompok Repeat Billing terpecah menjadi dua klaster |
 | Klaim ditandai: precision / recall | 87,6% / 83,3% |
-| Klaster tanpa fraud sama sekali | **3 dari 11** (JALA-F006, F044, F057) |
+| Klaster tanpa fraud sama sekali | **3 dari 12** (JALA-F006, F044, F057) |
 
 **Kelemahan yang kelihatan di layar:** 3 klaster itu bukan fraud. Isinya terutama klaim dialisis dan kunjungan ulang UGD,
 yang pola waktunya mirip klaim berulang, dan skornya tinggi (90 sampai 99). Satu di antaranya (F006, skor 99) berperingkat di atas klaster
