@@ -14,13 +14,13 @@ from components.typology import label as typology_label
 
 PAGES = {
     "dashboard": {
-        "purpose": "Ringkasan keadaan hari ini dalam satu layar.",
+        "purpose": "Ringkasan prioritas pemeriksaan pada periode data simulasi yang ditampilkan.",
         "read": [
             "Kartu di atas menjawab: berapa klaim yang perlu perhatian dan seberapa besar risikonya.",
             "Grafik tren menunjukkan apakah dugaan kecurangan naik atau turun dari waktu ke waktu.",
-            "Daftar di bawah berisi kelompok yang paling mendesak untuk diperiksa.",
+            "Kartu kasus demo membuka contoh prioritas; kasus pembanding menunjukkan pola yang dapat memiliki penjelasan wajar.",
         ],
-        "next": "Pilih kelompok di daftar untuk melihat alasan dan buktinya.",
+        "next": "Klik Mulai tinjau kasus atau Buka kasus pembanding untuk melihat alasan dan buktinya.",
     },
     "risk": {
         "purpose": "Daftar kelompok klaim mencurigakan, diurutkan dari yang paling berisiko.",
@@ -54,7 +54,7 @@ PAGES = {
         "read": [
             "Tulis catatan lebih dulu agar keputusan punya jejak yang jelas.",
             "Tiga pilihan mencatat simulasi penangguhan, rencana pemeriksaan lapangan, atau penandaan pola wajar.",
-            "Catatan dan keputusan tersimpan di riwayat lokal; tidak ada tindakan yang dikirim ke sistem BPJS.",
+            "Secara default, catatan hanya tersedia selama sesi aktif. Penyimpanan lokal lintas sesi bersifat opsional; tidak ada tindakan yang dikirim ke sistem BPJS.",
         ],
         "next": "Tinjau ringkasan status dan riwayat klaster sebelum kembali ke antrean.",
     },

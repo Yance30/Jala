@@ -26,7 +26,7 @@ def _confirm_freeze(a: dict):
         <div class="j-body">Anda akan menerbitkan instruksi penangguhan pencairan dana terhadap
         <b>{_esc(a['n_claims'])} klaim</b> senilai <b>{_esc(rp(a['value']))}</b> pada <b>{_esc(a['n_faskes'])} Faskes</b> terkait.</div>
         <div class="j-note" style="margin:10px 0;"><span>ⓘ</span><div><b>Simulasi prototipe:</b> tidak ada pembayaran
-          yang ditangguhkan dan tidak ada sistem BPJS yang dihubungi. Riwayat tindakan tersimpan di basis data lokal; perubahan skor hanya berlaku pada sesi ini.</div></div>
+          yang ditangguhkan dan tidak ada sistem BPJS yang dihubungi. Riwayat tersedia selama sesi aktif; penyimpanan lokal lintas sesi bersifat opsional. Perubahan skor hanya berlaku pada sesi ini.</div></div>
         <div class="j-label" style="margin:14px 0 6px;">Pada alur sungguhan (rancangan, belum terhubung), langkah ini akan:</div>
         """,
         unsafe_allow_html=True,
@@ -179,7 +179,7 @@ def render():
         <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:8px;flex-wrap:wrap;margin:18px 0 10px;">
           <div>
             <div class="j-h2">Pilih tindak lanjut</div>
-            <div class="j-sub">Opsi di bawah hanya simulasi; riwayat tindakan disimpan di basis data lokal dan belum terhubung ke sistem BPJS.</div>
+            <div class="j-sub">Opsi di bawah hanya simulasi. Riwayat tersedia selama sesi aktif; penyimpanan lokal lintas sesi bersifat opsional. Tidak terhubung ke sistem BPJS.</div>
           </div>
           <span class="j-pill grey">3 opsi demo</span>
         </div>
