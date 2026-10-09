@@ -168,7 +168,9 @@ Penilaian terhadap label tersembunyi (`evaluate_clusters`, hanya untuk mengukur)
 **Kelemahan yang kelihatan di layar:** 3 klaster itu bukan fraud. Isinya terutama klaim dialisis dan kunjungan ulang UGD,
 yang pola waktunya mirip klaim berulang, dan skornya tinggi (90 sampai 99). Satu di antaranya (F006, skor 99) berperingkat di atas klaster
 Repeat Billing yang benar (F039). Ini alasan keputusan akhir ada pada verifikator, dan alasan loop umpan balik verifikator (menandai
-"bukan fraud" lalu mengkalibrasi ulang) menjadi langkah berikutnya. Seperti semua angka lain di sini, ini data sintetis.
+"bukan fraud" lalu mengkalibrasi ulang) menjadi langkah berikutnya. Klaster yang didominasi dialisis (`N18.6`) juga otomatis
+membawa penanda "kemungkinan penjelasan sah" (lihat Alat bantu verifikator) agar verifikator memeriksa konteks klinis sebelum
+menyimpulkan repeat billing. Seperti semua angka lain di sini, ini data sintetis.
 
 **Keterbatasan pemulihan kelompok:** satu dari tiga kelompok Repeat Billing (repeat-2) tidak pulih sebagai satu klaster murni.
 Pada seed 2026, 35 dari 71 klaim fraud kelompok itu melewati ambang skor; klaim terbagi antara F039 dan F054. Kedua bagian
@@ -243,6 +245,7 @@ peningkatannya optimistis.
 | **Berkas Bukti Klaster (.zip)** | Audit Action, Claim Details | Ringkasan (alasan, bukti terukur, saran pemeriksaan, keputusan verifikator), `klaim_terkait.csv` (dengan alasan per klaim), `faskes.csv`, `dokter.csv`, dan gambar subgraf `.svg`. Diserahkan ke pemeriksa dokumen: JALA menyaring di depan, pemeriksa dokumen memeriksa berkasnya. |
 | **Bagaimana kalau dokter ini dikeluarkan?** | Audit Action | Klaim dokter dibuang dari klaster, graf antar-faskes dihitung ulang: apakah klaster pecah, berapa hubungan hilang, siapa inti jaringan. Pada data default, dokter pengarah Self-Referral terbaca sebagai inti (100% klaim), sedangkan cincin Phantom tidak bergantung pada satu dokter. Simulasi struktural, bukan penilaian peran hukum dokter. |
 | **Loop dismiss** | Audit Action, Risk Ranking | Dismiss menurunkan skor klaster (×0,4) dan klaster bertipologi sama dengan pola diagnosis serupa (kemiripan kosinus ≥ 0,85) turun hingga 25%; peringkat berubah di layar dan bisa dibatalkan. Klaster yang sudah dikonfirmasi tidak ikut turun. |
+| **Penanda "kemungkinan penjelasan sah"** | Claim Details, Audit Action | Bila ≥40% klaim satu klaster berkode `N18.6` (hemodialisis terjadwal), tampil penanda ketidakpastian: kunjungan berulang di sini mirip repeat billing padahal layanan sah, jadi verifikator diminta memastikan jadwal rutin dulu. Dihitung dari kolom teramati (kode diagnosis) tanpa label, dan hanya pola spesifik — sinyal non-spesifik (mis. jam kirim malam) sengaja tidak dipakai agar tidak memberi rasa aman palsu. |
 | **Cara Pakai** | Sidebar | Panduan 7 langkah mengikuti alur demo, terbuka otomatis sekali per sesi (`?tour=0` untuk mematikan), dengan tombol yang langsung membuka klaster contoh. |
 
 Diukur dengan simulasi (`python -m core.feedback`, memakai label hanya untuk menilai): verifikator yang meninjau antrean dari atas dan
