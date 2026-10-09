@@ -4,13 +4,9 @@ import streamlit as st
 
 from components import bench, cards, charts, guide, layout
 from core.evaluate import N_FOLDS
-from core.live import AUTO_FLAG, THRESH
+from core.live import AUTO_FLAG, THRESH, _DIALYSIS_ICD
 from data.mock_data import QUARTER
 from core.synthetic import SEED
-
-# Kode diagnosis dialisis terjadwal; klaim berulang di sini sah secara klinis,
-# sehingga dipakai sebagai contoh "pola mirip fraud padahal layanan terjadwal".
-_DIALYSIS_ICD = "N18.6"
 
 
 def _find_contrast_cluster(live):
