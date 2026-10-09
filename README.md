@@ -2,6 +2,9 @@
 
 [![CI](https://github.com/Yance30/Jala/actions/workflows/ci.yml/badge.svg)](https://github.com/Yance30/Jala/actions/workflows/ci.yml)
 
+**🔗 Demo live:** https://jala-fraud.streamlit.app/ &nbsp;·&nbsp; data 100% sintetis, tanpa data peserta nyata (sesuai UU PDP).
+Muatan pertama bisa ~30 detik karena mesin deteksi membangun cache; setelah itu responsif.
+
 Prototipe untuk **BPJS Kesehatan Healthkathon 2026** (kategori *Efisiensi Risiko pada Fasilitas Kesehatan*): dashboard deteksi kecurangan klaim BPJS Kesehatan lewat **analisis jaringan antar-aktor**
 (faskes, dokter, peserta, diagnosis), bukan pemeriksaan klaim satu per satu. Seluruh data **sintetis**
 (tidak ada data peserta nyata, sesuai UU PDP).
@@ -27,7 +30,7 @@ Prototipe untuk **BPJS Kesehatan Healthkathon 2026** (kategori *Efisiensi Risiko
 - About menyediakan slider kapasitas mingguan, simulasi salah dismiss, dan audit false positive per tipe faskes/wilayah. Semua hasil ini berasal dari data sintetis.
 - Replay waktu deteksi dapat dibuat dengan `python -m core.temporal_impact`; hasil disimpan ke `docs/temporal_impact.json`. Model replay hanya dilatih dari minggu yang sudah lewat, tetapi tetap merupakan simulasi retrospektif sintetis.
 - Dokumen untuk penilaian: [model card](docs/model-card.md), [one-pager](docs/one-pager.md), [rencana pilot](docs/pilot-plan.md), dan [latihan tanya jawab](docs/juri-faq.md).
-- Jalankan lokal di Windows dengan `run_demo.bat`, atau bangun Docker dengan `docker build -t jala-demo .` lalu jalankan `docker run --rm -p 8501:8501 -v jala-data:/app/.jala jala-demo`.
+- Coba langsung tanpa instalasi di **https://jala-fraud.streamlit.app/** (Streamlit Community Cloud). Jalankan lokal di Windows dengan `run_demo.bat`, atau bangun Docker dengan `docker build -t jala-demo .` lalu jalankan `docker run --rm -p 8501:8501 -v jala-data:/app/.jala jala-demo`.
 - `requirements-lock.txt` dan `requirements-lock-win.txt` mengunci closure dependensi runtime untuk CPython 3.12 di Linux dan Windows. Regenerasi dengan `python scripts/resolve_runtime_lock.py --python-version 3.12 --platform linux` atau `--platform windows` setelah mengubah paket. CI, Docker, dan `run_demo.bat` meng-install dari lock ini (bukan `requirements.txt`), sehingga lingkungan uji identik dengan yang di-deploy; `python scripts/check_lock.py requirements-lock.txt requirements-lock-win.txt` memverifikasi lock masih memenuhi rentang di `requirements.txt`.
 - Tampilan peran dan ID peserta tersamar adalah simulasi, bukan autentikasi, kontrol akses, atau bukti kepatuhan UU PDP.
 
