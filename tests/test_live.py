@@ -1,6 +1,7 @@
 """Tes lapisan data hidup (core/live.py): klaster dari skor nyata, tanpa label, dengan skema yang dipakai layar."""
 import json
 
+import pandas as pd
 import pytest
 
 from core import live as L
@@ -116,3 +117,31 @@ def test_search_finds_cluster_by_faskes_name(eng):
     c = lv.clusters[0]
     name = lv.world.faskes.set_index("faskes_id").name[c["faskes"][0]]
     assert lv.find(name) == c["id"] and lv.find("tidak-ada-yang-begini") is None
+
+
+def test_benign_explanations_read_only_observed_icd():
+    """Penanda 'mungkin sah' murni dari kolom teramati (icd); spesifik, tidak memberi rasa aman palsu."""
+    dia = pd.DataFrame({"icd": ["N18.6"] * 8 + ["J18.9"] * 2})
+    out = L.benign_explanations(dia)
+    assert len(out) == 1 and out[0]["marker"] == "dialisis_terjadwal"
+    assert "80%" in out[0]["text"] and "N18.6" in out[0]["text"]
+    # tanpa dominasi dialisis -> kosong (pola tidak spesifik tidak dipakai)
+    assert L.benign_explanations(pd.DataFrame({"icd": ["J18.9"] * 10})) == []
+    assert L.benign_explanations(pd.DataFrame({"icd": []})) == []
+
+
+def test_benign_marker_flags_dialysis_false_positive_never_real_fraud(eng):
+    """Penanda menyala pada klaster dialisis yang salah tandai, dan TIDAK pada klaster mayoritas fraud."""
+    w, _, lv = eng
+    lab = w.labels.set_index("claim_id")
+    fired_on_fp = False
+    for c in lv.clusters:
+        markers = lv.benign(c["id"])
+        fraud_share = float(lab.loc[c["idx"]].is_fraud.mean())
+        if fraud_share >= 0.5:
+            assert markers == [], f"{c['id']} mayoritas fraud tetapi diberi penanda penjelasan sah"
+        elif markers:
+            assert any(m["marker"] == "dialisis_terjadwal" for m in markers)
+            fired_on_fp = True
+    assert fired_on_fp, "dunia default seharusnya punya klaster dialisis salah-tandai yang diberi penanda"
+

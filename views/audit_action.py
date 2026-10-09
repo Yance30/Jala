@@ -141,6 +141,7 @@ def render():
     with b2:
         verifier_tools.evidence_button(cid, key="evidence_audit")
     verifier_tools.modus_note(live.by_id[cid]["typology"])
+    verifier_tools.benign_note(live, cid)
     verifier_tools.feedback_card(live, cid)
 
     audited_status = st.session_state.get("audited", {}).get(cid)

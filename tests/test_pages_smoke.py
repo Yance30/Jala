@@ -196,6 +196,35 @@ def test_audit_page_shows_whatif_panel():
     assert "UMPAN BALIK VERIFIKATOR" not in _text(at)            # belum ada keputusan
 
 
+def test_benign_uncertainty_marker_shown_for_dialysis_false_positive():
+    """Klaster dialisis (salah tandai) memunculkan penanda 'kemungkinan sah' di Audit & Claim Details."""
+    at = _audit_with("JALA-F006")
+    assert not at.exception
+    txt = _text(at)
+    assert "Kemungkinan penjelasan sah" in txt and "Penanda ketidakpastian" in txt and "N18.6" in txt
+
+    claim = AppTest.from_file(APP, default_timeout=TIMEOUT)
+    claim.session_state["intro_done"] = True
+    claim.session_state["tour_seen"] = True
+    claim.session_state["page"] = "claim"
+    claim.session_state["selected_cluster"] = "JALA-F006"
+    claim.run()
+    assert not claim.exception
+    assert "Kemungkinan penjelasan sah" in _text(claim)
+
+
+def test_benign_uncertainty_marker_absent_for_phantom_fraud_cluster():
+    """Klaster phantom (fraud murni, tanpa kode dialisis) tidak diberi penanda penjelasan sah."""
+    from components import bench
+
+    lv = bench.get_live()
+    phantom = next(c for c in lv.clusters if c["typology"] == "Phantom Billing")
+    at = _audit_with(phantom["id"])
+    assert not at.exception
+    assert "Kemungkinan penjelasan sah" not in _text(at)
+
+
+
 def test_dismiss_flow_lowers_score_shows_banner_and_can_be_undone():
     at = _audit_with("JALA-F006")
     next(b for b in at.button if b.key and "dismiss" in b.key).click().run()

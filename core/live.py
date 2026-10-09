@@ -30,6 +30,10 @@ MIN_CLAIMS = 5        # klaster lebih kecil dari ini diabaikan
 AUTO_FLAG = 85        # skor klaster (%) untuk "Auto-Flagged"
 SEED = 7
 
+# Penanda "kemungkinan sah" dihitung dari KOLOM TERAMATI saja (bukan label), untuk menekan false positive.
+_DIALYSIS_ICD = "N18.6"   # hemodialisis terjadwal; kunjungan berulang di sini sah secara klinis
+_DIALYSIS_SHARE = 0.4     # ambang "didominasi dialisis" agar penanda penjelasan sah ditampilkan
+
 TYPO = {   # tipologi -> (nada lencana, ikon)
     "Phantom Billing": ("amber", "✳"),
     "Repeat Billing": ("amber", "⧉"),
@@ -300,6 +304,12 @@ class Live:
                 return c["id"]
         return None
 
+    # ------------------------------------------------------------------ penanda ketidakpastian (false positive)
+    def benign(self, cid: str) -> list:
+        """Kemungkinan penjelasan sah untuk satu klaster, dari kolom teramati saja (lihat benign_explanations)."""
+        c = self.by_id[cid]
+        return benign_explanations(self.flagged.loc[c["idx"]])
+
 
 # ---------------------------------------------------------------------------
 def _evidence(fl: pd.DataFrame, typ: str) -> list:
@@ -350,6 +360,27 @@ def _why(typ: str, ev: list, n: int) -> str:
             "Self-Referral": "Dugaan Rujukan tidak sesuai (Self-referral)"}.get(typ, "Anomali jaringan")
     body = "; ".join(e[2] for e in ev[:2])
     return f"{head} pada {n} klaim ditandai: {body}."
+
+
+def benign_explanations(fl: pd.DataFrame) -> list:
+    """Penanda "mungkin sah" dari KOLOM TERAMATI saja (tanpa label), untuk mengurangi risiko false positive.
+
+    Hanya pola yang spesifik dan dapat dipertanggungjawabkan dari data klaim yang dikembalikan. Pola yang
+    tidak spesifik (mis. jam kirim malam, yang juga muncul pada klaster fraud) sengaja TIDAK dipakai agar
+    tidak memberi rasa aman palsu. Keluaran: daftar dict {marker, icon, text}.
+    """
+    out = []
+    if len(fl) == 0 or "icd" not in fl.columns:
+        return out
+    share = float((fl.icd == _DIALYSIS_ICD).mean())
+    if share >= _DIALYSIS_SHARE:
+        out.append({
+            "marker": "dialisis_terjadwal", "icon": "🩺",
+            "text": (f"{share:.0%} klaim di klaster ini memakai kode {_DIALYSIS_ICD} (hemodialisis). Kunjungan "
+                     "berulang pada dialisis terjadwal adalah layanan sah yang polanya mirip klaim berulang; "
+                     "pastikan ini jadwal rutin sebelum menyimpulkan repeat billing."),
+        })
+    return out
 
 
 def _timeline(df_all: pd.DataFrame, fl: pd.DataFrame, faskes: list):

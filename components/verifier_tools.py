@@ -225,3 +225,30 @@ def modus_note(typology: str) -> None:
         """,
         unsafe_allow_html=True,
     )
+
+
+# ---------------------------------------------------------------- penanda ketidakpastian (false positive)
+def benign_note(live, cid: str) -> None:
+    """Kemungkinan penjelasan sah untuk klaster ini, dari kolom teramati saja.
+
+    Menampilkan penanda ketidakpastian agar verifikator mengonfirmasi konteks klinis sebelum menindaklanjuti
+    (mis. klaster dialisis terjadwal yang polanya mirip repeat billing). Bila tidak ada penanda spesifik,
+    tidak menampilkan apa pun agar tidak menambah kebisingan; panduan generik sudah ada di modus_note.
+    """
+    items = live.benign(cid)
+    if not items:
+        return
+    lis = "".join(f'<li style="margin-bottom:4px;">{i["icon"]} {escape(i["text"])}</li>' for i in items)
+    st.markdown(
+        f"""
+        <div class="j-alert-teal" style="margin:10px 0;background:#FFFBEB;border-color:#FCD34D;">
+          <b>⚖ Kemungkinan penjelasan sah — periksa sebelum menyimpulkan</b>
+          <span class="j-pill grey" style="margin-left:8px;">Penanda ketidakpastian</span>
+          <ul style="margin:8px 0 0 18px;font-size:13px;color:#475569;">{lis}</ul>
+          <div class="j-sub" style="margin-top:6px;">Sinyal dihitung dari kolom teramati (kode diagnosis), bukan dari label.
+            Konfirmasi konteks klinis dengan verifikator sebelum menindaklanjuti klaster ini.</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+

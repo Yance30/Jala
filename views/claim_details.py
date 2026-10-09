@@ -112,6 +112,7 @@ def render():
             st.rerun()
         verifier_tools.evidence_button(selected, key="evidence_claim")
         verifier_tools.modus_note(live.by_id[selected]["typology"])
+        verifier_tools.benign_note(live, selected)
 
     with right:
         profile_html = "".join(
