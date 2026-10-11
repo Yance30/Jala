@@ -63,7 +63,7 @@ Aksi *freeze* dan *audit lapangan* adalah simulasi alur: tidak ada pembayaran ya
 **Pemetaan data.** Skema resmi data klaim BPJS tidak kami ketahui. `docs/pemetaan-data.md` memuat skema sintetis dan padanan
 konsepnya (belum dikonfirmasi), kontrak data minimal (`core/contract.py`, dicek otomatis oleh pipeline), kolom yang tidak ada
 (nomor SEP, kode INA-CBG, status pembayaran, kapabilitas faskes, dan lainnya), risiko ketelitian waktu, dan tujuh pertanyaan untuk
-panitia saat coaching. Guidebook tidak memuat kriteria penilaian.
+panitia saat coaching. 
 
 ## Quick start
 
