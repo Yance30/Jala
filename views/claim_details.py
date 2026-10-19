@@ -28,8 +28,8 @@ def render():
         review_status, review_tone = "Rencana pemeriksaan lapangan dicatat", "teal"
         next_step = "Rencana tercatat dalam simulasi; belum ada surat tugas yang diterbitkan."
     elif review and review.get("verdict") == "confirm":
-        review_status, review_tone = "Simulasi penangguhan dikonfirmasi", "teal"
-        next_step = "Status hanya berlaku pada demo ini; tidak ada pembayaran yang ditangguhkan."
+        review_status, review_tone = "Prioritas tinjauan dicatat (simulasi)", "teal"
+        next_step = "Catatan hanya berlaku pada demo ini; tidak ada pembayaran atau sistem eksternal yang berubah."
     elif review and review.get("verdict") == "dismiss":
         review_status, review_tone = "Pola wajar dicatat (simulasi)", "grey"
         next_step = "Jika catatan perlu dikoreksi, batalkan umpan balik pada halaman Tindak Lanjut."
