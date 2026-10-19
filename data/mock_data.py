@@ -26,11 +26,11 @@ AUDIT_ACTIONS = [
     {
         "id": "suspend",
         "icon": "⚖", "icon_tone": "teal", "tag": ("Tindak lanjut", "red"),
-        "title": "Simulasi penangguhan klaim",
-        "body": "Catat simulasi penangguhan klaim untuk klaster ini. Tidak ada pembayaran yang "
-                "ditangguhkan atau sistem eksternal yang dihubungi.",
-        "button": "Simulasikan penangguhan", "button_kind": "primary",
-        "note": "Simulasi; pembayaran tetap tidak berubah",
+        "title": "Catat prioritas pemeriksaan",
+        "body": "Catat bahwa klaster ini perlu ditinjau lebih dahulu. Tindakan hanya tersimpan sebagai "
+                "simulasi dan tidak mengubah pembayaran atau sistem eksternal.",
+        "button": "Catat prioritas (simulasi)", "button_kind": "primary",
+        "note": "Catatan demo; tidak mengubah pembayaran",
     },
     {
         "id": "field_audit",
@@ -70,32 +70,32 @@ COMPARISON = {
         "coverage": "1 Klaim Tunggal",
     },
     "han": {
-        "tag": "Heterogeneous Graph Neural Network (HAN)",
-        "title": "Maps relationships across Faskes, Dokter, and Pasien as a graph",
-        "sub": "Reveals hidden collusion patterns invisible in isolated claims.",
-        "panel_label": "Topologi Relasional: Multi-Partai (Metapath)",
-        "panel_note": "Korelasi siklus klaim terdeteksi secara otomatis melalui keterkaitan aktor berulang & anomali rujukan.",
+        "tag": "Analitik jaringan + gradient boosting (prototipe)",
+        "title": "Menggabungkan fitur hubungan antaraktor dengan pemeringkatan klaster",
+        "sub": "Menyusun pola pada data sintetis untuk membantu menentukan urutan tinjauan.",
+        "panel_label": "Analitik relasi pada data sintetis",
+        "panel_note": "Fitur relasi dan klaster digunakan untuk menyusun prioritas tinjauan; hasilnya bukan bukti pelanggaran.",
         "points": [
-            "Pelacakan metapath otomatis (Faskes ↔ Dokter ↔ Pasien ↔ ICD-10).",
-            "Mendeteksi anomali keterlibatan sindikat meski berkas individual tampak sah.",
-            "Skor risiko kolusi dari fitur graf (prototipe); arsitektur target: HAN.",
+            "Prototipe merangkum fitur relasi Faskes, dokter, pasien, dan klaim.",
+            "Klaster yang dihasilkan perlu diperiksa petugas bersama konteks dan bukti sumber.",
+            "Skor 0–100 hanya mengurutkan prioritas; GNN/HAN masih rancangan dan belum diimplementasikan.",
         ],
-        "coverage": "Jejaring Lintas Ekosistem",
+        "coverage": "Prototipe pada data sintetis",
     },
 }
 
 ABOUT = {
     "title": "Catatan Privasi & Sumber Data Prototipe",
     "subtitle": "JALA — Jaringan Analitik Lintas Aktor • Environmental Sandbox",
-    "quote": "“This prototype uses synthetic/dummy data only. No real BPJS participant data is used, "
-             "in compliance with Indonesia's Personal Data Protection Law (UU PDP).”",
+    "quote": "“Demo ini menggunakan data sintetis dan tidak memuat data peserta BPJS nyata. "
+             "Pernyataan ini bukan hasil audit kepatuhan sistem produksi terhadap UU PDP.”",
     "law": "Undang-Undang Republik Indonesia Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP)",
     "chips": [
         ("🧠 Synthetic Graph Generator (core/synthetic.py)", "teal"),
-        ("🔒 Zero PII Ingestion", "teal"),
-        ("♻ Fully Pseudonymized Entities", "teal"),
+        ("🔒 Data sintetis; bukan uji ingest data produksi", "teal"),
+        ("♻ Identitas dalam demo adalah contoh sintetis", "teal"),
     ],
-    "owner": "Direktorat Jaminan Pelayanan Kesehatan | Tim Pencegahan Kecurangan (Fraud) BPJS Kesehatan",
+    "owner": "Tim pengembang prototipe: Laskar Deadline (Kelompok 9)",
 }
 
 FOOTER_STATUS = [

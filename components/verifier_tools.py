@@ -65,8 +65,8 @@ def review_timeline(cid: str, key: str) -> None:
             score_text = ""
             if before is not None and after is not None:
                 score_text = (
-                    f"Skor prioritas: {before}% → {after}%"
-                    if before != after else f"Skor prioritas tidak berubah ({after}%)"
+                    f"Skor prioritas: {before}/100 → {after}/100"
+                    if before != after else f"Skor prioritas tidak berubah ({after}/100)"
                 )
             note_html = (f'<div style="margin-top:7px;font-size:13px;white-space:pre-wrap;'
                          f'overflow-wrap:anywhere;">{note}</div>' if note else "")
@@ -122,13 +122,13 @@ def feedback_card(live, cid: str) -> None:
     rank = [x["id"] for x in live.clusters].index(cid) + 1
     base = c["score_base"]
     if info["kind"] == "dismiss":
-        head = f"Pola ditandai wajar pada {fb[cid]['at']}. Skor {base}% → <b>{c['score']}%</b>, urutan saat ini #{rank}."
+        head = f"Pola ditandai wajar pada {fb[cid]['at']}. Skor {base}/100 → <b>{c['score']}/100</b>, urutan saat ini #{rank}."
     elif info["kind"] == "similar":
-        head = (f"Skor diturunkan {base}% → <b>{c['score']}%</b> (urutan #{rank}) karena pola diagnosis serupa "
+        head = (f"Skor diturunkan {base}/100 → <b>{c['score']}/100</b> (urutan #{rank}) karena pola diagnosis serupa "
                 f"({info['sim']:.2f}) dengan {info['source']} yang ditandai wajar. Klaster ini sendiri belum diputuskan: "
                 f"tinjau, atau batalkan catatan pola wajar di {info['source']} bila keliru.")
     else:
-        head = f"Simulasi penangguhan dikonfirmasi pada {fb[cid]['at']}. Tidak ada pembayaran yang ditangguhkan."
+        head = f"Prioritas tinjauan dicatat pada {fb[cid]['at']}. Tidak ada pembayaran atau sistem eksternal yang berubah."
     effects = [feedback.describe(x) for x in _changes(live) if x["source"] == cid and x["id"] != cid]
     lis = "".join(f"<li>{e}</li>" for e in effects)
     st.markdown(

@@ -19,36 +19,36 @@ def _apply_template(tpl: str):
     if not current.startswith(prefix):
         st.session_state.note_draft = prefix + current
 
-@st.dialog("Konfirmasi Otorisasi — Penangguhan Pembayaran Klaim (Simulasi)")
+@st.dialog("Catat Prioritas Tinjauan (Simulasi)")
 def _confirm_freeze(a: dict):
     st.markdown(
         f"""
-        <div class="j-body">Anda akan menerbitkan instruksi penangguhan pencairan dana terhadap
+        <div class="j-body">Anda akan mencatat prioritas tinjauan untuk
         <b>{_esc(a['n_claims'])} klaim</b> senilai <b>{_esc(rp(a['value']))}</b> pada <b>{_esc(a['n_faskes'])} Faskes</b> terkait.</div>
         <div class="j-note" style="margin:10px 0;"><span>ⓘ</span><div><b>Simulasi prototipe:</b> tidak ada pembayaran
           yang ditangguhkan dan tidak ada sistem BPJS yang dihubungi. Riwayat tersedia selama sesi aktif; penyimpanan lokal lintas sesi bersifat opsional. Perubahan skor hanya berlaku pada sesi ini.</div></div>
-        <div class="j-label" style="margin:14px 0 6px;">Pada alur sungguhan (rancangan, belum terhubung), langkah ini akan:</div>
+        <div class="j-label" style="margin:14px 0 6px;">Dalam demo, tindakan ini hanya:</div>
         """,
         unsafe_allow_html=True,
     )
     for item in [
-        "Menangguhkan pencairan klaim terkait di sistem pembayaran",
-        "Memberi notifikasi ke unit pengampu faskes",
-        "Menyiapkan rancangan berita acara untuk ditinjau petugas",
+        "Menyimpan catatan prioritas untuk sesi demo ini",
+        "Menampilkan perubahan status di antarmuka demo",
+        "Tidak mengubah pembayaran atau menghubungi sistem eksternal",
     ]:
         st.markdown(f'<div style="font-size:13px;margin-bottom:6px;">• {item}</div>', unsafe_allow_html=True)
     st.markdown('<div style="height:10px"></div>', unsafe_allow_html=True)
     c1, c2 = st.columns(2)
     if c1.button("Batal", width="stretch"):
         st.rerun()
-    if c2.button("✔ Konfirmasi (Simulasi)", width="stretch", type="primary"):
-        st.session_state.audit_log.append(f"[{a['id']}] FREEZE dicatat (simulasi: tidak ada sistem eksternal yang dihubungi).")
+    if c2.button("✔ Catat prioritas (Simulasi)", width="stretch", type="primary"):
+        st.session_state.audit_log.append(f"[{a['id']}] Prioritas tinjauan dicatat (simulasi; tanpa efek pada pembayaran/sistem eksternal).")
         st.session_state.setdefault("audited", {})[a["id"]] = "freeze"
         note = st.session_state.get("note_draft", "") or ""
         score_before = a["score"]
         bench.apply_verdict(a["id"], "confirm", note)
         score_after = bench.get_live().by_id[a["id"]]["score"]
-        bench.record_review_event(a["id"], "Konfirmasi penangguhan (simulasi)", note,
+        bench.record_review_event(a["id"], "Catat prioritas tinjauan (simulasi)", note,
                                   score_before, score_after)
         st.rerun()
 
@@ -106,9 +106,9 @@ def render():
             </div>
             <div style="display:flex;align-items:center;gap:12px;">
               <div style="width:56px;height:56px;border-radius:9999px;border:3px solid #DC2626;color:#DC2626;
-                          display:flex;align-items:center;justify-content:center;font-weight:700;">{_esc(a['score'])}%</div>
+                          display:flex;align-items:center;justify-content:center;font-weight:700;">{_esc(a['score'])}/100</div>
               <div>
-                <div class="j-label">Network Risk Score</div>
+                <div class="j-label">Skor prioritas jaringan (0–100)</div>
                 <div style="color:#DC2626;font-weight:600;font-size:13px;">{_esc(a['score_note'])}</div>
               </div>
             </div>
@@ -150,7 +150,7 @@ def render():
         st.success(action_notice)
     if audited_status:
         labels = {
-            "freeze": "Penangguhan dicatat sebagai simulasi",
+            "freeze": "Prioritas tinjauan dicatat (simulasi)",
             "field_audit": "Rencana pemeriksaan lapangan dicatat",
             "dismiss": "Pola ditandai wajar dalam simulasi",
         }
