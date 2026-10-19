@@ -185,7 +185,7 @@ class Live:
 
         for f in c["faskes"]:
             r = faskes.loc[f]
-            add(f"f_{f}", "faskes", f"{r['name']}", f"{TYPE_LABEL[r['type']]} · {r['region']} · skor {c['score']}", True)
+            add(f"f_{f}", "faskes", f"{r['name']}", f"{TYPE_LABEL[r['type']]} · {r['region']} · skor {c['score']}/100", True)
         top_docs = fl.doctor_id.value_counts().head(n_doc).index
         ndoc = self.df.groupby("doctor_id").faskes_id.nunique()
         for d in top_docs:
