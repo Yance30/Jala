@@ -27,7 +27,7 @@ from core.synthetic import PERIOD_DAYS, PERIOD_START, TYPE_LABEL, World
 THRESH = 0.5          # skor klaim minimum untuk "ditandai"
 MIN_EDGE = 3          # bobot sisi minimum antar-faskes
 MIN_CLAIMS = 5        # klaster lebih kecil dari ini diabaikan
-AUTO_FLAG = 85        # skor klaster (%) untuk "Auto-Flagged"
+AUTO_FLAG = 85        # ambang skor prioritas klaster (skala 0–100)
 SEED = 7
 
 # Penanda "kemungkinan sah" dihitung dari KOLOM TERAMATI saja (bukan label), untuk menekan false positive.
@@ -61,12 +61,12 @@ def _status(c: dict, default: tuple) -> tuple:
     if not fb:
         return default
     return {"dismiss": ("Pola wajar (simulasi)", "grey"), "similar": ("Prioritas diturunkan", "amber"),
-            "confirm": ("Penangguhan simulasi dikonfirmasi", "teal")}.get(fb["kind"], default)
+            "confirm": ("Prioritas tinjauan dicatat (simulasi)", "teal")}.get(fb["kind"], default)
 
 
 def _fb_suffix(c: dict) -> str:
     base = c.get("score_base")
-    return f" · skor dasar {base}%" if base is not None and base != c["score"] else ""
+    return f" · skor dasar {base}/100" if base is not None and base != c["score"] else ""
 
 
 @dataclass
@@ -89,8 +89,8 @@ class Live:
         s = c["score"]
         return {
             "id": c["id"], "name": c["name"], "subtitle": c["subtitle"],
-            "status": _status(c, ("Prioritas otomatis", "red") if s >= AUTO_FLAG else ("Tinjauan awal", "grey")),
-            "score": s, "conf": "Prioritas sangat tinggi" if s >= 90 else ("Prioritas tinggi" if s >= AUTO_FLAG else "Tinjauan awal"),
+            "status": _status(c, ("Skor tinggi — tinjau lebih dahulu", "red") if s >= AUTO_FLAG else ("Tinjauan awal", "grey")),
+            "score": s, "conf": "Skor sangat tinggi (≥90/100)" if s >= 90 else ("Skor tinggi" if s >= AUTO_FLAG else "Tinjauan awal"),
             "metric": c["metric"] + _fb_suffix(c), "typology": (c["typology"], tone), "why": c["why"],
             "actions": ["Lihat subgraf"], "icon": icon, "icon_tone": tone,
         }
@@ -101,8 +101,8 @@ class Live:
         return [
             {"label": "Klaster dalam antrean", "value": str(len(self.clusters)), "tone": "dark", "icon": "🕸", "icon_tone": "grey",
              "note": f"dari {self.flagged.faskes_id.nunique()} faskes dengan klaim ditandai"},
-            {"label": f"Prioritas otomatis (≥{AUTO_FLAG}%)", "value": str(n_auto), "tone": "red", "icon": "⚠", "icon_tone": "red",
-             "note": "Antrean verifikator prioritas"},
+            {"label": f"Skor prioritas tinggi (≥{AUTO_FLAG}/100)", "value": str(n_auto), "tone": "red", "icon": "⚠", "icon_tone": "red",
+             "note": "Urutan tinjauan demo; bukan probabilitas fraud"},
             {"label": "Diaudit di Sesi Ini", "value": str(audited), "tone": "dark", "icon": "✅", "icon_tone": "amber", "note": ""},
             {"label": "Kepadatan Rata-rata Klaster", "value": f"{dens:.2f}", "tone": "teal", "icon": "❋", "icon_tone": "green",
              "note": f"Modularitas Louvain: {self.modularity:.2f}"},
@@ -117,7 +117,7 @@ class Live:
                 "id": c["id"], "name": c["name"],
                 "nodes": f"{len(c['faskes'])} Faskes · {c['n_doctors']} Dokter · Wilayah {', '.join(c['regions'])}",
                 "typology": c["typology"], "faskes": c["faskes_names"], "volume": c["n"], "value": rp(c["value"]),
-                "score": s, "status": _status(c, ("Prioritas otomatis", "red") if s >= AUTO_FLAG else ("Menunggu tinjauan", "amber")),
+                "score": s, "status": _status(c, ("Skor tinggi — tinjau lebih dahulu", "red") if s >= AUTO_FLAG else ("Menunggu tinjauan", "amber")),
             })
         return out
 
@@ -126,7 +126,7 @@ class Live:
         exp = sum(c["value"] for c in self.clusters)
         stats = [
             {"label": "Klaster dalam antrean", "value": str(len(self.clusters)), "delta": "", "note": f"{len(self.flagged):,} klaim masuk tinjauan awal dari {len(self.df):,}", "tone": "dark"},
-            {"label": "Prioritas Sangat Tinggi (≥90%)", "value": str(crit), "delta": "", "note": "Tinjau lebih dahulu; bukan keputusan otomatis", "tone": "amber"},
+            {"label": "Skor prioritas sangat tinggi (≥90/100)", "value": str(crit), "delta": "", "note": "Tinjau lebih dahulu; bukan keputusan otomatis", "tone": "amber"},
             {"label": "Nilai Klaim Ditandai", "value": rp(exp), "delta": "", "note": "Total tarif klaim ditandai (sintetis)", "tone": "dark"},
         ]
         if auc is not None:
@@ -140,7 +140,7 @@ class Live:
         names = c["faskes_names"]
         return {
             "title": c["name"], "typology": (c["typology"], tone),
-            "flag": f"Prioritas otomatis ({c['score']}%)" if c["score"] >= AUTO_FLAG else f"Tinjauan awal ({c['score']}%)",
+            "flag": f"Skor tinggi ({c['score']}/100)" if c["score"] >= AUTO_FLAG else f"Tinjauan awal ({c['score']}/100)",
             "profile": [
                 ("Fasilitas Kesehatan", names), ("Periode Observasi", "Q3 2026 (Jul - Sep)"),
                 ("Total Klaim Ditandai", f"{c['n']} klaim", "red"), ("Keterikatan Metapath", METAPATH.get(c["typology"], "—"), "teal"),
@@ -157,9 +157,9 @@ class Live:
         tone, _ = TYPO.get(c["typology"], ("grey", "◆"))
         s = c["score"]
         return {
-            "id": c["id"], "name": c["name"], "flag": f"Prioritas otomatis ({s}%)" if s >= AUTO_FLAG else f"Tinjauan awal ({s}%)",
-            "typology": (c["typology"], tone), "algo": "Deteksi: prototipe fitur graf pada data sintetis (arsitektur target: HAN)",
-            "score": s, "score_note": "Kategori: Sangat Tinggi" if s >= 90 else ("Kategori: Tinggi" if s >= AUTO_FLAG else "Kategori: Sedang"),
+            "id": c["id"], "name": c["name"], "flag": f"Skor tinggi ({s}/100)" if s >= AUTO_FLAG else f"Tinjauan awal ({s}/100)",
+            "typology": (c["typology"], tone), "algo": "Fitur relasi graf + pemeringkatan prototipe pada data sintetis; GNN/HAN belum diimplementasikan",
+            "score": s, "score_note": "Tinjau lebih dahulu" if s >= AUTO_FLAG else "Prioritas tinjauan awal",
             "cards": [
                 ("Faskes Terkait", f"{len(c['faskes'])} Faskes Terkait", c["faskes_names"], "dark"),
                 ("Klaim Ditandai", f"{c['n']} Klaim Ditandai", f"Total tarif {rp(c['value'])}", "red"),
@@ -289,7 +289,7 @@ class Live:
              "value": f"{len(w.faskes)} faskes · {self.df.doctor_id.nunique()} dokter · {self.df.patient_id.nunique():,} peserta", "tone": "dark"},
             {"icon": "❋", "label": "Porsi Klaim Ditandai", "value": f"{len(self.flagged) / len(self.df):.1%}",
              "extra": f"({len(self.flagged):,} dari {len(self.df):,} klaim)", "tone": "dark"},
-            {"icon": "", "label": "Antrean Verifikator Berikutnya", "value": f"{n_auto} klaster ≥{AUTO_FLAG}% menunggu tinjauan", "tone": "red"},
+            {"icon": "", "label": "Antrean Verifikator Berikutnya", "value": f"{n_auto} klaster dengan skor ≥{AUTO_FLAG}/100 menunggu tinjauan", "tone": "red"},
         ]
 
     # ------------------------------------------------------------------ pencarian
