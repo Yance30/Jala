@@ -16,17 +16,17 @@ PAGES = {
     "dashboard": {
         "purpose": "Ringkasan prioritas pemeriksaan pada periode data simulasi yang ditampilkan.",
         "read": [
-            "Kartu di atas menjawab: berapa klaim yang perlu perhatian dan seberapa besar risikonya.",
-            "Grafik tren menunjukkan apakah dugaan kecurangan naik atau turun dari waktu ke waktu.",
+            "Kartu di atas merangkum klaim dalam antrean dan tingkat prioritas tinjauannya.",
+            "Grafik tren merangkum perubahan pola pada data simulasi; bukan ukuran perubahan fraud nyata.",
             "Kartu kasus demo membuka contoh prioritas; kasus pembanding menunjukkan pola yang dapat memiliki penjelasan wajar.",
         ],
         "next": "Klik Mulai tinjau kasus atau Buka kasus pembanding untuk melihat alasan dan buktinya.",
     },
     "risk": {
-        "purpose": "Daftar kelompok klaim mencurigakan, diurutkan dari yang paling berisiko.",
+        "purpose": "Daftar kelompok klaim dalam data demo, diurutkan berdasarkan skor prioritas tinjauan.",
         "read": [
             "Skor lebih tinggi berarti kelompok diprioritaskan lebih dulu untuk diperiksa; skor bukan peluang kecurangan.",
-            "Label merah berarti skornya sudah melewati batas dan sebaiknya diperiksa lebih dulu.",
+            "Label merah menandai skor prioritas yang melewati ambang tinjauan; skor bukan probabilitas atau bukti kecurangan.",
             "Gunakan kotak cari atau tombol filter untuk mempersempit daftar.",
         ],
         "next": "Buka satu kelompok untuk melihat alasannya, lalu lihat jaringannya.",
@@ -50,10 +50,10 @@ PAGES = {
         "next": "Periksa klaim sumber, catat alasan, lalu pilih tindak lanjut simulasi.",
     },
     "audit": {
-        "purpose": "Tempat memutuskan tindakan dan mencatat alasannya.",
+        "purpose": "Tempat mencatat tindak lanjut simulasi dan alasannya.",
         "read": [
             "Tulis catatan lebih dulu agar keputusan punya jejak yang jelas.",
-            "Tiga pilihan mencatat simulasi penangguhan, rencana pemeriksaan lapangan, atau penandaan pola wajar.",
+            "Pilihan demo mencatat prioritas tinjauan, rencana pemeriksaan, atau pola wajar. Tidak ada pembayaran atau sistem eksternal yang berubah.",
             "Secara default, catatan hanya tersedia selama sesi aktif. Penyimpanan lokal lintas sesi bersifat opsional; tidak ada tindakan yang dikirim ke sistem BPJS.",
         ],
         "next": "Tinjau ringkasan status dan riwayat klaster sebelum kembali ke antrean.",
@@ -79,7 +79,7 @@ GLOSSARY = [
     ("Repeat Billing", "Dugaan pola klaim berulang yang perlu dicocokkan dengan tanggal layanan dan dokumen klaim."),
     ("Rujukan tidak sesuai (Self-referral)", "Dugaan pola rujukan yang perlu diperiksa terhadap kebutuhan klinis, aturan, dan konteks layanan."),
     ("AUC / AP", "Ukuran pembanding model pada data sintetis yang jawabannya diketahui. Angka ini tidak menyatakan kinerja pada data nyata."),
-    ("Prioritas otomatis", "Skor klaster melewati ambang antrean awal. Artinya diperiksa lebih dulu, bukan terbukti curang."),
+    ("Ambang prioritas", "Batas skor untuk menyusun antrean tinjauan. Skor bukan probabilitas dan bukan bukti kecurangan."),
     ("Faskes", "Fasilitas kesehatan: rumah sakit, klinik, atau puskesmas."),
     ("Verifikator", "Petugas yang memeriksa dan memutuskan. JALA hanya membantu menyusun urutan pemeriksaan."),
     ("Dismiss", "Istilah teknis untuk mencatat pola wajar. Kalibrasi demo dapat mengubah prioritas kelompok yang serupa."),
