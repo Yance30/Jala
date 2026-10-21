@@ -31,7 +31,7 @@ def _triage_row(**over):
 @pytest.mark.parametrize("field", ["icon_tone", "icon", "name", "subtitle", "why"])
 def test_risk_table_escapes_free_text(field):
     html = tables.risk_table_html([_risk_row(**{field: PAYLOAD})])
-    assert "<b>" not in html and PAYLOAD not in html               # markup mentah tidak lolos
+    assert PAYLOAD not in html                                     # markup mentah tidak lolos
     assert ESCAPED in html                                          # ter-escape sebagai entitas
 
 
@@ -56,7 +56,9 @@ def test_risk_table_structure_and_one_row_per_cluster():
     html = tables.risk_table_html(rows)
     assert "<table" in html and "<thead>" in html and "<tbody>" in html
     assert html.count("<tr") == 1 + len(rows)                       # 1 baris header + 1 per klaster
-    assert "92%" in html and "70%" in html                          # skor numerik tampil apa adanya
+    assert "92/100" in html and "70/100" in html
+    assert "bukan probabilitas atau bukti" in html
+    assert html.count('class="j-card j-risk-mobile-card"') == len(rows)
 
 
 def test_triage_table_renders_numbers_and_highlight():
@@ -64,6 +66,8 @@ def test_triage_table_renders_numbers_and_highlight():
     html = tables.triage_table_html(rows, selected_id="JALA-F002")
     assert html.count("<tr") == 1 + len(rows)
     assert "120" in html                                            # volume numerik tidak di-escape
+    assert "92/100" in html and "92%" not in html
+    assert "Prioritas pemeriksaan (/100)" in html
     assert html.count('style="background:#E6F4F2;"') == 1           # hanya baris terpilih yang di-highlight
 
 
@@ -76,3 +80,11 @@ def test_audit_faskes_renders_volume_number():
 def test_empty_rows_produce_empty_body():
     for html in (tables.risk_table_html([]), tables.triage_table_html([]), tables.audit_faskes_html([])):
         assert "<tbody></tbody>" in html and html.count("<tr") == 1  # hanya baris header
+
+
+def test_score_bar_labels_priority_as_scale_not_percent():
+    from components.cards import score_bar
+
+    html = score_bar(72, "tinggi", "fitur graf")
+    assert ">72/100</span>" in html
+    assert "width:72%;" in html

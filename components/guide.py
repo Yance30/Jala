@@ -23,13 +23,13 @@ PAGES = {
         "next": "Klik Mulai tinjau kasus atau Buka kasus pembanding untuk melihat alasan dan buktinya.",
     },
     "risk": {
-        "purpose": "Daftar kelompok klaim mencurigakan, diurutkan dari yang paling berisiko.",
+        "purpose": "Antrean kelompok klaim untuk membantu menentukan urutan pemeriksaan.",
         "read": [
-            "Skor lebih tinggi berarti kelompok diprioritaskan lebih dulu untuk diperiksa; skor bukan peluang kecurangan.",
+            "Skor 0–100 menunjukkan urutan pemeriksaan; bukan probabilitas atau bukti kecurangan.",
             "Label merah berarti skornya sudah melewati batas dan sebaiknya diperiksa lebih dulu.",
             "Gunakan kotak cari atau tombol filter untuk mempersempit daftar.",
         ],
-        "next": "Buka satu kelompok untuk melihat alasannya, lalu lihat jaringannya.",
+        "next": "Pilih klaster, buka detail, periksa bukti dan konteks, lalu catat tindak lanjut.",
     },
     "network": {
         "purpose": "Peta hubungan antara rumah sakit/klinik, dokter, pasien, dan diagnosis.",
@@ -38,7 +38,7 @@ PAGES = {
             "Hubungan yang rapat atau berulang adalah petunjuk untuk diperiksa, bukan bukti pelanggaran.",
             "Faskes yang pudar adalah faskes sejenis yang wajar, dipakai sebagai pembanding.",
         ],
-        "next": "Buka alasan penandaan untuk membaca konteks dan bukti terkait.",
+        "next": "Buka detail kasus untuk memeriksa konteks dan bukti terkait.",
     },
     "claim": {
         "purpose": "Alasan sebuah kelompok mendapat prioritas tinjauan, beserta konteks dan bukti yang dapat diperiksa.",

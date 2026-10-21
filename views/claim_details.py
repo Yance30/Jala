@@ -78,6 +78,8 @@ def render():
     if st.button("Buka Tindak Lanjut", type="primary", icon=":material/arrow_forward:",
                  key="claim_open_audit", width="stretch"):
         layout.goto("audit", cluster=selected)
+    if st.button("Lihat Peta Jaringan (opsional)", key="claim_open_network", width="stretch"):
+        layout.goto("network", cluster=selected)
 
     cols = st.columns(4)
     for col, s in zip(cols, live.triage_stats(auc)):

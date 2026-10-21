@@ -40,3 +40,40 @@ def test_about_chart_headers_keep_nonnegative_spacing(app_url, page):
         assert pair["marginBottom"] >= 0, pair
         assert pair["parentMarginBottom"] >= 0, pair
         assert pair["height"] >= 94, pair
+
+
+def test_operational_layout_at_phone_tablet_and_desktop_sizes(app_url, page):
+    for route in ("data_prediction", "batch_review", "system_status", "dashboard", "risk", "network", "claim", "audit", "about"):
+        page.goto(f"{app_url}/?page={route}&tour=0")
+        expect(page.locator(".j-topbar")).to_be_visible()
+        expect(page.get_by_role("button", name="Stop", exact=True)).not_to_be_visible()
+        for width in (320, 390, 768, 1024, 1440):
+            page.set_viewport_size({"width": width, "height": 900})
+            page.wait_for_timeout(350)  # Sidebar and column transitions.
+            sizes = page.locator('[data-testid="stMain"]').evaluate(
+                "el => ({scroll:el.scrollWidth, client:el.clientWidth})")
+            assert sizes["scroll"] <= sizes["client"] + 2, (route, width, sizes)
+            if width <= 640:
+                buttons = page.locator('[data-testid="stMain"] button').evaluate_all(
+                    "els => els.filter(e => e.offsetParent && e.closest('[data-testid=stButton]')).map(e => e.getBoundingClientRect().height)")
+                assert all(height >= 44 for height in buttons), (route, width, buttons)
+
+
+def test_weekly_capacity_axis_titles_fit_chart(app_url, page, tmp_path):
+    page.goto(f"{app_url}/?page=about&tour=0")
+    title = page.locator(".ytitle").filter(has_text="Total klaim fraud sintetis")
+    expect(title).to_be_visible()
+    chart = page.get_by_test_id("stPlotlyChart").filter(has=title)
+    for width in (320, 390, 768, 1400):
+        page.set_viewport_size({"width": width, "height": 900})
+        chart.scroll_into_view_if_needed()
+        page.wait_for_timeout(700)  # Plotly resizes after the responsive layout changes.
+        bounds = chart.bounding_box()
+        for label in (chart.locator(".ytitle"), chart.locator(".xtitle")):
+            box = label.bounding_box()
+            assert box and bounds
+            assert box["x"] >= bounds["x"] - 1, (width, box, bounds)
+            assert box["y"] >= bounds["y"] - 1, (width, box, bounds)
+            assert box["x"] + box["width"] <= bounds["x"] + bounds["width"] + 1, (width, box, bounds)
+            assert box["y"] + box["height"] <= bounds["y"] + bounds["height"] + 1, (width, box, bounds)
+        chart.screenshot(path=str(tmp_path / f"capacity-{width}.png"))

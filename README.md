@@ -63,12 +63,29 @@ Aksi *freeze* dan *audit lapangan* adalah simulasi alur: tidak ada pembayaran ya
 **Pemetaan data.** Skema resmi data klaim BPJS tidak kami ketahui. `docs/pemetaan-data.md` memuat skema sintetis dan padanan
 konsepnya (belum dikonfirmasi), kontrak data minimal (`core/contract.py`, dicek otomatis oleh pipeline), kolom yang tidak ada
 (nomor SEP, kode INA-CBG, status pembayaran, kapabilitas faskes, dan lainnya), risiko ketelitian waktu, dan tujuh pertanyaan untuk
-panitia saat coaching. 
+panitia saat coaching.
 
 ## Quick start
 
+Versi kerja setelah audit: [perbaikan dan validasi](docs/perbaikan-audit-2026-10-20.md),
+[mode penggunaan serta penghapusan data](docs/deployment-and-data.md), dan
+[paket demo/uji pemeriksa](docs/review-pilot.md). Default aplikasi memisahkan penyimpanan per sesi.
+Model batch v3 memerlukan pelatihan ulang model v2; artefak eksperimen lama tetap menjadi catatan protokol historis.
+
+**Dataset uji eksternal:** Data & Prediksi menerima paket CSV dengan referensi faskes/dokter/peserta dan tarif sendiri. [Panduan impor dan evaluasi](docs/external-datasets.md) memuat kontrak, mapping kolom, CLI, dan batas penggunaan. [Uji pembangkit terpisah](docs/independent-evaluation.json) menghasilkan rata-rata AUC 0,8242 dan recall@100 35,56% pada tiga seed; hasil historis ini memperlihatkan kelemahan generalisasi dan bukan metrik operasional BPJS. [Evaluasi batch v3](docs/evaluation-v2.json) memakai protokol baru yang terpisah; jangan membandingkan angka lintas protokol secara langsung.
+
+**Kandidat fitur temporal:** Model utama tetap fitur graf + gradient boosting. About menyediakan pilihan eksperimen episode peserta dan arah rujukan, serta panel perbandingan pada beberapa cutoff. Lihat [protokol dan batas evaluasi](docs/temporal-challenger.md). Kandidat tidak otomatis mengganti baseline dan belum menggunakan GNN/HAN.
+
+**Eksperimen batch baru:** About menyediakan pemeriksaan kualitas data dan laboratorium pelatihan historis → prediksi batch CSV sintetis tanpa label. Lihat [panduan batch](docs/batch-lab.md), [hasil holdout temporal v2](docs/batch-evaluation.json), dan [audit proposal serta roadmap upgrade](docs/audit-proposal-upgrade-2026-10-19.md). Eksperimen ini terpisah dari benchmark utama di bawah. Pemeriksaan menemukan 240 pengajuan sebelum waktu layanan pada dunia default lama; opsi kronologi v2 memperbaikinya untuk eksperimen baru, sementara dunia lama dipertahankan untuk reproduksi benchmark.
+
+**Uji pola yang tidak dilatih:** satu keluarga fraud dikeluarkan sepenuhnya dari data latih sebelum fitur graf dihitung, lalu recall diukur per keluarga. Hasilnya memperlihatkan ketergantungan pada pola pelatihan: recall@300 self-referral satu arah turun ke 1,25% saat keluarga itu tidak dilatih, sementara precision keseluruhan tetap tinggi. Lihat [protokol dan hasil](docs/unseen-and-review.md).
+
+**Kandidat upcoding:** baseline tidak punya sinyal untuk upcoding yang tarifnya masih di bawah plafon. Dua fitur kandidat (simpangan komposisi diagnosis terhadap faskes sejenis, dan lonjakan tarif terhadap riwayat peserta) diisolasi sebagai `feature_set="upcoding"` sehingga angka benchmark di bawah tidak berubah. Pada batch uji sintetis, recall keluarga upcoding @300 naik dari 21,1% ke 100,0% dan tinjauan keliru pada RS yang sah menangani gagal jantung turun dari 5,0% ke 0,0%; pada kapasitas 50 dan 100 keduanya masih sama-sama 0%. Keluarga fraud dan fitur pendeteksinya dirancang tim yang sama, jadi ini menutup lubang yang diketahui, bukan bukti generalisasi. Kandidat tidak dipromosikan menjadi default. Lihat [protokol dan hasil](docs/upcoding-candidate.md).
+
+**Tinjauan batch dan penyimpanan:** skor model, prioritas kerja dan keputusan pemeriksa ditampilkan terpisah. Catatan sumber menyertakan klaim pembanding dan nilai fitur. Model tersimpan mencakup riwayat pelatihan; prediksi berikutnya menyertakan riwayat observasi tanpa melatih ulang bobot. Default demo memakai database per sesi; mode lokal memakai `.jala/batch.sqlite3`; mode bersama memerlukan OIDC dan memisahkan database per identitas. Lihat [konfigurasi, retensi, penghapusan dan backup](docs/deployment-and-data.md). Model/antrean dapat dihapus melalui UI. CSV menetralkan input yang dapat dibaca sebagai rumus spreadsheet. Checksum dan pemeriksaan versi tidak menjadikan pickle aman untuk file asing; hanya gunakan database aplikasi sendiri. Skor seri mendapat persentil sama dan bukan probabilitas fraud. Jejak audit belum tahan perubahan administrator mesin.
+
 ```bash
-pip install -r requirements.txt
+pip install -r requirements-lock.txt  # Windows: requirements-lock-win.txt
 streamlit run app.py
 # -> http://localhost:8501
 
@@ -113,12 +130,14 @@ flowchart LR
 |---|---|---|---|---|---|
 | Aturan per klaim (cara lama) | 0.551 | 0.067 | 12.5% | 15.1% | 22.5% |
 | Isolation Forest (tanpa label) | 0.974 | 0.679 | 44.0% | 70.0% | 93.2% |
-| **JALA: fitur graf + GBM** | 0.996 | 0.940 | 65.1% | 94.7% | 100.0% |
+| **JALA: fitur graf + GBM** | 0.997 | 0.940 | 65.1% | 94.7% | 100.0% |
 | Acak | 0.500 | 0.043 | 2.9% | 5.7% | 4.3% |
 
 Angka pada tabel ini bersumber dari `docs/benchmark.json` (pipeline evaluasi utama). Tabel *Uji ketahanan → Ablasi*
 di bagian bawah bersumber dari `docs/robustness.json`, yang memakai pipeline validasi silang berbeda; karena itu AP JALA
 di sana terbaca 0.93, sedikit lebih rendah dari 0.94 di sini. Keduanya benar untuk pipeline masing-masing.
+AUC benchmark 0.99659 dibulatkan menjadi 0.997 pada tabel ini, sedangkan tabel ablasi menampilkan 0.996 karena
+pipeline robustness menghasilkan 0.99593; materi presentasi sebaiknya mengikuti pembulatan per pipeline yang sama.
 
 Per tipologi (tipologi itu vs klaim sah):
 
@@ -258,7 +277,7 @@ perilaku ini dijaga tes. Hanya "dismiss" yang menurunkan skor: tidak ada kenaika
 
 ## Screens & navigation
 
-Sidebar nav rail (styled per `DESIGN.md`) exposes 5 modules; every route is also deep-linkable via `?page=<key>`:
+Sidebar nav rail (styled per `DESIGN.md`) exposes the primary modules; every application route is also deep-linkable via `?page=<key>`:
 
 | Key | Screen |
 |---|---|
@@ -268,6 +287,9 @@ Sidebar nav rail (styled per `DESIGN.md`) exposes 5 modules; every route is also
 | `claim` | Claim Details: triage queue + forensic side panel (opened from Risk Ranking; deep-linkable but not shown in the rail) |
 | `audit` | Audit Action (3 operational actions, freeze confirmation dialog, audit log) |
 | `about` | Perbandingan paradigma + Bukti Evaluasi, data source & privacy notes (`?page=comparison` mengarah ke sini) |
+| `data_prediction` | Data & Prediksi: upload, validasi, holdout prediction, and feature-readiness notes |
+| `batch_review` | Tinjauan batch: per-claim review, decisions, and export |
+| `system_status` | System Status: local model and review-queue diagnostics |
 
 Layar `pipeline` dari mockup asli tidak diimplementasikan.
 

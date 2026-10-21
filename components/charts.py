@@ -363,10 +363,13 @@ def weekly_replay_capacity_chart(report: dict, selected_capacity: int):
     fig.add_trace(go.Scatter(x=xs, y=[total("fraud_caught_jala", x) for x in xs],
                              name="JALA", mode="lines", line=dict(color=TEAL, width=3)))
     fig.add_vline(x=limit, line_dash="dot", line_color="#0F766E")
-    fig = _base_layout(fig, height=320)
-    fig.update_layout(margin=dict(l=10, r=10, t=35, b=10), hovermode="x unified")
-    fig.update_xaxes(title_text="Klaim yang diperiksa per minggu")
-    fig.update_yaxes(title_text="Total klaim fraud sintetis tertangkap (14 minggu)", rangemode="tozero")
+    fig = _base_layout(fig, height=360)
+    fig.update_layout(margin=dict(l=75, r=16, t=65, b=70), hovermode="x unified")
+    # A single rotated sentence exceeds the plot height even on desktop.
+    # Explicit line breaks also keep both axis titles inside narrow mobile cards.
+    fig.update_xaxes(title_text="Klaim yang diperiksa<br>per minggu", automargin=True, title_standoff=12)
+    fig.update_yaxes(title_text=f"Total klaim fraud sintetis<br>tertangkap ({len(weekly)} minggu)",
+                     rangemode="tozero", automargin=True, title_standoff=12)
     return fig
 
 

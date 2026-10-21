@@ -162,7 +162,7 @@ def _temporal_impact():
     if earlier:
         st.caption(f"Saat JALA lebih awal, median selisihnya {median(earlier):.1f} minggu.")
     if rings:
-        st.dataframe(rings, hide_index=True, use_container_width=True)
+        st.dataframe(rings, hide_index=True, width="stretch")
 
 
 def _chart_card(title: str, sub: str, fig) -> None:
@@ -278,9 +278,9 @@ def _evidence():
                    f"{fairness['caveat']} Kelompok kecil dapat menghasilkan angka yang tidak stabil.")
         fair_cols = st.columns(2)
         fair_cols[0].caption("Menurut tipe faskes")
-        fair_cols[0].dataframe(fairness["by_type"], hide_index=True, use_container_width=True)
+        fair_cols[0].dataframe(fairness["by_type"], hide_index=True, width="stretch")
         fair_cols[1].caption("Menurut wilayah sintetis")
-        fair_cols[1].dataframe(fairness["by_region"], hide_index=True, use_container_width=True)
+        fair_cols[1].dataframe(fairness["by_region"], hide_index=True, width="stretch")
 
     rows = ""
     names = {"phantom": "Phantom Billing (Klaim Palsu)", "repeat": "Repeat Billing",

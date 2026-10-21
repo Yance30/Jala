@@ -15,6 +15,7 @@ def test_every_page_has_a_guide():
 def test_guide_text_has_no_hardcoded_numbers():
     for g in guide.PAGES.values():
         body = g["purpose"] + g["next"] + " ".join(g["read"])
+        body = re.sub(r"\b0[–-]100\b", "", body)
         assert not re.search(r"\d+\s?%|Rp\s?\d|\d{3,}", body)
 
 

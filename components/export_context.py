@@ -4,6 +4,7 @@ from datetime import datetime
 import pandas as pd
 
 from data.mock_data import FOOTER_CUTOFF, QUARTER
+from core.csv_export import safe_csv
 
 
 def with_demo_context(frame: pd.DataFrame) -> pd.DataFrame:
@@ -18,4 +19,4 @@ def with_demo_context(frame: pd.DataFrame) -> pd.DataFrame:
 
 def csv_bytes(frame: pd.DataFrame) -> bytes:
     """Produce an Excel-friendly CSV with traceability fields."""
-    return with_demo_context(frame).to_csv(index=False).encode("utf-8-sig")
+    return safe_csv(with_demo_context(frame)).encode("utf-8-sig")

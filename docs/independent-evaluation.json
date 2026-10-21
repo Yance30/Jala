@@ -1,0 +1,338 @@
+{
+  "protocol": "independent-construction-v1",
+  "training_model": {
+    "version": "batch-gbm-v2",
+    "sklearn_version": "1.9.1",
+    "seed": 2026,
+    "cutoff": "2026-08-30T00:00:00",
+    "n_training_claims": 11465,
+    "features": [
+      "f_out_region",
+      "f_faskes_oor_z",
+      "f_pat_total",
+      "f_pat_nfaskes",
+      "f_burst",
+      "f_burst_z",
+      "f_doc_conc",
+      "f_doc_nfaskes",
+      "f_conc_component",
+      "f_gap_prev_h",
+      "f_dup_recent",
+      "f_dup_cross",
+      "f_ref",
+      "f_ref_internal",
+      "f_doc_ref_internal",
+      "f_ref_doc_share",
+      "f_ref_reciprocity",
+      "f_tarif_ratio",
+      "f_volume_z",
+      "f_tarif_match_prev",
+      "f_dup_pair_cross",
+      "f_dup_faskes_z"
+    ],
+    "training_fingerprint": "49e52217cee52d4c945855791fee66a863b4c12ea193bf4666c79095856d4d87",
+    "score_semantics": "Ranking signal, not a calibrated fraud probability",
+    "inference": "Closed batch; training data and current batch form the observable snapshot",
+    "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+  },
+  "runs": [
+    {
+      "seed": 31,
+      "quality": {
+        "schema_version": 1,
+        "passed": true,
+        "rows": {
+          "claims": 2955,
+          "faskes": 20,
+          "affiliations": 91,
+          "patients": 600
+        },
+        "issues": [],
+        "scope": "Pemeriksaan struktur dan konsistensi data; bukan validasi klinis, kebenaran label, atau kepatuhan."
+      },
+      "jala": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.8247568058076225,
+        "average_precision": 0.5916563137221711,
+        "expected_fraud_at_k": 73.0,
+        "precision_at_k": 0.73,
+        "recall_at_k": 0.365,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "rules": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.4983666061705989,
+        "average_precision": 0.0676818950930626,
+        "expected_fraud_at_k": 6.1778682959945685,
+        "precision_at_k": 0.06177868295994569,
+        "recall_at_k": 0.030889341479972843,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "n_fraud": 0,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "n_fraud": 0,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "n_fraud": 0,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "n_fraud": 80,
+          "expected_reviewed_at_k": 73.0,
+          "fraction_reviewed": 0.9125
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "n_fraud": 40,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "n_fraud": 0,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "n_fraud": 0,
+          "expected_reviewed_at_k": 27.0,
+          "fraction_reviewed": 0.0108
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "n_fraud": 80,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        }
+      ]
+    },
+    {
+      "seed": 47,
+      "quality": {
+        "schema_version": 1,
+        "passed": true,
+        "rows": {
+          "claims": 2955,
+          "faskes": 20,
+          "affiliations": 91,
+          "patients": 600
+        },
+        "issues": [],
+        "scope": "Pemeriksaan struktur dan konsistensi data; bukan validasi klinis, kebenaran label, atau kepatuhan."
+      },
+      "jala": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.8165399274047187,
+        "average_precision": 0.6341779374493585,
+        "expected_fraud_at_k": 71.33333333333333,
+        "precision_at_k": 0.7133333333333333,
+        "recall_at_k": 0.35666666666666663,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "rules": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.4985480943738657,
+        "average_precision": 0.0676818950930626,
+        "expected_fraud_at_k": 6.2436375975568374,
+        "precision_at_k": 0.06243637597556837,
+        "recall_at_k": 0.031218187987784186,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "n_fraud": 0,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "n_fraud": 0,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "n_fraud": 0,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "n_fraud": 80,
+          "expected_reviewed_at_k": 71.33333333333333,
+          "fraction_reviewed": 0.8916666666666666
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "n_fraud": 40,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "n_fraud": 0,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "n_fraud": 0,
+          "expected_reviewed_at_k": 28.666666666666668,
+          "fraction_reviewed": 0.011466666666666667
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "n_fraud": 80,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        }
+      ]
+    },
+    {
+      "seed": 59,
+      "quality": {
+        "schema_version": 1,
+        "passed": true,
+        "rows": {
+          "claims": 2955,
+          "faskes": 20,
+          "affiliations": 91,
+          "patients": 600
+        },
+        "issues": [],
+        "scope": "Pemeriksaan struktur dan konsistensi data; bukan validasi klinis, kebenaran label, atau kepatuhan."
+      },
+      "jala": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.8314019963702359,
+        "average_precision": 0.6132317701264359,
+        "expected_fraud_at_k": 69.0,
+        "precision_at_k": 0.69,
+        "recall_at_k": 0.345,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "rules": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.4999591651542649,
+        "average_precision": 0.06767681895093063,
+        "expected_fraud_at_k": 6.753401360544218,
+        "precision_at_k": 0.06753401360544217,
+        "recall_at_k": 0.033767006802721086,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "n_fraud": 0,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "n_fraud": 0,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "n_fraud": 0,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "n_fraud": 80,
+          "expected_reviewed_at_k": 69.0,
+          "fraction_reviewed": 0.8625
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "n_fraud": 40,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "n_fraud": 0,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "n_fraud": 0,
+          "expected_reviewed_at_k": 31.0,
+          "fraction_reviewed": 0.0124
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "n_fraud": 80,
+          "expected_reviewed_at_k": 0.0,
+          "fraction_reviewed": 0.0
+        }
+      ]
+    }
+  ],
+  "mean": {
+    "auc": 0.824232909860859,
+    "average_precision": 0.6130220070993219,
+    "precision_at_k": 0.7111111111111111,
+    "recall_at_k": 0.35555555555555557
+  },
+  "limitations": [
+    "Separate generation code, but scenarios designed by the same project; not external expert validation.",
+    "All entities are new; snapshot contains historical training graph and the complete new batch.",
+    "Labels describe planted synthetic cases, not confirmed clinical fraud.",
+    "Seeds repeat one scenario family; no confidence interval or real-world accuracy claim.",
+    "Model is trained once and never tuned or retrained on scenario outcomes."
+  ]
+}

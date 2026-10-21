@@ -1,0 +1,2 @@
+# Optional shared deployment only. Uses the same Streamlit version as runtime.
+streamlit[auth]==1.64.0

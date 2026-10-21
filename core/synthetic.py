@@ -79,6 +79,7 @@ class WorldConfig:
       * evasive_config(level): fraud yang sengaja menghindari fitur deteksi
     """
     n_oneoff: int = 13000
+    chronological_submissions: bool = False  # v2 opt-in; legacy benchmark remains reproducible
     home_p: float = 0.93              # peluang peserta sah berdomisili di wilayah faskes
     rs_batch_p: float = 0.7           # peluang RS mengirim klaim dalam batch malam
     pusk_batch_p: float = 0.4         # peluang puskesmas mengirim batch sore
@@ -470,6 +471,13 @@ def generate_world(seed: int = SEED, n_oneoff: int = 13000, cfg: WorldConfig | N
     cols = ["faskes_id", "doctor_id", "patient_id", "icd", "tarif", "visit_s", "submit_s",
             "referral_from_faskes", "referral_from_doctor", "is_fraud", "typology", "group", "legit_kind"]
     df = pd.DataFrame(b.rows, columns=cols)
+    if cfg.chronological_submissions:
+        # Preserve the scheduled submission hour, moving an impossible same-day
+        # batch to its next daily slot. No label or random draws are consulted.
+        late = df.submit_s < df.visit_s
+        df.loc[late, "submit_s"] += np.ceil(
+            (df.loc[late, "visit_s"] - df.loc[late, "submit_s"]) / DAY
+        ) * DAY
     # kategori klaim sah yang mirip fraud, ditandai SETELAH data jadi (hanya untuk analisis false positive)
     hour = (df.submit_s % DAY) / 3600
     is_rs = df.faskes_id.map(ftype).isin(["rs_c", "rs_b"])

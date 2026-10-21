@@ -6,6 +6,12 @@ Mengurutkan klaster klaim yang perlu ditinjau lebih dulu berdasarkan pola lintas
 
 ## Data dan metode
 
+- Model batch utama kini `batch-gbm-v3`; benchmark demo lama tetap retrospektif/transduktif.
+- Prediksi batch menolak waktu yang hanya tanggal, menyertakan catatan sumber, dan menggunakan riwayat
+  observasi sebelumnya saat model tersimpan dipakai kembali. Bobot model tetap.
+- Protokol batch terbaru: `docs/evaluation-protocol-v2.json`; hasil: `docs/evaluation-v2.json`.
+  Rentang antar-seed/cutoff bukan interval kepercayaan atau bukti validasi operasional.
+
 - Data saat ini 100% sintetis, seed default 2026, sekitar 17 ribu klaim dan 60 faskes.
 - Tiga skenario fraud yang ditanam: Phantom Billing, Repeat Billing, dan Self-Referral. Data juga memuat pola layanan sah yang sengaja mirip fraud.
 - Model yang dievaluasi: fitur graf dan gradient boosting, dengan validasi silang per kelompok faskes. Bukan GNN/HAN.

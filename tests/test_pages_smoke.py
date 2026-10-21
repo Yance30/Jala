@@ -9,7 +9,7 @@ import pytest
 from streamlit.testing.v1 import AppTest
 
 APP = str(Path(__file__).resolve().parent.parent / "app.py")
-PAGES = ["dashboard", "network", "risk", "claim", "audit", "about"]
+PAGES = ["dashboard", "network", "risk", "claim", "audit", "about", "batch_review", "system_status", "data_prediction"]
 TIMEOUT = 120
 
 
@@ -225,33 +225,33 @@ def test_benign_uncertainty_marker_absent_for_phantom_fraud_cluster():
 
 
 
-def test_dismiss_flow_lowers_score_shows_banner_and_can_be_undone():
+def test_dismiss_requires_confirmation_and_can_be_cancelled():
     at = _audit_with("JALA-F006")
     next(b for b in at.button if b.key and "dismiss" in b.key).click().run()
-    assert not at.exception
-    assert {k: v["verdict"] for k, v in at.session_state["feedback"].items()} == {"JALA-F006": "dismiss"}
-    assert at.session_state["review_history"][-1]["action"] == "Tandai sebagai pola wajar"
-    assert any(b.key == "audit_history_JALA-F006_download" for b in at.download_button)
-    txt = _text(at)
-    assert "UMPAN BALIK VERIFIKATOR" in txt and "JALA-F044" in txt and "→ <b>40%</b>" in txt
-    assert any(e.label == "Riwayat pemeriksaan klaster" for e in at.expander)
-
-    at.session_state["page"] = "risk"
-    at.run()
-    assert not at.exception and "UMPAN BALIK VERIFIKATOR AKTIF" in _text(at)
-
-    at.session_state["page"] = "audit"
-    at.run()
-    next(b for b in at.button if b.key == "undo_JALA-F006").click().run()
-    assert at.session_state["feedback"] == {} and "UMPAN BALIK VERIFIKATOR" not in _text(at)
-    assert at.session_state["review_history"][-1]["action"] == "Umpan balik dibatalkan"
+    assert not at.exception and at.session_state.get("feedback", {}) == {}
+    assert "dapat memengaruhi klaster dengan pola serupa" in _text(at)
+    next(b for b in at.button if b.key == "cancel_followup_JALA-F006_dismiss").click().run()
+    assert not at.exception and at.session_state.get("feedback", {}) == {}
+    assert at.session_state.get("audit_log", []) == []
 
 
 def test_feedback_reset_button_clears_everything():
     at = _audit_with("JALA-F006")
-    next(b for b in at.button if b.key and "dismiss" in b.key).click().run()
+    at.session_state["feedback"] = {
+        "JALA-F006": {"verdict": "dismiss", "note": "uji", "at": "2026-10-20 10:00"}
+    }
+    at.session_state["audited"] = {"JALA-F006": "dismiss"}
     at.session_state["page"] = "risk"
     at.run()
     next(b for b in at.button if b.key == "fb_reset").click().run()
     assert at.session_state["feedback"] == {} and not at.session_state["audited"]
     assert at.session_state["review_history"][-1]["action"] == "Umpan balik sesi diatur ulang"
+
+
+def test_risk_queue_opens_selected_case_from_primary_action():
+    at = _open("risk")
+    assert not at.exception
+    assert any(s.label == "Pilih klaster untuk melihat detail" for s in at.selectbox)
+    next(b for b in at.button if b.key == "risk_open_detail").click().run()
+    assert not at.exception and at.session_state["page"] == "claim"
+    assert at.session_state["selected_cluster"] is not None

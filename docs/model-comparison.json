@@ -1,0 +1,2161 @@
+{
+  "protocol": "temporal-challenger-v1",
+  "development_seeds": [
+    101,
+    211
+  ],
+  "holdout_seeds": [
+    809,
+    811
+  ],
+  "cutoff_days": [
+    45,
+    60,
+    75
+  ],
+  "summary": {
+    "original": {
+      "auc": 0.9001085904416213,
+      "average_precision": 0.667892064770395,
+      "recall_at_k": 0.4060416666666667,
+      "precision_at_k": 0.8120833333333334,
+      "false_reviews_at_300": 139.66666666666666
+    },
+    "expanded_base": {
+      "auc": 0.9878992740471869,
+      "average_precision": 0.9140357824332744,
+      "recall_at_k": 0.49666666666666665,
+      "precision_at_k": 0.9933333333333333,
+      "false_reviews_at_300": 117.8888888888889
+    },
+    "temporal": {
+      "auc": 0.9919732304900183,
+      "average_precision": 0.9310190005429546,
+      "recall_at_k": 0.4958333333333333,
+      "precision_at_k": 0.9916666666666666,
+      "false_reviews_at_300": 111.8
+    }
+  },
+  "promotion_gate_passed": false,
+  "runs": [
+    {
+      "cutoff_day": 45,
+      "seed": 809,
+      "model": "original",
+      "metadata": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-08-15T00:00:00",
+        "n_training_claims": 8711,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "01b25ebbca0699159c8a1e8665a5c0867749de9255a5e5ef3b48f18ba5bb8ae5",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.8533303085299456,
+        "average_precision": 0.6965861830572417,
+        "expected_fraud_at_k": 99.0,
+        "precision_at_k": 0.99,
+        "recall_at_k": 0.495,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.8533303085299456,
+        "average_precision": 0.6965861830572417,
+        "expected_fraud_at_k": 160.0,
+        "precision_at_k": 0.5333333333333333,
+        "recall_at_k": 0.8,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 60.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 30.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 35.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 1.0,
+          "reviewed_at_300": 50.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 64.0,
+          "reviewed_at_300": 80.0
+        }
+      ],
+      "false_reviews_at_300": 140.0
+    },
+    {
+      "cutoff_day": 45,
+      "seed": 809,
+      "model": "expanded_base",
+      "metadata": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-08-15T00:00:00",
+        "n_training_claims": 10347,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "c58fc8e921623de172c9608360d89e74595e39fd5b5d850b2006d828ada07c50",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9840925589836661,
+        "average_precision": 0.8858154555695278,
+        "expected_fraud_at_k": 99.0,
+        "precision_at_k": 0.99,
+        "recall_at_k": 0.495,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.9840925589836661,
+        "average_precision": 0.8858154555695278,
+        "expected_fraud_at_k": 160.0,
+        "precision_at_k": 0.5333333333333333,
+        "recall_at_k": 0.8,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 1.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 54.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 8.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 1.0,
+          "reviewed_at_300": 131.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 45.0,
+          "reviewed_at_300": 80.0
+        }
+      ],
+      "false_reviews_at_300": 140.0
+    },
+    {
+      "cutoff_day": 45,
+      "seed": 809,
+      "model": "temporal",
+      "metadata": {
+        "version": "batch-gbm-temporal-v1",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-08-15T00:00:00",
+        "n_training_claims": 10347,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z",
+          "episode_prior_7d",
+          "episode_cross_7d",
+          "episode_prior_30d",
+          "episode_cross_tariff_similarity",
+          "episode_gap_days",
+          "episode_interval_cv",
+          "ref_target_share",
+          "ref_target_patients",
+          "ref_doctor_volume",
+          "ref_destination_hhi"
+        ],
+        "feature_set": "temporal",
+        "training_fingerprint": "c58fc8e921623de172c9608360d89e74595e39fd5b5d850b2006d828ada07c50",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9886098003629764,
+        "average_precision": 0.9056452393251629,
+        "expected_fraud_at_k": 98.0,
+        "precision_at_k": 0.98,
+        "recall_at_k": 0.49,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.9886098003629764,
+        "average_precision": 0.9056452393251629,
+        "expected_fraud_at_k": 188.0,
+        "precision_at_k": 0.6266666666666667,
+        "recall_at_k": 0.94,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 1.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 1.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 74.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 28.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 8.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 2.0,
+          "reviewed_at_300": 102.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 24.0,
+          "reviewed_at_300": 80.0
+        }
+      ],
+      "false_reviews_at_300": 112.0
+    },
+    {
+      "cutoff_day": 45,
+      "seed": 811,
+      "model": "original",
+      "metadata": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-08-15T00:00:00",
+        "n_training_claims": 8711,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "01b25ebbca0699159c8a1e8665a5c0867749de9255a5e5ef3b48f18ba5bb8ae5",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.8417586206896552,
+        "average_precision": 0.6628220249898544,
+        "expected_fraud_at_k": 95.0,
+        "precision_at_k": 0.95,
+        "recall_at_k": 0.475,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.8417586206896552,
+        "average_precision": 0.6628220249898544,
+        "expected_fraud_at_k": 160.0,
+        "precision_at_k": 0.5333333333333333,
+        "recall_at_k": 0.8,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 59.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 3.0,
+          "reviewed_at_300": 30.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 34.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 2.0,
+          "reviewed_at_300": 51.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 61.0,
+          "reviewed_at_300": 80.0
+        }
+      ],
+      "false_reviews_at_300": 140.0
+    },
+    {
+      "cutoff_day": 45,
+      "seed": 811,
+      "model": "expanded_base",
+      "metadata": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-08-15T00:00:00",
+        "n_training_claims": 10347,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "c58fc8e921623de172c9608360d89e74595e39fd5b5d850b2006d828ada07c50",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9669392014519056,
+        "average_precision": 0.8520967161819474,
+        "expected_fraud_at_k": 100.0,
+        "precision_at_k": 1.0,
+        "recall_at_k": 0.5,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.9669392014519056,
+        "average_precision": 0.8520967161819474,
+        "expected_fraud_at_k": 160.0,
+        "precision_at_k": 0.5333333333333333,
+        "recall_at_k": 0.8,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 10.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 56.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 10.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 120.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 44.0,
+          "reviewed_at_300": 80.0
+        }
+      ],
+      "false_reviews_at_300": 140.0
+    },
+    {
+      "cutoff_day": 45,
+      "seed": 811,
+      "model": "temporal",
+      "metadata": {
+        "version": "batch-gbm-temporal-v1",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-08-15T00:00:00",
+        "n_training_claims": 10347,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z",
+          "episode_prior_7d",
+          "episode_cross_7d",
+          "episode_prior_30d",
+          "episode_cross_tariff_similarity",
+          "episode_gap_days",
+          "episode_interval_cv",
+          "ref_target_share",
+          "ref_target_patients",
+          "ref_doctor_volume",
+          "ref_destination_hhi"
+        ],
+        "feature_set": "temporal",
+        "training_fingerprint": "c58fc8e921623de172c9608360d89e74595e39fd5b5d850b2006d828ada07c50",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9810517241379311,
+        "average_precision": 0.8821763573483756,
+        "expected_fraud_at_k": 100.0,
+        "precision_at_k": 1.0,
+        "recall_at_k": 0.5,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.9810517241379311,
+        "average_precision": 0.8821763573483756,
+        "expected_fraud_at_k": 160.0,
+        "precision_at_k": 0.5333333333333333,
+        "recall_at_k": 0.8,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 6.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 4.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 60.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 10.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 120.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 40.0,
+          "reviewed_at_300": 80.0
+        }
+      ],
+      "false_reviews_at_300": 140.0
+    },
+    {
+      "cutoff_day": 60,
+      "seed": 809,
+      "model": "original",
+      "metadata": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-08-30T00:00:00",
+        "n_training_claims": 11465,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "49e52217cee52d4c945855791fee66a863b4c12ea193bf4666c79095856d4d87",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9531215970961888,
+        "average_precision": 0.7131284177455043,
+        "expected_fraud_at_k": 76.0,
+        "precision_at_k": 0.76,
+        "recall_at_k": 0.38,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.9531215970961888,
+        "average_precision": 0.7131284177455043,
+        "expected_fraud_at_k": 160.0,
+        "precision_at_k": 0.5333333333333333,
+        "recall_at_k": 0.8,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 52.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 29.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 76.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 1.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 24.0,
+          "reviewed_at_300": 58.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 80.0
+        }
+      ],
+      "false_reviews_at_300": 140.0
+    },
+    {
+      "cutoff_day": 60,
+      "seed": 809,
+      "model": "expanded_base",
+      "metadata": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-08-30T00:00:00",
+        "n_training_claims": 13684,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "22313d1ea474ae3e80363e1f5e0cba77aa08128329d99c05fc0d7ee484ec7066",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9948548094373866,
+        "average_precision": 0.9402267250282472,
+        "expected_fraud_at_k": 99.0,
+        "precision_at_k": 0.99,
+        "recall_at_k": 0.495,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.9948548094373866,
+        "average_precision": 0.9402267250282472,
+        "expected_fraud_at_k": 196.0,
+        "precision_at_k": 0.6533333333333333,
+        "recall_at_k": 0.98,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 68.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 36.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 6.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 1.0,
+          "reviewed_at_300": 98.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 31.0,
+          "reviewed_at_300": 80.0
+        }
+      ],
+      "false_reviews_at_300": 104.0
+    },
+    {
+      "cutoff_day": 60,
+      "seed": 809,
+      "model": "temporal",
+      "metadata": {
+        "version": "batch-gbm-temporal-v1",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-08-30T00:00:00",
+        "n_training_claims": 13684,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z",
+          "episode_prior_7d",
+          "episode_cross_7d",
+          "episode_prior_30d",
+          "episode_cross_tariff_similarity",
+          "episode_gap_days",
+          "episode_interval_cv",
+          "ref_target_share",
+          "ref_target_patients",
+          "ref_doctor_volume",
+          "ref_destination_hhi"
+        ],
+        "feature_set": "temporal",
+        "training_fingerprint": "22313d1ea474ae3e80363e1f5e0cba77aa08128329d99c05fc0d7ee484ec7066",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9957522686025408,
+        "average_precision": 0.9502821086597191,
+        "expected_fraud_at_k": 99.0,
+        "precision_at_k": 0.99,
+        "recall_at_k": 0.495,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.9957522686025408,
+        "average_precision": 0.9502821086597191,
+        "expected_fraud_at_k": 196.0,
+        "precision_at_k": 0.6533333333333333,
+        "recall_at_k": 0.98,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 67.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 36.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 7.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 1.0,
+          "reviewed_at_300": 97.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 32.0,
+          "reviewed_at_300": 80.0
+        }
+      ],
+      "false_reviews_at_300": 104.0
+    },
+    {
+      "cutoff_day": 60,
+      "seed": 811,
+      "model": "original",
+      "metadata": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-08-30T00:00:00",
+        "n_training_claims": 11465,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "49e52217cee52d4c945855791fee66a863b4c12ea193bf4666c79095856d4d87",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.8338602540834846,
+        "average_precision": 0.5979930189876201,
+        "expected_fraud_at_k": 75.25,
+        "precision_at_k": 0.7525,
+        "recall_at_k": 0.37625,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.8338602540834846,
+        "average_precision": 0.5979930189876201,
+        "expected_fraud_at_k": 157.0,
+        "precision_at_k": 0.5233333333333333,
+        "recall_at_k": 0.785,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 51.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 1.0,
+          "reviewed_at_300": 30.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 75.25,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 23.75,
+          "reviewed_at_300": 62.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 77.0
+        }
+      ],
+      "false_reviews_at_300": 143.0
+    },
+    {
+      "cutoff_day": 60,
+      "seed": 811,
+      "model": "expanded_base",
+      "metadata": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-08-30T00:00:00",
+        "n_training_claims": 13684,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "22313d1ea474ae3e80363e1f5e0cba77aa08128329d99c05fc0d7ee484ec7066",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9925771324863883,
+        "average_precision": 0.9263166751671379,
+        "expected_fraud_at_k": 100.0,
+        "precision_at_k": 1.0,
+        "recall_at_k": 0.5,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.9925771324863883,
+        "average_precision": 0.9263166751671379,
+        "expected_fraud_at_k": 189.0,
+        "precision_at_k": 0.63,
+        "recall_at_k": 0.945,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 68.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 29.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 10.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 101.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 32.0,
+          "reviewed_at_300": 80.0
+        }
+      ],
+      "false_reviews_at_300": 111.0
+    },
+    {
+      "cutoff_day": 60,
+      "seed": 811,
+      "model": "temporal",
+      "metadata": {
+        "version": "batch-gbm-temporal-v1",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-08-30T00:00:00",
+        "n_training_claims": 13684,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z",
+          "episode_prior_7d",
+          "episode_cross_7d",
+          "episode_prior_30d",
+          "episode_cross_tariff_similarity",
+          "episode_gap_days",
+          "episode_interval_cv",
+          "ref_target_share",
+          "ref_target_patients",
+          "ref_doctor_volume",
+          "ref_destination_hhi"
+        ],
+        "feature_set": "temporal",
+        "training_fingerprint": "22313d1ea474ae3e80363e1f5e0cba77aa08128329d99c05fc0d7ee484ec7066",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9944745916515426,
+        "average_precision": 0.9420184781473553,
+        "expected_fraud_at_k": 100.0,
+        "precision_at_k": 1.0,
+        "recall_at_k": 0.5,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.9944745916515426,
+        "average_precision": 0.9420184781473553,
+        "expected_fraud_at_k": 192.0,
+        "precision_at_k": 0.64,
+        "recall_at_k": 0.96,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 69.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 32.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 9.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 99.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 31.0,
+          "reviewed_at_300": 80.0
+        }
+      ],
+      "false_reviews_at_300": 108.0
+    },
+    {
+      "cutoff_day": 75,
+      "seed": 809,
+      "model": "original",
+      "metadata": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-09-14T00:00:00",
+        "n_training_claims": 14074,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "d758f393d461729f5fb33c01f5a93e6f361bcbe49b6a7468c6c8647380b1f8c3",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.956578947368421,
+        "average_precision": 0.6859405992721037,
+        "expected_fraud_at_k": 76.0,
+        "precision_at_k": 0.76,
+        "recall_at_k": 0.38,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.956578947368421,
+        "average_precision": 0.6859405992721037,
+        "expected_fraud_at_k": 159.0,
+        "precision_at_k": 0.53,
+        "recall_at_k": 0.795,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 31.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 76.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 2.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 4.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 24.0,
+          "reviewed_at_300": 106.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 77.0
+        }
+      ],
+      "false_reviews_at_300": 141.0
+    },
+    {
+      "cutoff_day": 75,
+      "seed": 809,
+      "model": "expanded_base",
+      "metadata": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-09-14T00:00:00",
+        "n_training_claims": 16765,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "a242839421da7a1c593be10affce57aaaa59a90c4bde466df07dcbf7ccd6df80",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9961860254083484,
+        "average_precision": 0.9515239300771368,
+        "expected_fraud_at_k": 98.0,
+        "precision_at_k": 0.98,
+        "recall_at_k": 0.49,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.9961860254083484,
+        "average_precision": 0.9515239300771368,
+        "expected_fraud_at_k": 200.0,
+        "precision_at_k": 0.6666666666666666,
+        "recall_at_k": 1.0,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 80.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 40.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 8.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 2.0,
+          "reviewed_at_300": 92.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 18.0,
+          "reviewed_at_300": 80.0
+        }
+      ],
+      "false_reviews_at_300": 100.0
+    },
+    {
+      "cutoff_day": 75,
+      "seed": 809,
+      "model": "temporal",
+      "metadata": {
+        "version": "batch-gbm-temporal-v1",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-09-14T00:00:00",
+        "n_training_claims": 16765,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z",
+          "episode_prior_7d",
+          "episode_cross_7d",
+          "episode_prior_30d",
+          "episode_cross_tariff_similarity",
+          "episode_gap_days",
+          "episode_interval_cv",
+          "ref_target_share",
+          "ref_target_patients",
+          "ref_doctor_volume",
+          "ref_destination_hhi"
+        ],
+        "feature_set": "temporal",
+        "training_fingerprint": "a242839421da7a1c593be10affce57aaaa59a90c4bde466df07dcbf7ccd6df80",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9973838475499093,
+        "average_precision": 0.962934452229766,
+        "expected_fraud_at_k": 98.0,
+        "precision_at_k": 0.98,
+        "recall_at_k": 0.49,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.9973838475499093,
+        "average_precision": 0.962934452229766,
+        "expected_fraud_at_k": 200.0,
+        "precision_at_k": 0.6666666666666666,
+        "recall_at_k": 1.0,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 2.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 75.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 40.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 8.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 2.0,
+          "reviewed_at_300": 90.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 23.0,
+          "reviewed_at_300": 80.0
+        }
+      ],
+      "false_reviews_at_300": 100.0
+    },
+    {
+      "cutoff_day": 75,
+      "seed": 811,
+      "model": "original",
+      "metadata": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-09-14T00:00:00",
+        "n_training_claims": 14074,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "d758f393d461729f5fb33c01f5a93e6f361bcbe49b6a7468c6c8647380b1f8c3",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9620018148820326,
+        "average_precision": 0.6508821445700458,
+        "expected_fraud_at_k": 66.0,
+        "precision_at_k": 0.66,
+        "recall_at_k": 0.33,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.9620018148820326,
+        "average_precision": 0.6508821445700458,
+        "expected_fraud_at_k": 166.0,
+        "precision_at_k": 0.5533333333333333,
+        "recall_at_k": 0.83,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 30.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 66.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 11.0
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 1.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 34.0,
+          "reviewed_at_300": 103.0
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 75.0
+        }
+      ],
+      "false_reviews_at_300": 134.0
+    },
+    {
+      "cutoff_day": 75,
+      "seed": 811,
+      "model": "expanded_base",
+      "metadata": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-09-14T00:00:00",
+        "n_training_claims": 16765,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "a242839421da7a1c593be10affce57aaaa59a90c4bde466df07dcbf7ccd6df80",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9927459165154264,
+        "average_precision": 0.9282351925756495,
+        "expected_fraud_at_k": 100.0,
+        "precision_at_k": 1.0,
+        "recall_at_k": 0.5,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.9927459165154264,
+        "average_precision": 0.9282351925756495,
+        "expected_fraud_at_k": 187.66666666666666,
+        "precision_at_k": 0.6255555555555555,
+        "recall_at_k": 0.9383333333333332,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 80.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 27.666666666666668
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 8.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 104.33333333333333
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 20.0,
+          "reviewed_at_300": 80.0
+        }
+      ],
+      "false_reviews_at_300": 112.33333333333334
+    },
+    {
+      "cutoff_day": 75,
+      "seed": 811,
+      "model": "temporal",
+      "metadata": {
+        "version": "batch-gbm-temporal-v1",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-09-14T00:00:00",
+        "n_training_claims": 16765,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z",
+          "episode_prior_7d",
+          "episode_cross_7d",
+          "episode_prior_30d",
+          "episode_cross_tariff_similarity",
+          "episode_gap_days",
+          "episode_interval_cv",
+          "ref_target_share",
+          "ref_target_patients",
+          "ref_doctor_volume",
+          "ref_destination_hhi"
+        ],
+        "feature_set": "temporal",
+        "training_fingerprint": "a242839421da7a1c593be10affce57aaaa59a90c4bde466df07dcbf7ccd6df80",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "top100": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9945671506352087,
+        "average_precision": 0.9430573675473485,
+        "expected_fraud_at_k": 100.0,
+        "precision_at_k": 1.0,
+        "recall_at_k": 0.5,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "top300": {
+        "n_claims": 2955,
+        "n_fraud": 200,
+        "capacity": 300,
+        "auc": 0.9945671506352087,
+        "average_precision": 0.9430573675473485,
+        "expected_fraud_at_k": 193.2,
+        "precision_at_k": 0.644,
+        "recall_at_k": 0.966,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "scenarios": [
+        {
+          "scenario": "legit_dialysis",
+          "n_claims": 80,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_office_batch",
+          "n_claims": 75,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 0.0
+        },
+        {
+          "scenario": "legit_transfer",
+          "n_claims": 60,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 2.0
+        },
+        {
+          "scenario": "phantom_distributed",
+          "n_claims": 80,
+          "reviewed_at_100": 66.0,
+          "reviewed_at_300": 80.0
+        },
+        {
+          "scenario": "repeat_delayed",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 34.2
+        },
+        {
+          "scenario": "repeat_original",
+          "n_claims": 40,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 10.0
+        },
+        {
+          "scenario": "routine",
+          "n_claims": 2500,
+          "reviewed_at_100": 0.0,
+          "reviewed_at_300": 94.8
+        },
+        {
+          "scenario": "selfref_oneway",
+          "n_claims": 80,
+          "reviewed_at_100": 34.0,
+          "reviewed_at_300": 79.0
+        }
+      ],
+      "false_reviews_at_300": 106.80000000000001
+    }
+  ],
+  "limitations": [
+    "Same scenario templates in development and holdout, disjoint seeds/entities only.",
+    "No tuning on these holdout outcomes. Old evaluation seeds 31/47/59 are excluded.",
+    "All models see the same complete closed test batch; reference tables are static.",
+    "Promotion gate is experimental; production default is not changed automatically.",
+    "Clinical appropriateness and duplicate payment cannot be established from these fields."
+  ]
+}

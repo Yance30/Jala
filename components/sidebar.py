@@ -40,7 +40,7 @@ def render_sidebar():
 
     from components import bench
 
-    live = bench.get_live()
+    demo_page = st.session_state.get("page", "dashboard") not in ("data_prediction", "batch_review", "system_status")
 
     with st.sidebar:
 
@@ -127,12 +127,15 @@ def render_sidebar():
 
         if "demo_role" not in st.session_state:
             st.session_state.demo_role = "Verifikator"
-        st.selectbox("Tampilan peran (simulasi)", ["Verifikator", "Supervisor"], key="demo_role")
-        st.caption("Simulasi tampilan privasi untuk diskusi UU PDP; bukan autentikasi, kontrol akses, atau bukti kepatuhan.")
+        st.selectbox("Role preview", ["Verifikator", "Supervisor"], key="demo_role",
+                     format_func=lambda role: "Verifier" if role == "Verifikator" else role)
+        st.caption("Privacy preview for personal data protection discussions; "
+                   "not authentication, access control, or proof of compliance.")
 
         tutorial.sidebar_button()
 
-        case_search.render_sidebar(live)
+        if demo_page:
+            case_search.render_sidebar(bench.get_live())
 
         st.markdown(
             "<div style='height:1.25rem'></div>",

@@ -1,6 +1,6 @@
 """Tutorial penggunaan: dialog langkah demi langkah yang mengikuti alur demo JALA.
 
-* Tombol "Cara Pakai" di sidebar membuka dialog kapan saja.
+* Tombol "How to Use" di sidebar membuka dialog kapan saja.
 * Terbuka otomatis sekali per sesi setelah animasi pembuka; matikan dengan `?tour=0` (demo, tes e2e).
 * Tiap langkah punya tombol "Buka halaman ini" yang langsung memuat klaster contoh dari data nyata.
 * Bahasa sehari-hari; istilah teknis dijelaskan di "Arti istilah yang dipakai" (components/guide.py).
@@ -14,7 +14,7 @@ from components import bench, guide, layout
 
 # page: halaman yang dibuka tombol "Buka halaman ini" (None = tidak ada); cluster: bawa klaster contoh
 STEPS = [
-    {"page": None, "cluster": False, "icon": "👋", "title": "Selamat datang di JALA", "tag": "Mulai di sini",
+    {"page": None, "cluster": False, "icon": "👋", "title": "Welcome to JALA", "tag": "Mulai di sini",
      "goal": "Paham apa yang dilakukan JALA, dan apa yang tidak, sebelum mulai.",
      "lead": "JALA membantu menemukan kecurangan klaim yang dilakukan bersama-sama oleh beberapa pihak, "
              "yang sulit terlihat bila klaim diperiksa satu per satu.",
@@ -22,8 +22,8 @@ STEPS = [
             "Semua data di sini buatan. Tidak ada data peserta yang sebenarnya.",
             "JALA hanya menyarankan urutan pemeriksaan. Keputusan akhir selalu ada pada petugas verifikator.",
             "Alurnya sederhana: lihat ringkasan, pilih kelompok, lihat jaringannya, baca alasannya, lalu putuskan."],
-     "tip": "Panduan ini bisa dibuka lagi kapan saja lewat tombol Cara Pakai di menu samping."},
-    {"page": "dashboard", "cluster": False, "icon": "📊", "title": "1. Dashboard: lihat gambaran besar", "tag": "Ringkasan",
+     "tip": "Panduan ini bisa dibuka lagi kapan saja lewat tombol How to Use di menu samping."},
+    {"page": "dashboard", "cluster": False, "icon": "📊", "title": "1. Dashboard: See the Big Picture", "tag": "Ringkasan",
      "goal": "Tahu seberapa banyak yang perlu diperhatikan hari ini dan apa yang paling mendesak.",
      "lead": "Halaman pertama merangkum keadaan terkini: berapa klaim yang ditandai dan kelompok mana yang menunggu diperiksa.",
      "do": ["Lihat kartu di bagian atas. Kartu itu menjawab seberapa banyak yang perlu perhatian.",
@@ -31,7 +31,7 @@ STEPS = [
             "Lihat daftar di bagian bawah. Kelompok paling atas adalah yang paling mendesak.",
             "Semua angka dihitung dari data yang ada, bukan angka contoh."],
      "tip": "Klik nama kelompok di daftar untuk langsung melihat detailnya."},
-    {"page": "risk", "cluster": False, "icon": "🏆", "title": "2. Prioritas Klaster: pilih yang diperiksa dulu", "tag": "Prioritas",
+    {"page": "risk", "cluster": False, "icon": "🏆", "title": "2. Risk Ranking: Prioritize Your Review", "tag": "Prioritas",
      "goal": "Mendapat daftar urut kelompok yang siap diperiksa, lengkap dengan alasan singkat.",
      "lead": "Karena waktu pemeriksa terbatas, kelompok diurutkan menurut skor prioritas. Label merah menunjukkan kelompok untuk ditinjau lebih dahulu.",
      "do": ["Mulai dari kelompok paling atas, karena itu yang paling mencurigakan.",
@@ -39,7 +39,7 @@ STEPS = [
             "Buka satu kelompok untuk membaca alasan mengapa ia ditandai.",
             "Unduh daftar sebagai berkas CSV bila perlu dibawa ke rapat atau dibuka di Excel."],
      "tip": "Skor tinggi bukan bukti curang. Pola yang sah, seperti cuci darah terjadwal, kadang ikut tertandai. Karena itu ada tombol untuk menandai kelompok sebagai wajar."},
-    {"page": "network", "cluster": True, "icon": "🕸", "title": "3. Peta Jaringan: lihat hubungannya", "tag": "Penelusuran",
+    {"page": "network", "cluster": True, "icon": "🕸", "title": "3. Network Analysis: Explore Connections", "tag": "Penelusuran",
      "goal": "Melihat pola hubungan yang tidak tampak bila klaim dibaca satu per satu.",
      "lead": "Peta ini menunjukkan siapa terhubung dengan siapa untuk membantu meninjau dugaan Phantom Billing (Klaim Palsu), Repeat Billing, atau Rujukan tidak sesuai (Self-referral).",
      "do": ["Pilih satu kelompok, lalu perbesar atau geser peta untuk melihat lebih dekat.",
@@ -47,7 +47,7 @@ STEPS = [
             "Cari yang janggal: dokter yang menagih di banyak fasilitas, atau pasien dari luar daerah yang muncul berulang.",
             "Klik sebuah titik untuk menyorot hubungan miliknya saja."],
      "tip": "Titik yang pudar adalah fasilitas sejenis yang wajar. Gunakan sebagai pembanding."},
-    {"page": "claim", "cluster": True, "icon": "🔎", "title": "4. Alasan Penandaan: pahami konteksnya", "tag": "Bukti",
+    {"page": "claim", "cluster": True, "icon": "🔎", "title": "4. Claim Details: Understand the Context", "tag": "Bukti",
      "goal": "Mendapat penjelasan yang bisa diperiksa dan paket pemeriksaan untuk ditinjau lebih lanjut.",
      "lead": "Halaman ini menjelaskan mengapa sebuah kelompok ditandai, dengan bahasa biasa dan angka yang bisa dicek.",
      "do": ["Baca ringkasan di bagian atas. Isinya kecurigaan dalam satu atau dua kalimat.",
@@ -55,7 +55,7 @@ STEPS = [
             "Lihat klaim dengan skor tertinggi untuk tahu mana yang perlu dibuka berkasnya lebih dulu.",
             "Unduh paket pemeriksaan (.zip) untuk dibaca dan diverifikasi lebih lanjut."],
      "tip": "Paket pemeriksaan berisi ringkasan, klaim terkait, data fasilitas dan dokter, serta gambar peta hubungan. Isinya bahan tinjauan, bukan bukti pelanggaran yang sudah terverifikasi."},
-    {"page": "audit", "cluster": True, "icon": "⚖", "title": "5. Tindak Lanjut: catat keputusan", "tag": "Keputusan",
+    {"page": "audit", "cluster": True, "icon": "⚖", "title": "5. Audit Actions: Record Your Decision", "tag": "Keputusan",
      "goal": "Mengambil tindakan yang tercatat, dan melihat urutan prioritas ikut menyesuaikan.",
      "lead": "Setelah memahami kasusnya, pilih salah satu dari tiga tindakan. Ada dua alat bantu untuk memutuskan dengan lebih yakin.",
      "do": ["Tulis catatan verifikator terlebih dahulu agar keputusan ada jejaknya.",
@@ -63,7 +63,7 @@ STEPS = [
             "Mencoba simulasi: bagaimana jika dokter ini dikeluarkan? Hasilnya menunjukkan siapa tulang punggung jaringan.",
             "Salah memilih? Tombol Batalkan mengembalikan skor seperti semula."],
      "tip": "Menandai sebagai wajar hanya menurunkan skor kelompok serupa. Kelompok itu tidak disembunyikan, jadi masih bisa ditinjau."},
-    {"page": "about", "cluster": False, "icon": "📐", "title": "6. About: seberapa bisa dipercaya", "tag": "Kejujuran hasil",
+    {"page": "about", "cluster": False, "icon": "📐", "title": "6. About: Understand the Evidence", "tag": "Kejujuran hasil",
      "goal": "Tahu sejauh mana hasil JALA boleh dipercaya dan dikutip.",
      "lead": "Bagian terakhir menunjukkan seberapa baik prototipe bekerja pada data buatan yang jawabannya sudah diketahui.",
      "do": ["Lihat simulasi kapasitas: berapa kecurangan yang tertangkap bila hanya sebagian klaim yang diperiksa.",
@@ -168,7 +168,7 @@ def _flow(i: int) -> str:
     return f'<div class="jt-flow">{arrow.join(chips)}</div>'
 
 
-@st.dialog("Cara Pakai JALA", width="large")
+@st.dialog("How to Use JALA", width="large")
 def _tour() -> None:
     i = max(0, min(len(STEPS) - 1, st.session_state.get("tour_step", 0)))
     s = STEPS[i]
@@ -178,7 +178,7 @@ def _tour() -> None:
                    for n, x in enumerate(s["do"], start=1))
     example = (f'<div class="jt-card example"><div class="k">Kelompok contoh</div>'
                f'<div class="v">Tombol di bawah akan membuka: <b>{html.escape(str(name))}</b></div>'
-               f'<div class="s">{html.escape(str(cid))}, skor {score}%</div></div>') if s["cluster"] else ""
+               f'<div class="s">{html.escape(str(cid))}, skor {score}/100</div></div>') if s["cluster"] else ""
     flow = _flow(i) if i in (0, len(STEPS) - 1) else ""
 
     progress = (i + 1) / len(STEPS) * 100
@@ -219,8 +219,8 @@ def show() -> None:
 
 
 def sidebar_button() -> None:
-    """Tombol 'Cara Pakai' di sidebar; membuka dialog di langkah terakhir yang dilihat."""
-    if st.button("❓ Cara Pakai", key="tour_open", width="stretch"):
+    """Tombol 'How to Use' di sidebar; membuka dialog di langkah terakhir yang dilihat."""
+    if st.button("❓ How to Use", key="tour_open", width="stretch"):
         show()
 
 

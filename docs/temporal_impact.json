@@ -1,7 +1,7 @@
 {
   "meta": {
     "seed": 2026,
-    "capacity_claims_per_week": 500,
+    "capacity_claims_per_week": 35,
     "n_claims": 17431,
     "n_weeks": 14,
     "method": "weekly batch; GBM fit only on earlier claims; rules scored on the current batch",
@@ -13,10 +13,10 @@
       "start": "2026-07-01",
       "n_claims": 1070,
       "n_fraud": 40,
-      "capacity": 500,
+      "capacity": 35,
       "rings_active": 7,
       "rings_caught_jala": 0,
-      "rings_caught_rules": 6,
+      "rings_caught_rules": 4,
       "jala_model_available": false,
       "capacity_curve": {
         "capacity_per_week": [
@@ -755,10 +755,10 @@
       "start": "2026-07-08",
       "n_claims": 1335,
       "n_fraud": 62,
-      "capacity": 500,
+      "capacity": 35,
       "rings_active": 8,
-      "rings_caught_jala": 8,
-      "rings_caught_rules": 6,
+      "rings_caught_jala": 4,
+      "rings_caught_rules": 3,
       "jala_model_available": true,
       "capacity_curve": {
         "capacity_per_week": [
@@ -1497,10 +1497,10 @@
       "start": "2026-07-15",
       "n_claims": 1247,
       "n_fraud": 55,
-      "capacity": 500,
+      "capacity": 35,
       "rings_active": 8,
       "rings_caught_jala": 8,
-      "rings_caught_rules": 8,
+      "rings_caught_rules": 4,
       "jala_model_available": true,
       "capacity_curve": {
         "capacity_per_week": [
@@ -2239,10 +2239,10 @@
       "start": "2026-07-22",
       "n_claims": 1249,
       "n_fraud": 43,
-      "capacity": 500,
+      "capacity": 35,
       "rings_active": 8,
       "rings_caught_jala": 8,
-      "rings_caught_rules": 6,
+      "rings_caught_rules": 4,
       "jala_model_available": true,
       "capacity_curve": {
         "capacity_per_week": [
@@ -2981,10 +2981,10 @@
       "start": "2026-07-29",
       "n_claims": 1311,
       "n_fraud": 62,
-      "capacity": 500,
+      "capacity": 35,
       "rings_active": 8,
-      "rings_caught_jala": 8,
-      "rings_caught_rules": 8,
+      "rings_caught_jala": 6,
+      "rings_caught_rules": 3,
       "jala_model_available": true,
       "capacity_curve": {
         "capacity_per_week": [
@@ -3723,10 +3723,10 @@
       "start": "2026-08-05",
       "n_claims": 1533,
       "n_fraud": 55,
-      "capacity": 500,
+      "capacity": 35,
       "rings_active": 7,
       "rings_caught_jala": 7,
-      "rings_caught_rules": 7,
+      "rings_caught_rules": 4,
       "jala_model_available": true,
       "capacity_curve": {
         "capacity_per_week": [
@@ -4465,10 +4465,10 @@
       "start": "2026-08-12",
       "n_claims": 1559,
       "n_fraud": 41,
-      "capacity": 500,
+      "capacity": 35,
       "rings_active": 8,
       "rings_caught_jala": 8,
-      "rings_caught_rules": 8,
+      "rings_caught_rules": 3,
       "jala_model_available": true,
       "capacity_curve": {
         "capacity_per_week": [
@@ -5207,10 +5207,10 @@
       "start": "2026-08-19",
       "n_claims": 1275,
       "n_fraud": 94,
-      "capacity": 500,
+      "capacity": 35,
       "rings_active": 8,
-      "rings_caught_jala": 8,
-      "rings_caught_rules": 8,
+      "rings_caught_jala": 6,
+      "rings_caught_rules": 5,
       "jala_model_available": true,
       "capacity_curve": {
         "capacity_per_week": [
@@ -5949,10 +5949,10 @@
       "start": "2026-08-26",
       "n_claims": 1278,
       "n_fraud": 49,
-      "capacity": 500,
+      "capacity": 35,
       "rings_active": 8,
-      "rings_caught_jala": 8,
-      "rings_caught_rules": 4,
+      "rings_caught_jala": 7,
+      "rings_caught_rules": 1,
       "jala_model_available": true,
       "capacity_curve": {
         "capacity_per_week": [
@@ -6691,10 +6691,10 @@
       "start": "2026-09-02",
       "n_claims": 1299,
       "n_fraud": 58,
-      "capacity": 500,
+      "capacity": 35,
       "rings_active": 8,
       "rings_caught_jala": 8,
-      "rings_caught_rules": 8,
+      "rings_caught_rules": 6,
       "jala_model_available": true,
       "capacity_curve": {
         "capacity_per_week": [
@@ -7433,10 +7433,10 @@
       "start": "2026-09-09",
       "n_claims": 1260,
       "n_fraud": 56,
-      "capacity": 500,
+      "capacity": 35,
       "rings_active": 8,
-      "rings_caught_jala": 8,
-      "rings_caught_rules": 8,
+      "rings_caught_jala": 5,
+      "rings_caught_rules": 3,
       "jala_model_available": true,
       "capacity_curve": {
         "capacity_per_week": [
@@ -8175,10 +8175,10 @@
       "start": "2026-09-16",
       "n_claims": 1290,
       "n_fraud": 43,
-      "capacity": 500,
+      "capacity": 35,
       "rings_active": 7,
       "rings_caught_jala": 7,
-      "rings_caught_rules": 5,
+      "rings_caught_rules": 4,
       "jala_model_available": true,
       "capacity_curve": {
         "capacity_per_week": [
@@ -8917,10 +8917,10 @@
       "start": "2026-09-23",
       "n_claims": 1290,
       "n_fraud": 75,
-      "capacity": 500,
+      "capacity": 35,
       "rings_active": 7,
-      "rings_caught_jala": 7,
-      "rings_caught_rules": 6,
+      "rings_caught_jala": 4,
+      "rings_caught_rules": 3,
       "jala_model_available": true,
       "capacity_curve": {
         "capacity_per_week": [
@@ -9659,10 +9659,10 @@
       "start": "2026-09-30",
       "n_claims": 435,
       "n_fraud": 20,
-      "capacity": 500,
+      "capacity": 35,
       "rings_active": 6,
       "rings_caught_jala": 6,
-      "rings_caught_rules": 6,
+      "rings_caught_rules": 2,
       "jala_model_available": true,
       "capacity_curve": {
         "capacity_per_week": [
@@ -10646,39 +10646,47 @@
       "typology": "phantom",
       "first_week_active": 1,
       "rules_week": 1,
-      "rules_date": "2026-07-01",
-      "jala_week": 2,
-      "jala_date": "2026-07-08",
-      "weeks_earlier": -1
+      "rules_date": "2026-07-08",
+      "rules_available_at": "2026-07-08T00:00:00",
+      "jala_week": 3,
+      "jala_date": "2026-07-22",
+      "jala_available_at": "2026-07-22T00:00:00",
+      "weeks_earlier": -2
     },
     {
       "ring": "phantom-2",
       "typology": "phantom",
       "first_week_active": 1,
       "rules_week": 1,
-      "rules_date": "2026-07-01",
+      "rules_date": "2026-07-08",
+      "rules_available_at": "2026-07-08T00:00:00",
       "jala_week": 2,
-      "jala_date": "2026-07-08",
+      "jala_date": "2026-07-15",
+      "jala_available_at": "2026-07-15T00:00:00",
       "weeks_earlier": -1
     },
     {
       "ring": "phantom-3",
       "typology": "phantom",
       "first_week_active": 2,
-      "jala_week": 2,
-      "jala_date": "2026-07-08",
-      "rules_week": 2,
-      "rules_date": "2026-07-08",
-      "weeks_earlier": 0
+      "jala_week": 3,
+      "jala_date": "2026-07-22",
+      "jala_available_at": "2026-07-22T00:00:00",
+      "rules_week": 6,
+      "rules_date": "2026-08-12",
+      "rules_available_at": "2026-08-12T00:00:00",
+      "weeks_earlier": 3
     },
     {
       "ring": "repeat-1",
       "typology": "repeat",
       "first_week_active": 1,
       "rules_week": 1,
-      "rules_date": "2026-07-01",
+      "rules_date": "2026-07-08",
+      "rules_available_at": "2026-07-08T00:00:00",
       "jala_week": 2,
-      "jala_date": "2026-07-08",
+      "jala_date": "2026-07-15",
+      "jala_available_at": "2026-07-15T00:00:00",
       "weeks_earlier": -1
     },
     {
@@ -10686,40 +10694,48 @@
       "typology": "repeat",
       "first_week_active": 1,
       "rules_week": 1,
-      "rules_date": "2026-07-01",
-      "jala_week": 2,
-      "jala_date": "2026-07-08",
-      "weeks_earlier": -1
+      "rules_date": "2026-07-08",
+      "rules_available_at": "2026-07-08T00:00:00",
+      "jala_week": 3,
+      "jala_date": "2026-07-22",
+      "jala_available_at": "2026-07-22T00:00:00",
+      "weeks_earlier": -2
     },
     {
       "ring": "repeat-3",
       "typology": "repeat",
       "first_week_active": 1,
-      "rules_week": 1,
-      "rules_date": "2026-07-01",
       "jala_week": 2,
-      "jala_date": "2026-07-08",
-      "weeks_earlier": -1
+      "jala_date": "2026-07-15",
+      "jala_available_at": "2026-07-15T00:00:00",
+      "rules_week": 2,
+      "rules_date": "2026-07-15",
+      "rules_available_at": "2026-07-15T00:00:00",
+      "weeks_earlier": 0
     },
     {
       "ring": "selfref-1",
       "typology": "selfref",
       "first_week_active": 1,
-      "rules_week": 1,
-      "rules_date": "2026-07-01",
       "jala_week": 2,
-      "jala_date": "2026-07-08",
-      "weeks_earlier": -1
+      "jala_date": "2026-07-15",
+      "jala_available_at": "2026-07-15T00:00:00",
+      "rules_week": 2,
+      "rules_date": "2026-07-15",
+      "rules_available_at": "2026-07-15T00:00:00",
+      "weeks_earlier": 0
     },
     {
       "ring": "selfref-2",
       "typology": "selfref",
       "first_week_active": 1,
-      "jala_week": 2,
-      "jala_date": "2026-07-08",
+      "jala_week": 3,
+      "jala_date": "2026-07-22",
+      "jala_available_at": "2026-07-22T00:00:00",
       "rules_week": 3,
-      "rules_date": "2026-07-15",
-      "weeks_earlier": 1
+      "rules_date": "2026-07-22",
+      "rules_available_at": "2026-07-22T00:00:00",
+      "weeks_earlier": 0
     }
   ]
 }

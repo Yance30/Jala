@@ -50,6 +50,61 @@ def _confirm_freeze(a: dict):
         score_after = bench.get_live().by_id[a["id"]]["score"]
         bench.record_review_event(a["id"], "Konfirmasi penangguhan (simulasi)", note,
                                   score_before, score_after)
+        st.session_state["audit_action_notice"] = (
+            "Simulasi penangguhan tercatat di riwayat lokal; tidak ada pembayaran "
+            "yang ditangguhkan atau sistem eksternal yang dihubungi."
+        )
+        st.rerun()
+
+
+@st.dialog("Konfirmasi tindak lanjut (simulasi)")
+def _confirm_review_action(action_id: str, a: dict):
+    actions = {
+        "field_audit": (
+            "Rencana hanya disimpan di riwayat demo. Tidak ada tim yang ditugaskan "
+            "dan surat tugas tidak diterbitkan.",
+            "Status rencana dapat dibatalkan pada halaman ini.",
+        ),
+        "dismiss": (
+            "Keputusan ini mengubah skor prioritas demo untuk klaster ini dan dapat "
+            "memengaruhi klaster dengan pola serupa.",
+            "Umpan balik dapat dibatalkan dari detail tindak lanjut.",
+        ),
+    }
+    impact, undo_note = actions[action_id]
+    title = next(action["title"] for action in AUDIT_ACTIONS if action["id"] == action_id)
+    st.markdown(
+        f"""
+        <div class="j-h2">{_esc(a['name'])}</div>
+        <div class="j-body" style="margin-top:8px;">{_esc(impact)}</div>
+        <div class="j-note" style="margin-top:12px;">
+          <span>ⓘ</span><div><b>Hanya simulasi.</b> Tidak ada tindakan yang dikirim ke sistem BPJS.</div>
+        </div>
+        <div class="j-sub" style="margin-top:8px;">{_esc(undo_note)}</div>
+        """,
+        unsafe_allow_html=True,
+    )
+    cancel_col, confirm_col = st.columns(2)
+    if cancel_col.button("Batal", width="stretch", key=f"cancel_followup_{a['id']}_{action_id}"):
+        st.rerun()
+    if confirm_col.button(
+        "Konfirmasi (Simulasi)",
+        width="stretch",
+        type="primary",
+        key=f"confirm_followup_{a['id']}_{action_id}",
+    ):
+        note = st.session_state.get("note_draft", "") or ""
+        score_before = bench.get_live().by_id[a["id"]]["score"]
+        st.session_state.audit_log.append(f"[{a['id']}] {title} dicatat (simulasi).")
+        if action_id == "dismiss":
+            st.session_state.setdefault("audited", {})[a["id"]] = "dismiss"
+            bench.apply_verdict(a["id"], "dismiss", note)
+            score_after = bench.get_live().by_id[a["id"]]["score"]
+        else:
+            st.session_state.setdefault("audited", {})[a["id"]] = "field_audit"
+            score_after = score_before
+        bench.record_review_event(a["id"], title, note, score_before, score_after)
+        st.session_state["audit_action_notice"] = f"{title} tercatat di riwayat lokal."
         st.rerun()
 
 
@@ -106,9 +161,9 @@ def render():
             </div>
             <div style="display:flex;align-items:center;gap:12px;">
               <div style="width:56px;height:56px;border-radius:9999px;border:3px solid #DC2626;color:#DC2626;
-                          display:flex;align-items:center;justify-content:center;font-weight:700;">{_esc(a['score'])}%</div>
+                          display:flex;align-items:center;justify-content:center;font-weight:700;">{_esc(a['score'])}/100</div>
               <div>
-                <div class="j-label">Network Risk Score</div>
+                <div class="j-label">Prioritas jaringan (/100)</div>
                 <div style="color:#DC2626;font-weight:600;font-size:13px;">{_esc(a['score_note'])}</div>
               </div>
             </div>
@@ -215,23 +270,7 @@ def render():
                     if act["button_kind"] == "primary":
                         _confirm_freeze(a)
                     else:
-                        note = st.session_state.get("note_draft", "") or ""
-                        score_before = live.by_id[cid]["score"]
-                        st.session_state.audit_log.append(f"[{cid}] {action_title} dicatat (simulasi).")
-                        if act["id"] == "dismiss":
-                            st.session_state.setdefault("audited", {})[cid] = "dismiss"
-                            bench.apply_verdict(cid, "dismiss", note)
-                            score_after = bench.get_live().by_id[cid]["score"]
-                        elif act["id"] == "field_audit":
-                            st.session_state.setdefault("audited", {})[cid] = "field_audit"
-                            score_after = score_before
-                        else:
-                            score_after = score_before
-                        bench.record_review_event(cid, action_title, note, score_before, score_after)
-                        if act["id"] == "dismiss":
-                            st.rerun()
-                        st.session_state["audit_action_notice"] = f"{action_title} tercatat di riwayat lokal. Tidak ada tindakan eksternal yang dijalankan."
-                        st.rerun()
+                        _confirm_review_action(act["id"], a)
 
                 st.markdown(
                     f'<div class="j-actcard-note">{_esc(act["note"])}</div>',

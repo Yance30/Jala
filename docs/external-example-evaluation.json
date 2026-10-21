@@ -1,0 +1,86 @@
+{
+  "provenance": {
+    "adapter_version": "csv-v1",
+    "timestamps": "UTC; naive input interpreted as UTC",
+    "files_sha256": {
+      "affiliations.csv": "03328f8715c4d003b51d4ead24a88222f4d624d1af7112193811109f761b00fe",
+      "claims.csv": "6da89fe544ea14dc8930b59371bf661786a3e9b187176992fb7160428e23223a",
+      "faskes.csv": "972f47ce801c118e2b318bdef2a9fe3f6d988e7a6eaa53f1dd57f85134291803",
+      "labels.csv": "6971efd60bb39f77b9c8ee277f650635d36e4216acb9b3e087bc31515ba54027",
+      "patients.csv": "29f4b2e87a93af2d24b4d56ead619c72149e373d9bc21c910e69cb671ec391e6",
+      "tariff_caps.json": "d84bdd808e6ff4df02a2335fa84835e776a780a70e5c84ae4d4eeaf66cf0b9ac"
+    },
+    "rows": {
+      "claims": 955,
+      "faskes": 20,
+      "affiliations": 91,
+      "patients": 600
+    }
+  },
+  "model": {
+    "version": "batch-gbm-v2",
+    "sklearn_version": "1.9.1",
+    "seed": 2026,
+    "cutoff": "2026-09-30T00:00:00",
+    "n_training_claims": 507,
+    "features": [
+      "f_out_region",
+      "f_faskes_oor_z",
+      "f_pat_total",
+      "f_pat_nfaskes",
+      "f_burst",
+      "f_burst_z",
+      "f_doc_conc",
+      "f_doc_nfaskes",
+      "f_conc_component",
+      "f_gap_prev_h",
+      "f_dup_recent",
+      "f_dup_cross",
+      "f_ref",
+      "f_ref_internal",
+      "f_doc_ref_internal",
+      "f_ref_doc_share",
+      "f_ref_reciprocity",
+      "f_tarif_ratio",
+      "f_volume_z",
+      "f_tarif_match_prev",
+      "f_dup_pair_cross",
+      "f_dup_faskes_z"
+    ],
+    "training_fingerprint": "ef7f1792e252bf70d41879b088791b4835e3135732178deb7f0b53f751c40b52",
+    "score_semantics": "Ranking signal, not a calibrated fraud probability",
+    "inference": "Closed batch; training data and current batch form the observable snapshot",
+    "tariff_fingerprint": "ae97329072819bd3b1f6252dc9832f8e467d50a7f16ca4d604da32e982639f7c"
+  },
+  "test_start": "2026-09-30T00:34:01.826150880",
+  "test_end": "2026-10-30T19:35:15.526016140",
+  "n_predicted": 448,
+  "evaluation_available": true,
+  "limitations": [
+    "External test package, not a verified BPJS integration.",
+    "Historical labels assumed available at cutoff; reference tables are static.",
+    "Complete current batch visible at close; not streaming inference."
+  ],
+  "jala": {
+    "n_claims": 448,
+    "n_fraud": 85,
+    "capacity": 100,
+    "auc": 0.9766164316966456,
+    "average_precision": 0.9272407250573322,
+    "expected_fraud_at_k": 70.0,
+    "precision_at_k": 0.7,
+    "recall_at_k": 0.8235294117647058,
+    "tie_policy": "Expected hits averaged over tied scores"
+  },
+  "rules": {
+    "n_claims": 448,
+    "n_fraud": 85,
+    "capacity": 100,
+    "auc": 0.5,
+    "average_precision": 0.18973214285714285,
+    "expected_fraud_at_k": 18.973214285714285,
+    "precision_at_k": 0.18973214285714285,
+    "recall_at_k": 0.2232142857142857,
+    "tie_policy": "Expected hits averaged over tied scores"
+  }
+}

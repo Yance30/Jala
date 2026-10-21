@@ -1,0 +1,779 @@
+{
+  "protocol": "upcoding-candidate-v1",
+  "cutoff": "2026-09-01",
+  "tariff_caps": {
+    "I10": 250000,
+    "E11.9": 300000,
+    "N18.6": 1200000,
+    "I50": 2400000
+  },
+  "train_seeds": [
+    101,
+    211
+  ],
+  "test_seeds": [
+    1201,
+    1213
+  ],
+  "runs": [
+    {
+      "seed": 1201,
+      "feature_set": "base",
+      "model": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-09-01T00:00:00",
+        "n_training_claims": 2552,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "f5db554c9bd9d3b6f5f8d62f73e3ca7c481eeeb9f86e900e8a822c643dc0b83c",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "cdb03f1681b2a895e9b041410a0e773c52bcc5468e766f50dc911c68c523433f"
+      },
+      "metrics": {
+        "50": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 50,
+          "auc": 0.9489431496699448,
+          "average_precision": 0.7828774830722591,
+          "expected_fraud_at_k": 50.0,
+          "precision_at_k": 1.0,
+          "recall_at_k": 0.19230769230769232,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "100": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 100,
+          "auc": 0.9489431496699448,
+          "average_precision": 0.7828774830722591,
+          "expected_fraud_at_k": 100.0,
+          "precision_at_k": 1.0,
+          "recall_at_k": 0.38461538461538464,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "200": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 200,
+          "auc": 0.9489431496699448,
+          "average_precision": 0.7828774830722591,
+          "expected_fraud_at_k": 160.0,
+          "precision_at_k": 0.8,
+          "recall_at_k": 0.6153846153846154,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "300": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 300,
+          "auc": 0.9489431496699448,
+          "average_precision": 0.7828774830722591,
+          "expected_fraud_at_k": 182.3125,
+          "precision_at_k": 0.6077083333333333,
+          "recall_at_k": 0.7012019230769231,
+          "tie_policy": "Expected hits averaged over tied scores"
+        }
+      },
+      "families": [
+        {
+          "family": "upcoding",
+          "labelled": true,
+          "n": 60,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.371875
+          }
+        },
+        {
+          "family": "phantom_distributed",
+          "labelled": true,
+          "n": 80,
+          "recall": {
+            "50": 0.5375,
+            "100": 0.6875,
+            "200": 1.0,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "repeat_delayed",
+          "labelled": true,
+          "n": 40,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.0
+          }
+        },
+        {
+          "family": "selfref_oneway",
+          "labelled": true,
+          "n": 80,
+          "recall": {
+            "50": 0.0875,
+            "100": 0.5625,
+            "200": 1.0,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "legit_severe",
+          "labelled": false,
+          "n": 40,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.1
+          }
+        },
+        {
+          "family": "legit_dialysis",
+          "labelled": false,
+          "n": 80,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.0
+          }
+        },
+        {
+          "family": "legit_transfer",
+          "labelled": false,
+          "n": 60,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.0
+          }
+        },
+        {
+          "family": "legit_office_batch",
+          "labelled": false,
+          "n": 75,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.0
+          }
+        },
+        {
+          "family": "routine",
+          "labelled": false,
+          "n": 2500,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.016,
+            "300": 0.043025
+          }
+        }
+      ]
+    },
+    {
+      "seed": 1201,
+      "feature_set": "upcoding",
+      "model": {
+        "version": "batch-gbm-upcoding-v1",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-09-01T00:00:00",
+        "n_training_claims": 2552,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z",
+          "f_icd_mix_z",
+          "f_pat_tarif_jump"
+        ],
+        "feature_set": "upcoding",
+        "training_fingerprint": "f5db554c9bd9d3b6f5f8d62f73e3ca7c481eeeb9f86e900e8a822c643dc0b83c",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "cdb03f1681b2a895e9b041410a0e773c52bcc5468e766f50dc911c68c523433f"
+      },
+      "metrics": {
+        "50": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 50,
+          "auc": 0.9880850060622389,
+          "average_precision": 0.9258321601397873,
+          "expected_fraud_at_k": 50.0,
+          "precision_at_k": 1.0,
+          "recall_at_k": 0.19230769230769232,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "100": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 100,
+          "auc": 0.9880850060622389,
+          "average_precision": 0.9258321601397873,
+          "expected_fraud_at_k": 100.0,
+          "precision_at_k": 1.0,
+          "recall_at_k": 0.38461538461538464,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "200": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 200,
+          "auc": 0.9880850060622389,
+          "average_precision": 0.9258321601397873,
+          "expected_fraud_at_k": 197.0,
+          "precision_at_k": 0.985,
+          "recall_at_k": 0.7576923076923077,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "300": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 300,
+          "auc": 0.9880850060622389,
+          "average_precision": 0.9258321601397873,
+          "expected_fraud_at_k": 220.0,
+          "precision_at_k": 0.7333333333333333,
+          "recall_at_k": 0.8461538461538461,
+          "tie_policy": "Expected hits averaged over tied scores"
+        }
+      },
+      "families": [
+        {
+          "family": "upcoding",
+          "labelled": true,
+          "n": 60,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 1.0,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "phantom_distributed",
+          "labelled": true,
+          "n": 80,
+          "recall": {
+            "50": 0.0125,
+            "100": 0.45,
+            "200": 0.7125,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "repeat_delayed",
+          "labelled": true,
+          "n": 40,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.0
+          }
+        },
+        {
+          "family": "selfref_oneway",
+          "labelled": true,
+          "n": 80,
+          "recall": {
+            "50": 0.6125,
+            "100": 0.8,
+            "200": 1.0,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "legit_severe",
+          "labelled": false,
+          "n": 40,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.0
+          }
+        },
+        {
+          "family": "legit_dialysis",
+          "labelled": false,
+          "n": 80,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.0
+          }
+        },
+        {
+          "family": "legit_transfer",
+          "labelled": false,
+          "n": 60,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.008333333333333333,
+            "300": 0.11666666666666667
+          }
+        },
+        {
+          "family": "legit_office_batch",
+          "labelled": false,
+          "n": 75,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.02666666666666667
+          }
+        },
+        {
+          "family": "routine",
+          "labelled": false,
+          "n": 2500,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.001,
+            "300": 0.0256
+          }
+        }
+      ]
+    },
+    {
+      "seed": 1213,
+      "feature_set": "base",
+      "model": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-09-01T00:00:00",
+        "n_training_claims": 2552,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "f5db554c9bd9d3b6f5f8d62f73e3ca7c481eeeb9f86e900e8a822c643dc0b83c",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "cdb03f1681b2a895e9b041410a0e773c52bcc5468e766f50dc911c68c523433f"
+      },
+      "metrics": {
+        "50": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 50,
+          "auc": 0.97482217432305,
+          "average_precision": 0.8512159050416518,
+          "expected_fraud_at_k": 50.0,
+          "precision_at_k": 1.0,
+          "recall_at_k": 0.19230769230769232,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "100": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 100,
+          "auc": 0.97482217432305,
+          "average_precision": 0.8512159050416518,
+          "expected_fraud_at_k": 100.0,
+          "precision_at_k": 1.0,
+          "recall_at_k": 0.38461538461538464,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "200": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 200,
+          "auc": 0.97482217432305,
+          "average_precision": 0.8512159050416518,
+          "expected_fraud_at_k": 176.0,
+          "precision_at_k": 0.88,
+          "recall_at_k": 0.676923076923077,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "300": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 300,
+          "auc": 0.97482217432305,
+          "average_precision": 0.8512159050416518,
+          "expected_fraud_at_k": 198.0,
+          "precision_at_k": 0.66,
+          "recall_at_k": 0.7615384615384615,
+          "tie_policy": "Expected hits averaged over tied scores"
+        }
+      },
+      "families": [
+        {
+          "family": "upcoding",
+          "labelled": true,
+          "n": 60,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.05
+          }
+        },
+        {
+          "family": "phantom_distributed",
+          "labelled": true,
+          "n": 80,
+          "recall": {
+            "50": 0.0,
+            "100": 0.25,
+            "200": 0.975,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "repeat_delayed",
+          "labelled": true,
+          "n": 40,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.45,
+            "300": 0.875
+          }
+        },
+        {
+          "family": "selfref_oneway",
+          "labelled": true,
+          "n": 80,
+          "recall": {
+            "50": 0.625,
+            "100": 1.0,
+            "200": 1.0,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "legit_severe",
+          "labelled": false,
+          "n": 40,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.0
+          }
+        },
+        {
+          "family": "legit_dialysis",
+          "labelled": false,
+          "n": 80,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.0
+          }
+        },
+        {
+          "family": "legit_transfer",
+          "labelled": false,
+          "n": 60,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.0
+          }
+        },
+        {
+          "family": "legit_office_batch",
+          "labelled": false,
+          "n": 75,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.0
+          }
+        },
+        {
+          "family": "routine",
+          "labelled": false,
+          "n": 2500,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0096,
+            "300": 0.0408
+          }
+        }
+      ]
+    },
+    {
+      "seed": 1213,
+      "feature_set": "upcoding",
+      "model": {
+        "version": "batch-gbm-upcoding-v1",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-09-01T00:00:00",
+        "n_training_claims": 2552,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z",
+          "f_icd_mix_z",
+          "f_pat_tarif_jump"
+        ],
+        "feature_set": "upcoding",
+        "training_fingerprint": "f5db554c9bd9d3b6f5f8d62f73e3ca7c481eeeb9f86e900e8a822c643dc0b83c",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "cdb03f1681b2a895e9b041410a0e773c52bcc5468e766f50dc911c68c523433f"
+      },
+      "metrics": {
+        "50": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 50,
+          "auc": 0.996808567964435,
+          "average_precision": 0.9764283265032704,
+          "expected_fraud_at_k": 50.0,
+          "precision_at_k": 1.0,
+          "recall_at_k": 0.19230769230769232,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "100": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 100,
+          "auc": 0.996808567964435,
+          "average_precision": 0.9764283265032704,
+          "expected_fraud_at_k": 100.0,
+          "precision_at_k": 1.0,
+          "recall_at_k": 0.38461538461538464,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "200": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 200,
+          "auc": 0.996808567964435,
+          "average_precision": 0.9764283265032704,
+          "expected_fraud_at_k": 199.0,
+          "precision_at_k": 0.995,
+          "recall_at_k": 0.7653846153846153,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "300": {
+          "n_claims": 3115,
+          "n_fraud": 260,
+          "capacity": 300,
+          "auc": 0.996808567964435,
+          "average_precision": 0.9764283265032704,
+          "expected_fraud_at_k": 247.0,
+          "precision_at_k": 0.8233333333333334,
+          "recall_at_k": 0.95,
+          "tie_policy": "Expected hits averaged over tied scores"
+        }
+      },
+      "families": [
+        {
+          "family": "upcoding",
+          "labelled": true,
+          "n": 60,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 1.0,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "phantom_distributed",
+          "labelled": true,
+          "n": 80,
+          "recall": {
+            "50": 0.0,
+            "100": 0.4125,
+            "200": 0.7375,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "repeat_delayed",
+          "labelled": true,
+          "n": 40,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.675
+          }
+        },
+        {
+          "family": "selfref_oneway",
+          "labelled": true,
+          "n": 80,
+          "recall": {
+            "50": 0.625,
+            "100": 0.8375,
+            "200": 1.0,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "legit_severe",
+          "labelled": false,
+          "n": 40,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.0
+          }
+        },
+        {
+          "family": "legit_dialysis",
+          "labelled": false,
+          "n": 80,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.0
+          }
+        },
+        {
+          "family": "legit_transfer",
+          "labelled": false,
+          "n": 60,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.016666666666666666,
+            "300": 0.1
+          }
+        },
+        {
+          "family": "legit_office_batch",
+          "labelled": false,
+          "n": 75,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.0
+          }
+        },
+        {
+          "family": "routine",
+          "labelled": false,
+          "n": 2500,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "200": 0.0,
+            "300": 0.0188
+          }
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "The upcoding family and the two candidate features were designed by the same team; this shows a known blind spot closing, not generalisation to real upcoding.",
+    "Planted pattern is one clinic billing I50 for patients whose own record is routine I10. Real upcoding varies in code pair, setting, and documentation.",
+    "Synthetic independent-scenario data only; not operational BPJS validation and no clinical review.",
+    "No hyperparameter tuning on the test seeds; baseline graph + GBM settings unchanged.",
+    "legit_severe rows are counted with the same recall formula but are benign; a non-zero value there is a false-review cost, not detection."
+  ]
+}

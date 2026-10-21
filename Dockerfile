@@ -7,5 +7,7 @@ WORKDIR /app
 COPY requirements-lock.txt ./
 RUN pip install --no-cache-dir -r requirements-lock.txt
 COPY . .
+RUN useradd --create-home jala && mkdir -p /app/.jala && chown -R jala:jala /app
+USER jala
 EXPOSE 8501
 CMD ["streamlit", "run", "app.py", "--server.port=8501"]

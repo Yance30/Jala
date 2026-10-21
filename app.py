@@ -2,7 +2,9 @@ import streamlit as st
 from pathlib import Path
 
 from components import intro, layout, sidebar, theme, tutorial
-from views import about, audit_action, claim_details, dashboard, network_graph, risk_ranking
+from views import about, audit_action, batch_review, claim_details, dashboard, network_graph, risk_ranking
+from views import system_status
+from views import data_prediction
 
 LOGO_PATH = Path(__file__).resolve().parent / "assets" / "logo.png"
 
@@ -11,6 +13,9 @@ st.set_page_config(
     page_icon=str(LOGO_PATH),
     layout="wide"
 )
+
+from components.access import initialize
+initialize()
 
 if "page" not in st.session_state:
     st.session_state.page = "dashboard"
@@ -28,6 +33,9 @@ ROUTES = {
     "claim": claim_details.render,
     "audit": audit_action.render,
     "about": about.render,
+    "batch_review": batch_review.render,
+    "system_status": system_status.render,
+    "data_prediction": data_prediction.render,
 }
 
 # Comparison sekarang menjadi section di halaman About
@@ -51,6 +59,8 @@ if not st.session_state.intro_done:
 
 sidebar.render_sidebar()
 layout.render_topbar(st.session_state.page)
+from components.responsive import CSS as RESPONSIVE_CSS
+st.markdown(RESPONSIVE_CSS, unsafe_allow_html=True)
 layout.render_demo_notice()
 layout.render_workflow_stepper(st.session_state.page)
 

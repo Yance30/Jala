@@ -4,6 +4,7 @@ from __future__ import annotations
 import os
 import sqlite3
 from pathlib import Path
+from core.access import scoped_path
 
 
 def database_path() -> Path | None:
@@ -15,7 +16,7 @@ def database_path() -> Path | None:
     mengaktifkan penyimpanan persisten pada instance single-user/lokal.
     """
     configured = os.environ.get("JALA_REVIEW_HISTORY_DB")
-    return Path(configured).expanduser() if configured else None
+    return scoped_path(Path(configured).expanduser()) if configured else None
 
 
 def _connect() -> sqlite3.Connection:

@@ -1,0 +1,20 @@
+{
+  "protocol": "closed-batch-review-v2",
+  "purpose": "Frozen synthetic evaluation before further feature tuning; not clinical validation",
+  "training_seeds": [101, 211],
+  "holdout_seeds": [1701, 1709, 1721],
+  "training_start": "2026-07-01",
+  "holdout_start": "2026-10-05",
+  "cutoff_days": [45, 60],
+  "capacities": [20, 50, 100],
+  "model": "base",
+  "n_routine": 1000,
+  "promotion": "No automatic promotion. Review precision, recall, false reviews and every planted family across all runs.",
+  "uncertainty": "Report per-run values and min/max across seeds/cutoffs. This range is not a confidence interval.",
+  "limitations": [
+    "Separate seeds and entities, same synthetic scenario templates",
+    "Full current batch available at close",
+    "Historical labels assumed available at cutoff",
+    "No verified operational fraud labels or human usability results"
+  ]
+}

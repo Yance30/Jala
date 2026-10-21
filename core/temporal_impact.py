@@ -75,10 +75,12 @@ def weekly_replay(world: World, capacity_per_week: int = 500) -> dict:
                 labels.group == ring, "typology"].iloc[0]), "first_week_active": wi})
             if ring in caught_graph and "jala_week" not in item:
                 item["jala_week"] = wi
-                item["jala_date"] = lo.date().isoformat()
+                item["jala_date"] = hi.date().isoformat()
+                item["jala_available_at"] = hi.isoformat()
             if ring in caught_rules and "rules_week" not in item:
                 item["rules_week"] = wi
-                item["rules_date"] = lo.date().isoformat()
+                item["rules_date"] = hi.date().isoformat()
+                item["rules_available_at"] = hi.isoformat()
         history.append({"week": wi, "start": lo.date().isoformat(), "n_claims": int(len(current)),
                         "n_fraud": int(y.sum()), "capacity": int(capacity_per_week),
                         "rings_active": len(active_rings), "rings_caught_jala": len(caught_graph),

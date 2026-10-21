@@ -107,17 +107,23 @@ FOOTER_CUTOFF = "Batas data simulasi: 30 Sep 2026, 23.59 WIB"
 
 NAV_PAGES = [
     ("dashboard", "Dashboard"),
-    ("network", "Network Graph"),
+    ("data_prediction", "Data & Prediction"),
+    ("batch_review", "Claim Review"),
+    ("network", "Network Analysis"),
     ("risk", "Risk Ranking"),
-    ("audit", "Audit Action"),
-    ("about", "About"),
+    ("audit", "Audit Actions"),
+    ("system_status", "System Status"),
+    ("about", "About & Evaluation"),
 ]
 
 PAGE_TITLES = {
-    "dashboard": "Ringkasan",
-    "network": "Peta Jaringan",
-    "risk": "Prioritas Klaster",
-    "claim": "Alasan Penandaan",
-    "audit": "Tindak Lanjut Audit",
-    "about": "Tentang JALA",
+    "dashboard": "Dashboard",
+    "network": "Network Analysis",
+    "risk": "Risk Ranking",
+    "claim": "Claim Details",
+    "audit": "Audit Actions",
+    "about": "About JALA",
+    "batch_review": "Claim Review",
+    "system_status": "System Status",
+    "data_prediction": "Data & Prediction",
 }

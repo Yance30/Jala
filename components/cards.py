@@ -49,7 +49,7 @@ def score_bar(score: int, conf: str, metric: str, tone: str = "#B91C1C") -> str:
     return f"""
     <div>
       <div style="display:flex;align-items:baseline;gap:6px;">
-        <span style="font-size:18px;font-weight:700;color:{color};">{score}%</span>
+        <span style="font-size:18px;font-weight:700;color:{color};">{score}/100</span>
         <span style="font-size:11px;color:#64748B;">{conf}</span>
       </div>
       <div class="j-bar" style="margin:6px 0;"><span style="width:{score}%;background:{color};"></span></div>

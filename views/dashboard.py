@@ -29,6 +29,9 @@ def _find_contrast_cluster(live):
 
 
 def render():
+    if st.button("Unggah data & jalankan prediksi", key="start_prediction", type="primary"):
+        st.session_state.page = "data_prediction"
+        st.rerun()
     live = bench.get_live()
     col_sel, col_sync = st.columns([3, 1])
     with col_sel:
@@ -43,9 +46,8 @@ def render():
         )
     with col_sync:
         st.markdown(
-            '<div style="display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap;">'
-            '<span class="j-chip"><span class="dot amber"></span>Data sintetis · prototipe</span>'
-            f'<span class="j-chip">Periode data: <b>{QUARTER}</b></span></div>',
+            '<div style="display:flex;justify-content:flex-end;">'
+            f'<span class="j-chip"><span class="dot amber"></span>Data sintetis · {QUARTER}</span></div>',
             unsafe_allow_html=True,
         )
     st.markdown(
@@ -59,6 +61,12 @@ def render():
     )
     guide.render_page_guide("dashboard")
     st.markdown('<div style="height:8px"></div>', unsafe_allow_html=True)
+
+    st.markdown(
+        '<div class="j-section-heading"><span>Kasus yang disarankan</span>'
+        '<span>Mulai dari prioritas tertinggi, lalu verifikasi buktinya</span></div>',
+        unsafe_allow_html=True,
+    )
 
     # Satu kasus teratas menjadi pintu masuk demo; data tetap berasal dari klaster hasil model.
     featured = live.clusters[0] if live.clusters else None
@@ -134,6 +142,11 @@ def render():
             "arsitektur HAN masih rancangan."
         )
 
+    st.markdown(
+        '<div class="j-section-heading"><span>Ringkasan operasional</span>'
+        '<span>Indikator dari data simulasi pada periode ini</span></div>',
+        unsafe_allow_html=True,
+    )
     cols = st.columns(3)
     for col, kpi in zip(cols, live.kpis()):
         with col:
@@ -148,7 +161,13 @@ def render():
                 unsafe_allow_html=True,
             )
 
-    st.markdown('<div style="height:20px"></div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="j-section-heading j-section-heading-chart">'
+        '<span>Tren pemeriksaan</span>'
+        '<span>Perubahan mingguan membantu melihat pola; bukan bukti kecurangan</span></div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown('<div style="height:4px"></div>', unsafe_allow_html=True)
     with st.container(key="chart_panel_dashboard_trend"):
         st.markdown(
             """
