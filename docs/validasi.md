@@ -26,9 +26,9 @@ untuk **mengurutkan prioritas pemeriksaan**, dengan keputusan akhir tetap pada v
 
 - **Data klaim BPJS nyata.** Dilarang oleh guidebook (butir 5o: wajib data dummy/anonim). Angka JALA mengukur
   apakah logika deteksi bekerja pada pola yang **didefinisikan generator**, bukan akurasi di lapangan.
-- **Skenario dari keluarga generator independen.** Dunia utama, dunia bergeser (transfer), dan skenario
-  "fraud menghindar" masih dibuat oleh keluarga pembangkit yang sama. Yang diuji adalah pergeseran
-  **parameter**, bukan pola fraud yang benar-benar baru.
+- **Validasi eksternal independen.** Pembangkit terpisah sudah tersedia di `core/independent_scenarios.py`,
+  dengan evaluasi batch dan uji keluarga yang ditahan dari pelatihan. Perancangnya tetap tim yang sama;
+  ini belum merupakan validasi pakar/data operasional independen.
 - **Evaluasi pakar domain / verifikator nyata.** Belum ada; penilaian false positive saat ini terhadap label
   sintetis, bukan pertimbangan klinis manusia.
 - **Model HAN/GNN.** Arsitektur target, **belum diimplementasikan**. Mesin yang diukur sekarang:

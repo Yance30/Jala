@@ -28,7 +28,18 @@ KS = (100, 250, 500, 1000)
 CURVE_KS = list(range(0, 1201, 20))
 N_FOLDS = 4
 
+
+def percentile_rank(values):
+    """Persentil peringkat 0-100; skor yang seri mendapat nilai yang sama."""
+    series = values if isinstance(values, pd.Series) else pd.Series(values)
+    series = series.astype(float)
+    if len(series) < 2:
+        return pd.Series([100.0] * len(series), index=series.index)
+    return (series.rank(method="average") - 1) / (len(series) - 1) * 100
+
 CAVEATS = [
+    "Benchmark retrospektif/transduktif: fitur dibangun dari seluruh snapshot sebelum fold classifier. "
+    "Hasil ini bukan bukti prediksi prospektif; gunakan evaluasi batch temporal untuk data baru.",
     "Data 100% sintetis dan fraud disisipkan oleh pembangkit yang sama dengan yang membuat fitur-fiturnya; "
     "angka ini mengukur apakah logika deteksi bekerja pada pola yang didefinisikan, bukan akurasi di data BPJS nyata.",
     "Validasi silang dilakukan per kelompok faskes: cincin dan jaringan fraud yang sama tidak pernah dipakai melatih "

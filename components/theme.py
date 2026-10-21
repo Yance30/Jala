@@ -1470,7 +1470,8 @@ div[data-testid="stHorizontalBlock"]
 .j-workflow { margin: 0 0 18px; }
 .j-workflow ol {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
     gap: 8px;
     list-style: none;
     margin: 0;
@@ -1501,7 +1502,7 @@ div[data-testid="stHorizontalBlock"]
 }
 
 @media (max-width: 560px) {
-    .j-workflow ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .j-workflow ol { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .j-workflow li { padding: 7px 4px; }
 }
 
@@ -2100,7 +2101,55 @@ div[data-testid="stHorizontalBlock"] {
 
 def inject_theme():
     import streamlit as st
-
+    st.markdown("""
+<style>
+.j-task-path {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:20px 0 24px}
+.j-task-path > div {background:#fff;border:1px solid #d8e4e1;border-top:3px solid #0f766e;border-radius:8px;padding:20px}
+.j-task-path b {display:block;color:#115e59;font-size:16px;margin-bottom:8px}
+.j-task-path span {display:block;color:#3e4947;font-size:14px;line-height:1.6}
+.j-section-heading {display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:18px 0 10px;padding-bottom:8px;border-bottom:1px solid #e2e8f0}
+.j-section-heading > span:first-child {color:#132a1c;font-size:16px;font-weight:650;letter-spacing:-.01em}
+.j-section-heading > span:last-child {color:#64748b;font-size:12px;text-align:right}
+.j-section-heading-chart {margin-top:20px}
+.j-filter-label {margin:10px 0 4px;color:#475569;font-size:12px;font-weight:600}
+.j-filter-summary {display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:12px 0;color:#64748b;font-size:12px}
+.j-filter-summary b {color:#132a1c;font-size:14px}
+.st-key-risk_filters [data-testid="stButton"] > button {height:auto;min-height:44px;padding:8px 10px;border-radius:8px;line-height:1.35;white-space:normal}
+.st-key-risk_filters [data-testid="stTextInput"] input {min-height:46px;border-radius:8px}
+.j-risk-mobile-cards {display:none}
+.j-risk-score-value {font-size:18px;font-weight:700;line-height:1.2}
+.j-risk-score-note {margin-top:4px;color:#64748b;font-size:11px;line-height:1.4}
+.j-risk-mobile-card {margin:0 0 10px;padding:16px}
+.j-risk-mobile-heading,.j-risk-mobile-score,.j-risk-mobile-field {display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.j-risk-mobile-name {color:#132a1c;font-size:15px;font-weight:650;line-height:1.4}
+.j-risk-mobile-subtitle {margin-top:4px;color:#64748b;font-size:12px;line-height:1.5}
+.j-risk-mobile-score {margin-top:14px;padding-top:12px;border-top:1px solid #e2e8f0}
+.j-risk-mobile-score span,.j-risk-mobile-field > span {color:#64748b;font-size:12px}
+.j-risk-mobile-score strong {font-size:18px}
+.j-risk-mobile-field {justify-content:flex-start;align-items:center;margin-top:12px}
+.j-risk-mobile-why {display:grid;gap:4px;margin-top:12px;padding:10px 12px;border-radius:8px;background:#f8fafc;color:#475569;font-size:13px;line-height:1.5}
+.j-risk-mobile-why b {color:#132a1c}
+.st-key-risk_actions [data-testid="stButton"] > button {min-height:48px}
+section[data-testid="stSidebar"] div[role="radiogroup"] label::before {content:none !important;display:none !important}
+section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p {color:#e2efeb !important}
+button:focus-visible,a:focus-visible,input:focus-visible {outline:3px solid #0f766e !important;outline-offset:3px}
+@media(max-width:760px){
+.j-task-path{grid-template-columns:1fr;gap:8px}.j-task-path > div{padding:14px}
+.j-section-heading{align-items:flex-start;flex-direction:column;gap:2px}
+.j-section-heading > span:last-child{text-align:left}
+.j-filter-summary{flex-direction:column;gap:3px}
+}
+@media(max-width:1000px){
+.j-risk-mobile-cards{display:block}
+.j-risk-desktop-table,.j-scrollhint{display:none !important}
+}
+@media(max-width:760px){
+[data-testid="stMain"],[data-testid="stMainBlockContainer"]{min-width:0 !important;width:100% !important;max-width:100vw !important;box-sizing:border-box}
+[data-testid="stMain"] [data-testid="stVerticalBlock"],[data-testid="stMain"] [data-testid="stElementContainer"]{min-width:0 !important;max-width:100% !important}
+.j-topbar{flex-wrap:wrap;gap:12px}.j-task-path,.j-task-path > div{min-width:0;max-width:100%;box-sizing:border-box}
+}
+</style>
+""", unsafe_allow_html=True)
     st.markdown(
         f"<style>{CSS}</style>",
         unsafe_allow_html=True,

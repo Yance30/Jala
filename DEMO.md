@@ -21,32 +21,31 @@ tampak sah padahal terkoordinasi, dan hanya memprioritaskan; keputusan akhir tet
 
 **Bahan yang bisa ditinggalkan:** [one-pager](docs/one-pager.md), [model card](docs/model-card.md), [rencana pilot](docs/pilot-plan.md), dan [12 jawaban singkat untuk juri](docs/juri-faq.md).
 
-**Riwayat pemeriksaan demo:** tindakan per klaster tersimpan lintas kunjungan di basis data SQLite lokal
-`.jala/review_history.sqlite3`. Tombol **Reset demo** memulihkan status sesi tetapi mempertahankan audit trail.
-Basis data ini dibagi oleh semua pengguna pada instance aplikasi yang sama; gunakan hanya ID dan catatan sintetis,
-jangan masukkan data pribadi atau data klaim nyata. Ini penyimpanan prototipe, belum memiliki akun, pembatasan akses,
-atau enkripsi untuk penggunaan operasional. Riwayat tindakan tersimpan secara persisten; umpan balik verifikator dan
-perubahan skor hanya berlaku pada sesi aplikasi yang sedang berjalan.
+**Riwayat pemeriksaan demo:** secara default hidup hanya pada sesi aktif. Penyimpanan persisten bersifat opsional melalui
+`JALA_REVIEW_HISTORY_DB`; bila dikonfigurasi pada instance bersama, penyimpanannya juga dapat dipakai bersama dan bukan
+kontrol akses. Keputusan antrean batch memiliki penyimpanan lokal terpisah. Gunakan hanya ID dan catatan sintetis;
+jangan masukkan data pribadi atau data klaim nyata. Prototipe ini belum memiliki autentikasi atau perlindungan setara
+layanan operasional. Umpan balik dan perubahan skor berlaku pada sesi aplikasi.
 
 ## Alur 3 menit
 
 | Waktu | Layar | Yang dilakukan | Yang diucapkan |
 |---|---|---|---|
 | 0:00-0:20 | Dashboard | Tunjuk kartu KPI | "Klaim BPJS diperiksa satu per satu. Kolusi antar-faskes tidak terlihat dari satu berkas. JALA membaca jaringan faskes, dokter, dan peserta." |
-| 0:20-0:45 | Dashboard | Sorot tiga kartu dan grafik tren | "Pada data sintetis ini JALA menandai 296 klaim Phantom Billing, 244 Repeat Billing, dan 101 Self-Referral." |
-| 0:45-1:05 | Risk Ranking | Klik *Risk Ranking* di sidebar, tunjuk baris teratas **Jejaring Klinik Pratama 31 (+2 faskes)** (JALA-F031) | "Klaster diurutkan menurut skor jaringan. Teratas: tiga klinik, 120 klaim, skor 100%." |
-| 1:05-1:35 | Network Graph | Klik *Lihat Sub-Graph*, tunjuk dokter dan peserta | "Inilah yang tidak terlihat dari satu berkas: dokter yang sama menagih di tiga klinik dalam setengah jam, dan peserta dari luar wilayah." |
-| 1:35-1:55 | Claim Details | Klik *Risk Ranking* di sidebar, lalu *Buka Claim Details*; baca tiga bukti terukur | "Alasannya bukan kotak hitam: 98% peserta luar wilayah, 77% dikirim serentak, 77% dokter lintas faskes." |
-| 1:55-2:20 | Audit Action | Klik *Tindak lanjut: Audit Action*, gulir ke *Bagaimana kalau dokter ini dikeluarkan?* | "Kami simulasikan mengeluarkan dokter satu per satu. Tidak ada satu dokter pun yang jadi titik tunggal; yang terbesar hanya terkait 38% klaim. Cincin ini berlapis, jadi yang tepat adalah pemeriksaan lapangan ke tiga faskes, bukan satu orang." |
+| 0:20-0:45 | Dashboard | Sorot tiga kartu dan grafik tren | "Pada data sintetis yang sedang ditampilkan, JALA menandai 295 dugaan Phantom Billing, 252 dugaan Repeat Billing, dan 102 dugaan Self-Referral." |
+| 0:45-1:05 | Risk Ranking | Klik *Risk Ranking* di sidebar, tunjuk klaster teratas yang tampil | "Klaster diurutkan menurut skor prioritas. Buka satu klaster dan baca jumlah faskes, klaim terkait, serta skor /100 yang ditampilkan." |
+| 1:05-1:35 | Network Graph | Klik *Lihat Sub-Graph*, tunjuk hubungan yang benar-benar terlihat | "Graf membantu menelusuri hubungan antarentitas yang terkait. Hubungan ini adalah petunjuk untuk diperiksa, bukan bukti pelanggaran." |
+| 1:35-1:55 | Claim Details | Buka detail klaster dan baca indikator yang tampil | "Setiap indikator ditelusuri dari catatan sintetis yang mendasarinya. Saya hanya menyebut nilai yang terlihat di layar; skor bukan probabilitas." |
+| 1:55-2:20 | Audit Action | Klik *Tindak lanjut: Audit Action*, gulir ke *Bagaimana kalau dokter ini dikeluarkan?* | "Panel ini mensimulasikan dampak mengeluarkan dokter dari klaster. Baca perubahan dan proporsi klaim yang tampil; ini analisis struktur jaringan, bukan penilaian hukum atas dokter." |
 | 2:20-2:40 | Audit Action | Klik *Berkas Bukti Klaster (.zip)* | "Satu klik menghasilkan berkas untuk pemeriksa dokumen: klaim terkait, alasan, dan gambar jaringan. JALA menyaring di depan, pemeriksa dokumen memeriksa berkasnya." |
-| 2:40-3:00 | About | Tunjuk kartu AUC dan grafik kapasitas audit, lalu kotak Batasan | "Pada data sintetis berlabel, AUC 0,996 dibanding 0,551 untuk aturan per klaim. Bila hanya 500 klaim yang bisa diperiksa, JALA menangkap 65% fraud, aturan lama 12,5%. Ini bukan akurasi di data BPJS nyata; batasannya tertulis di sini." |
+| 2:40-3:00 | About | Tunjuk kartu AUC dan grafik kapasitas audit, lalu kotak Batasan | "Pada benchmark sintetis seed 2026, AUC JALA 0,997 dibanding 0,551 untuk aturan sederhana; di kapasitas 500, recall masing-masing 65,1% dan 12,5%. Ini hasil sintetis, bukan akurasi pada data BPJS nyata." |
 
 ## Tambahan jika ada waktu 30 detik: verifikator mengoreksi sistem
 
 | Layar | Yang dilakukan | Yang diucapkan |
 |---|---|---|
-| Risk Ranking | Di kotak *Pilih klaster* (bawah tabel), klik kotaknya, ketik **RS Tipe C 50**, lalu klik pilihan *Jejaring RS Tipe C 50 (+1 faskes)* (JALA-F006) yang muncul, klik *Buka Claim Details*, lalu *Tindak lanjut: Audit Action* | "Klaster ini tertandai karena klaim berulang tiap sekitar 46 jam. Di berkas bukti, mayoritas klaimnya (57%) berdiagnosis hemodialisis (N18.6), yang memang berjadwal; ini pola wajar, bukan fraud." |
-| Audit Action | Klik *Arsipkan & Turunkan Skor* | "Verifikator men-dismiss. Skor turun 99% menjadi 40%, dan klaster berpola dialisis serupa, *Jejaring Klinik Pratama 44* (JALA-F044), ikut turun dari 96% menjadi 73%. Ini kalibrasi ringan, belum melatih ulang model." |
+| Dashboard | Klik **Buka kasus pembanding**, lalu periksa detail dan indikator yang tampil | "Kasus pembanding memperlihatkan pola berulang yang dapat memiliki penjelasan layanan wajar, seperti terapi terjadwal. Karena itu, pola dan skor tetap perlu ditinjau bersama konteks dan dokumen." |
+| Audit Action | Pilih hasil tinjauan yang sesuai dan simpan catatan | "Keputusan dan alasan pemeriksa dicatat. Bila memilih pola wajar, kalibrasi demo dapat mengubah prioritas klaster serupa; perubahan yang tampil bukan pelatihan ulang model." |
 | Risk Ranking | Tunjuk spanduk umpan balik | "Peringkat berubah di layar, dan bisa dibatalkan." |
 
 Pada simulasi, bila verifikator meninjau antrean dari atas dan men-dismiss klaster yang sebenarnya tidak berisi fraud,
@@ -55,11 +54,10 @@ presisi antrean Auto-Flagged naik dari 73% menjadi 89% lalu 100%, tanpa satu pun
 
 ## Skenario kerja dan dampak yang belum diukur
 
-Gunakan kasus **Jejaring Klinik Pratama 31** sebagai contoh realistis, dengan seluruh identitas dan transaksi tetap
-sintetis. Petugas mulai dari antrean, membuka hubungan dokter–faskes dan peserta lintas wilayah, lalu memeriksa alasan
-per klaim dan mengunduh berkas sumber. Setelah itu petugas mencatat apakah pola perlu pemeriksaan lapangan atau dapat
-dijelaskan sebagai layanan wajar. Kasus dialisis JALA-F006 menjadi pembanding penting: pola klaim berulang terlihat
-mencurigakan secara statistik, tetapi jadwal terapi yang sah dapat menjelaskannya.
+Gunakan klaster teratas yang tampil sebagai contoh, dengan seluruh identitas dan transaksi tetap sintetis. Petugas
+mulai dari antrean, membuka hubungan yang ditampilkan, lalu memeriksa indikator per klaim dan mengunduh berkas bukti.
+Gunakan tombol kasus pembanding untuk melihat pola layanan yang dapat memiliki penjelasan wajar, seperti terapi
+terjadwal. Catat apakah kasus perlu diperiksa lebih lanjut atau memiliki konteks yang menjelaskannya.
 
 Demo ini menunjukkan **pengurutan dan pengumpulan konteks**, bukan penghematan waktu yang sudah terbukti. Belum ada
 uji waktu dengan verifikator atau data operasional. Untuk mengukur dampak pada pilot, bandingkan waktu median dari
@@ -72,9 +70,12 @@ dilakukan.
 
 **1. Data sintetis, bagaimana buktinya di dunia nyata?**
 Belum terbukti, dan kami tidak mengklaimnya. Yang kami buktikan: logika deteksi bekerja pada pola yang didefinisikan, divalidasi
-silang per kelompok faskes, dengan kasus sah yang sengaja mirip fraud (dialisis, bencana, batch RS). Fitur per-klaim saja AUC 0,80;
-dengan agregat entitas 0,99, jadi jaringan memang menambah nilai. Model yang dilatih di satu dunia sintetis diuji di dunia lain
-dengan AUC 0,995 (`docs/robustness.json`). Langkah berikutnya: pilot di data klaim nyata dengan persetujuan.
+silang per kelompok faskes, dengan kasus sah yang sengaja mirip fraud (dialisis, bencana, batch RS). Pada ablasi sintetis,
+fitur per-klaim menghasilkan AUC 0,802, agregat entitas 0,992, dan JALA penuh 0,996. Ini mendukung nilai tambah informasi
+entitas dan relasi pada generator ini, bukan bukti lapangan. Transfer ke dunia B dengan parameter bergeser menghasilkan AUC
+0,995, tetapi dunia tersebut masih dari keluarga pembangkit yang sama. Pada skenario pembangkit terpisah, rata-rata AUC
+0,824 dan recall@100 35,56% (`docs/independent-evaluation.json`), yang menunjukkan batas generalisasi. Langkah berikutnya:
+validasi data dan pilot hanya dengan persetujuan tata kelola.
 
 **2. Apa bedanya dengan pemeriksaan berkas seperti Pramana?**
 Keduanya saling melengkapi. Pemeriksaan berkas menilai keaslian satu dokumen; JALA melihat hubungan antar-aktor yang tidak
@@ -118,4 +119,4 @@ Bila dismiss keliru pada klaster fraud, klaster serupanya ikut turun tetapi teta
 - [ ] URL dengan `?tour=0` terbuka, About sudah pernah dimuat.
 - [ ] Umpan balik diatur ulang (tidak ada spanduk di Risk Ranking).
 - [ ] Rekaman cadangan dan laptop lokal siap.
-- [ ] Angka 296 / 244 / 101, AUC 0,996 vs 0,551, dan 65% vs 12,5% cocok dengan layar.
+- [ ] Angka 295 / 252 / 102, AUC benchmark 0,997 vs 0,551, dan recall@500 65,1% vs 12,5% cocok dengan artefak yang disebut.

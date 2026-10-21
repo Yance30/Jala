@@ -7,11 +7,12 @@ if not exist ".venv\Scripts\streamlit.exe" (
   if errorlevel 1 goto error
   .venv\Scripts\python.exe -m pip install --upgrade pip
   if errorlevel 1 goto error
-  .venv\Scripts\python.exe -m pip install -r requirements-lock-win.txt
-  if errorlevel 1 goto error
 )
 
-.venv\Scripts\python.exe -m streamlit run app.py
+.venv\Scripts\python.exe -m pip install -r requirements-lock-win.txt
+if errorlevel 1 goto error
+set JALA_MODE=local
+.venv\Scripts\python.exe -m streamlit run app.py --server.address=127.0.0.1
 exit /b %errorlevel%
 
 :error

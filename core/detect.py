@@ -71,7 +71,7 @@ def _within(sorted_t: np.ndarray, t: np.ndarray, w: float):
     return np.searchsorted(sorted_t, t - w, "left"), np.searchsorted(sorted_t, t + w, "right")
 
 
-def build_features(claims, faskes, affiliations, patients) -> pd.DataFrame:
+def build_features(claims, faskes, affiliations, patients, *, tariff_caps=None) -> pd.DataFrame:
     assert_no_labels(claims, faskes, affiliations, patients)
     contract.validate(claims, faskes, affiliations, patients)
     t0 = claims.visit_ts.min()
@@ -124,7 +124,8 @@ def build_features(claims, faskes, affiliations, patients) -> pd.DataFrame:
     out["f_conc_component"] = df.faskes_id.map(comp).fillna(1).values
 
     # --- klaim berulang (peserta + ICD sama) ---
-    d = df.sort_values(["patient_id", "icd", "visit_s"])
+    # ID breaks equal-time ties deterministically; it does not imply chronology.
+    d = df.sort_values(["patient_id", "icd", "visit_s", "claim_id"], kind="stable")
     same = (d.patient_id.values[1:] == d.patient_id.values[:-1]) & (d.icd.values[1:] == d.icd.values[:-1])
     gap = np.full(len(d), 999.0)
     cross = np.zeros(len(d))
@@ -143,7 +144,11 @@ def build_features(claims, faskes, affiliations, patients) -> pd.DataFrame:
     ptar[1:] = np.where(same, d.tarif.values[:-1], np.nan)
     pfas = np.full(len(d), "", dtype=object)
     pfas[1:] = np.where(same, d.faskes_id.values[:-1], "")
-    tm = np.where(recent, np.abs(d.tarif.values / np.where(np.isnan(ptar), 1.0, ptar) - 1), 1.0)
+    current_tariff = d.tarif.to_numpy(dtype=float)
+    tm = np.ones(len(d), dtype=float)
+    positive = recent & (ptar > 0)
+    tm[positive] = np.abs(current_tariff[positive] / ptar[positive] - 1)
+    tm[recent & (ptar == 0) & (current_tariff == 0)] = 0.
     out["f_tarif_match_prev"] = pd.Series(np.minimum(tm, 1.0), index=d.index).reindex(df.index).values
     cross_ev = recent & (cross > 0)
     pa = np.where(pfas < d.faskes_id.values, pfas, d.faskes_id.values)
@@ -182,7 +187,7 @@ def build_features(claims, faskes, affiliations, patients) -> pd.DataFrame:
     out["f_ref_reciprocity"] = np.where(is_ref.to_numpy() & (lo >= 3), ratio, 0.0)
 
     # --- tarif & volume ---
-    out["f_tarif_ratio"] = (df.tarif / df.icd.map(ICD_CAP)).values
+    out["f_tarif_ratio"] = (df.tarif / df.icd.map(ICD_CAP if tariff_caps is None else tariff_caps)).values
     vol = df.groupby("faskes_id").claim_id.transform("count") / df.capacity
     out["f_volume_z"] = _z_by_group(vol, df["type"]).values
     return out[FEATURES]
@@ -191,13 +196,13 @@ def build_features(claims, faskes, affiliations, patients) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 # Baseline berbasis aturan: memeriksa tiap klaim secara terpisah (cara lama)
 # ---------------------------------------------------------------------------
-def rule_flags(claims: pd.DataFrame) -> pd.DataFrame:
+def rule_flags(claims: pd.DataFrame, *, tariff_caps=None) -> pd.DataFrame:
     """Asumsi saya tentang mesin aturan lama: (1) tarif melewati plafon, (2) klaim ganda identik
     (peserta + ICD + faskes) pada hari yang sama. Tidak melihat relasi antar-faskes/dokter."""
     assert_no_labels(claims)
     day = claims.visit_ts.dt.floor("D")
     dup = claims.assign(day=day).groupby(["patient_id", "icd", "faskes_id", "day"]).cumcount() > 0
-    over = claims.tarif > claims.icd.map(ICD_CAP)
+    over = claims.tarif > claims.icd.map(ICD_CAP if tariff_caps is None else tariff_caps)
     return pd.DataFrame({"rule_over_cap": over.astype(int).values, "rule_same_day_dup": dup.astype(int).values},
                         index=claims.claim_id.values)
 
@@ -219,8 +224,13 @@ def explain(row: pd.Series) -> dict:
             f"Dokter yang sama menagih di {int(row.f_doc_conc) + 1} faskes dalam rentang 30 menit.")
     if row.f_dup_recent:
         lintas = " dan di faskes berbeda" if row.f_dup_cross else ""
-        reasons["Repeat Billing"].append(
-            f"Peserta dengan diagnosis sama ditagih lagi {row.f_gap_prev_h:.0f} jam setelah klaim sebelumnya{lintas}.")
+        if row.f_gap_prev_h == 0:
+            reasons["Repeat Billing"].append(
+                f"Klaim peserta dengan diagnosis sama tercatat pada waktu identik{lintas}; "
+                "klaim pembanding dipilih dengan urutan ID, bukan urutan layanan.")
+        else:
+            reasons["Repeat Billing"].append(
+                f"Peserta dengan diagnosis sama ditagih lagi {row.f_gap_prev_h:.0f} jam setelah klaim sebelumnya{lintas}.")
     if row.f_dup_recent and row.f_tarif_match_prev <= .035:
         reasons["Repeat Billing"].append(
             f"Tarif nyaris identik dengan klaim sebelumnya (selisih {row.f_tarif_match_prev:.1%}).")

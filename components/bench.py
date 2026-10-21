@@ -26,6 +26,10 @@ def _core_fingerprint() -> str:
     tanpa mengandalkan kenaikan _ENGINE_CACHE_VERSION secara manual. Mencegah pickle
     basi dibangkitkan dengan layout class yang tidak lagi cocok (sumber AttributeError)."""
     hasher = hashlib.sha256()
+    from core.batch_store import runtime
+    hasher.update(json.dumps(runtime(), sort_keys=True).encode())
+    for name in ("requirements-lock.txt", "requirements-lock-win.txt"):
+        hasher.update((_CORE_DIR.parent / name).read_bytes())
     for path in sorted(_CORE_DIR.rglob("*.py")):
         try:
             hasher.update(path.relative_to(_CORE_DIR).as_posix().encode("utf-8"))

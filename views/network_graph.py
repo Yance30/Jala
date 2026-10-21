@@ -56,7 +56,7 @@ def render():
             ids = [c["id"] for c in pool]
             cur = st.session_state.get("selected_cluster")
             sel = st.selectbox("Pilih klaster", ids, index=ids.index(cur) if cur in ids else 0,
-                               format_func=lambda i: f"{live.by_id[i]['score']}% · {live.by_id[i]['name']}")
+                               format_func=lambda i: f"{live.by_id[i]['score']}/100 · {live.by_id[i]['name']}")
             st.session_state.selected_cluster = sel
         with t4:
             # ikon Material (bukan glyph unicode) supaya selalu terlihat di HP

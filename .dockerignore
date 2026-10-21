@@ -5,5 +5,9 @@ venv
 __pycache__
 *.pyc
 .pytest_cache
+.pytest_tmp
+.pytest_tmp_local
+.audit-test-tmp
+debug.log
 .env
 .streamlit/secrets.toml

@@ -213,6 +213,8 @@ BG_CSS = (
 
 def render_topbar(page: str):
     title = PAGE_TITLES.get(page, "Workspace")
+    period = "Periode mengikuti batch" if page in ("data_prediction", "batch_review", "system_status") else QUARTER
+    short_period = "Batch" if page in ("data_prediction", "batch_review", "system_status") else QUARTER_SHORT
 
     topbar = (
         '<div class="j-topbar">'
@@ -234,8 +236,8 @@ def render_topbar(page: str):
         # Kanan: kuartal + avatar
         '<div style="display:flex;align-items:center;gap:10px;">'
         f'<span class="j-chip">{ICON_CALENDAR_SVG}'                  # BARU: ikon kalender
-        f'<span class="j-q-full">{QUARTER}</span>'
-        f'<span class="j-q-short">{QUARTER_SHORT}</span>'
+        f'<span class="j-q-full">{period}</span>'
+        f'<span class="j-q-short">{short_period}</span>'
         '</span>'
         f'<span class="j-avatar" title="User">{ICON_USER_SVG}</span>'  # BARU: ikon user
         '</div>'
@@ -243,17 +245,26 @@ def render_topbar(page: str):
         '</div>'
     )
 
+    background = BG_CSS
+    if page in ("data_prediction", "batch_review", "system_status"):
+        background += "<style>.stApp{background:#F8FAFC !important;}</style>"
     st.markdown(
-        BG_CSS + topbar,
+        background + topbar,
         unsafe_allow_html=True,
     )
 
 
 def render_demo_notice():
     """Persistent, plain-language scope notice for the synthetic demo."""
+    batch_page = st.session_state.get("page") in ("data_prediction", "batch_review", "system_status")
+    origin = st.session_state.get("dataset_origin", "Paket pengguna; asal belum diverifikasi")
+    source = origin if batch_page else "Data sintetis bawaan"
+    if st.session_state.get("page") == "batch_review":
+        source = "Antrean batch tersimpan; terpisah dari demo"
+    from html import escape
     st.markdown(
         '<div class="j-demo-notice" role="status" aria-label="Batas lingkungan demo">'
-        '<b>Mode demo</b><span>Data sintetis</span><span>Tindakan tidak dikirim ke sistem BPJS</span>'
+        f'<b>Prototipe</b><span>{escape(source)}</span><span>Tindakan tidak dikirim ke sistem BPJS</span>'
         '</div>',
         unsafe_allow_html=True,
     )
@@ -261,9 +272,18 @@ def render_demo_notice():
 
 def render_workflow_stepper(page: str):
     """Show the user's place in the review flow; Network is supporting evidence."""
-    if page == "about":
+    if page in ("data_prediction", "batch_review"):
+        labels = ["Siapkan data", "Validasi", "Prediksi", "Tinjau", "Unduh hasil"]
+        active = 3 if page == "batch_review" else (2 if st.session_state.get("external_dataset") is not None else 0)
+        items = "".join(f'<li class="{"active" if i == active else "done" if i < active else ""}"'
+                        + (' aria-current="step"' if i == active else '')
+                        + f'><span class="j-step-number">{i+1}</span><span>{label}</span></li>'
+                        for i, label in enumerate(labels))
+        st.markdown(f'<nav class="j-workflow" aria-label="Tahap pemeriksaan"><ol>{items}</ol></nav>', unsafe_allow_html=True)
         return
-    steps = ["Ringkasan", "Prioritas", "Bukti", "Tindak lanjut"]
+    if page in ("about", "system_status"):
+        return
+    steps = ["Ringkasan", "Pilih kasus", "Periksa bukti", "Tindak lanjut"]
     active = {"dashboard": 0, "risk": 1, "claim": 2, "network": 2, "audit": 3}.get(page, 0)
     items = []
     for i, label in enumerate(steps):

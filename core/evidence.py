@@ -20,6 +20,7 @@ from core.detect import explain
 from core.live import AUTO_FLAG, Live
 from core.synthetic import TYPE_LABEL
 from data.mock_data import FOOTER_CUTOFF, QUARTER
+from core.csv_export import safe_csv
 
 CHECKLIST = {
     "Phantom Billing": [
@@ -248,9 +249,9 @@ def build_pack(live: Live, cid: str, feedback: dict | None = None, generated_at:
             "external_systems_contacted": False,
         }, ensure_ascii=False, indent=2),
         "ringkasan.md": summary_md(live, cid, feedback, ts, dk, fk, cl),
-        "klaim_terkait.csv": cl.to_csv(index=False),
-        "faskes.csv": fk.to_csv(index=False),
-        "dokter.csv": dk.to_csv(index=False),
+        "klaim_terkait.csv": safe_csv(cl),
+        "faskes.csv": safe_csv(fk),
+        "dokter.csv": safe_csv(dk),
         "subgraf.svg": svg,
         "subgraf.json": json.dumps({"nodes": nodes_j, "edges": edges}, ensure_ascii=False, indent=1),
     }

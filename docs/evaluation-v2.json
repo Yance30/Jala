@@ -1,0 +1,1446 @@
+{
+  "protocol": {
+    "protocol": "closed-batch-review-v2",
+    "purpose": "Frozen synthetic evaluation before further feature tuning; not clinical validation",
+    "training_seeds": [
+      101,
+      211
+    ],
+    "holdout_seeds": [
+      1701,
+      1709,
+      1721
+    ],
+    "training_start": "2026-07-01",
+    "holdout_start": "2026-10-05",
+    "cutoff_days": [
+      45,
+      60
+    ],
+    "capacities": [
+      20,
+      50,
+      100
+    ],
+    "model": "base",
+    "n_routine": 1000,
+    "promotion": "No automatic promotion. Review precision, recall, false reviews and every planted family across all runs.",
+    "uncertainty": "Report per-run values and min/max across seeds/cutoffs. This range is not a confidence interval.",
+    "limitations": [
+      "Separate seeds and entities, same synthetic scenario templates",
+      "Full current batch available at close",
+      "Historical labels assumed available at cutoff",
+      "No verified operational fraud labels or human usability results"
+    ]
+  },
+  "provenance": {
+    "runtime": {
+      "python": "3.14.5",
+      "sklearn": "1.9.1",
+      "numpy": "2.5.3",
+      "pandas": "3.0.6"
+    },
+    "source_sha256": "f4b4306325fdc1d45fa739922521002a39f697dba90cda2a0bacf3251de34067",
+    "lock_sha256": {
+      "requirements-lock.txt": "d3d348b7230d82d90adbfbd1f8be8a63cb81580b71cc9f1b38dda7a00fe437d4",
+      "requirements-lock-win.txt": "d031125d726533dca91c17035327834751dfd005e7ec03e75db5e7371200af97"
+    }
+  },
+  "model_version": "batch-gbm-v3",
+  "ranges_not_confidence_intervals": {
+    "20": {
+      "precision_at_k": {
+        "min": 1.0,
+        "max": 1.0
+      },
+      "recall_at_k": {
+        "min": 0.1,
+        "max": 0.1
+      },
+      "expected_false_reviews": {
+        "min": 0.0,
+        "max": 0.0
+      }
+    },
+    "50": {
+      "precision_at_k": {
+        "min": 1.0,
+        "max": 1.0
+      },
+      "recall_at_k": {
+        "min": 0.25,
+        "max": 0.25
+      },
+      "expected_false_reviews": {
+        "min": 0.0,
+        "max": 0.0
+      }
+    },
+    "100": {
+      "precision_at_k": {
+        "min": 1.0,
+        "max": 1.0
+      },
+      "recall_at_k": {
+        "min": 0.5,
+        "max": 0.5
+      },
+      "expected_false_reviews": {
+        "min": 0.0,
+        "max": 0.0
+      }
+    }
+  },
+  "runs": [
+    {
+      "seed": 1701,
+      "cutoff": "2026-08-15T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 20,
+        "auc": 0.9998366533864542,
+        "average_precision": 0.998971088457089,
+        "expected_fraud_at_k": 20.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 180.0,
+        "recall_at_k": 0.1,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 20.0,
+          "fraction_reviewed": 0.25,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1701,
+      "cutoff": "2026-08-15T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 50,
+        "auc": 0.9998366533864542,
+        "average_precision": 0.998971088457089,
+        "expected_fraud_at_k": 50.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 150.0,
+        "recall_at_k": 0.25,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 50.0,
+          "fraction_reviewed": 0.625,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1701,
+      "cutoff": "2026-08-15T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9998366533864542,
+        "average_precision": 0.998971088457089,
+        "expected_fraud_at_k": 100.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 100.0,
+        "recall_at_k": 0.5,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 70.0,
+          "fraction_reviewed": 0.875,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 30.0,
+          "fraction_reviewed": 0.375,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1709,
+      "cutoff": "2026-08-15T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 20,
+        "auc": 0.9986035856573705,
+        "average_precision": 0.9912572380582246,
+        "expected_fraud_at_k": 20.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 180.0,
+        "recall_at_k": 0.1,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 20.0,
+          "fraction_reviewed": 0.25,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1709,
+      "cutoff": "2026-08-15T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 50,
+        "auc": 0.9986035856573705,
+        "average_precision": 0.9912572380582246,
+        "expected_fraud_at_k": 50.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 150.0,
+        "recall_at_k": 0.25,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 50.0,
+          "fraction_reviewed": 0.625,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1709,
+      "cutoff": "2026-08-15T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9986035856573705,
+        "average_precision": 0.9912572380582246,
+        "expected_fraud_at_k": 100.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 100.0,
+        "recall_at_k": 0.5,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 68.0,
+          "fraction_reviewed": 0.85,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 32.0,
+          "fraction_reviewed": 0.4,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1721,
+      "cutoff": "2026-08-15T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 20,
+        "auc": 0.9988804780876495,
+        "average_precision": 0.9930846262430997,
+        "expected_fraud_at_k": 20.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 180.0,
+        "recall_at_k": 0.1,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 20.0,
+          "fraction_reviewed": 0.25,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1721,
+      "cutoff": "2026-08-15T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 50,
+        "auc": 0.9988804780876495,
+        "average_precision": 0.9930846262430997,
+        "expected_fraud_at_k": 50.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 150.0,
+        "recall_at_k": 0.25,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 50.0,
+          "fraction_reviewed": 0.625,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1721,
+      "cutoff": "2026-08-15T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9988804780876495,
+        "average_precision": 0.9930846262430997,
+        "expected_fraud_at_k": 100.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 100.0,
+        "recall_at_k": 0.5,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 67.0,
+          "fraction_reviewed": 0.8375,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 33.0,
+          "fraction_reviewed": 0.4125,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1701,
+      "cutoff": "2026-08-30T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 20,
+        "auc": 0.9978127490039841,
+        "average_precision": 0.9889295687754155,
+        "expected_fraud_at_k": 20.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 180.0,
+        "recall_at_k": 0.1,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 20.0,
+          "fraction_reviewed": 0.25,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1701,
+      "cutoff": "2026-08-30T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 50,
+        "auc": 0.9978127490039841,
+        "average_precision": 0.9889295687754155,
+        "expected_fraud_at_k": 50.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 150.0,
+        "recall_at_k": 0.25,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 48.0,
+          "fraction_reviewed": 0.6,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 2.0,
+          "fraction_reviewed": 0.025,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1701,
+      "cutoff": "2026-08-30T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9978127490039841,
+        "average_precision": 0.9889295687754155,
+        "expected_fraud_at_k": 100.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 100.0,
+        "recall_at_k": 0.5,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 78.0,
+          "fraction_reviewed": 0.975,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 22.0,
+          "fraction_reviewed": 0.275,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1709,
+      "cutoff": "2026-08-30T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 20,
+        "auc": 0.9984940239043825,
+        "average_precision": 0.9922972810866652,
+        "expected_fraud_at_k": 20.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 180.0,
+        "recall_at_k": 0.1,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 20.0,
+          "fraction_reviewed": 0.25,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1709,
+      "cutoff": "2026-08-30T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 50,
+        "auc": 0.9984940239043825,
+        "average_precision": 0.9922972810866652,
+        "expected_fraud_at_k": 50.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 150.0,
+        "recall_at_k": 0.25,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 46.0,
+          "fraction_reviewed": 0.575,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 4.0,
+          "fraction_reviewed": 0.05,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1709,
+      "cutoff": "2026-08-30T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9984940239043825,
+        "average_precision": 0.9922972810866652,
+        "expected_fraud_at_k": 100.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 100.0,
+        "recall_at_k": 0.5,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 76.0,
+          "fraction_reviewed": 0.95,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 7.0,
+          "fraction_reviewed": 0.175,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 17.0,
+          "fraction_reviewed": 0.2125,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1721,
+      "cutoff": "2026-08-30T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 20,
+        "auc": 0.9940756972111554,
+        "average_precision": 0.9699525875500593,
+        "expected_fraud_at_k": 20.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 180.0,
+        "recall_at_k": 0.1,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 20.0,
+          "fraction_reviewed": 0.25,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1721,
+      "cutoff": "2026-08-30T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 50,
+        "auc": 0.9940756972111554,
+        "average_precision": 0.9699525875500593,
+        "expected_fraud_at_k": 50.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 150.0,
+        "recall_at_k": 0.25,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 30.0,
+          "fraction_reviewed": 0.375,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 20.0,
+          "fraction_reviewed": 0.25,
+          "planted_fraud": true
+        }
+      ]
+    },
+    {
+      "seed": 1721,
+      "cutoff": "2026-08-30T00:00:00",
+      "metrics": {
+        "n_claims": 1455,
+        "n_fraud": 200,
+        "capacity": 100,
+        "auc": 0.9940756972111554,
+        "average_precision": 0.9699525875500593,
+        "expected_fraud_at_k": 100.0,
+        "precision_at_k": 1.0,
+        "expected_false_reviews": 0.0,
+        "expected_fraud_missed": 100.0,
+        "recall_at_k": 0.5,
+        "tie_policy": "Expected hits averaged over tied scores"
+      },
+      "families": [
+        {
+          "family": "legit_dialysis",
+          "n": 80,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_office_batch",
+          "n": 75,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "legit_transfer",
+          "n": 60,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "reviewed": 43.0,
+          "fraction_reviewed": 0.5375,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": true
+        },
+        {
+          "family": "repeat_original",
+          "n": 40,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "routine",
+          "n": 1000,
+          "reviewed": 0.0,
+          "fraction_reviewed": 0.0,
+          "planted_fraud": false
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "reviewed": 57.0,
+          "fraction_reviewed": 0.7125,
+          "planted_fraud": true
+        }
+      ]
+    }
+  ]
+}

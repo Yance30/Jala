@@ -101,9 +101,9 @@ def describe(ch: dict) -> str:
     rank = (f"peringkat #{ch['rank_before']} → #{ch['rank_after']}" if ch["rank_before"] != ch["rank_after"]
             else f"peringkat tetap #{ch['rank_after']}")
     if ch["kind"] == "dismiss":
-        return f"{ch['id']}: skor {ch['score_before']}% → {ch['score_after']}%, {rank} (ditandai sebagai pola wajar oleh verifikator)"
+        return f"{ch['id']}: prioritas kerja {ch['score_before']}/100 → {ch['score_after']}/100, {rank} (skor dasar model dipertahankan)"
     if ch["kind"] == "similar":
-        return (f"{ch['id']}: skor {ch['score_before']}% → {ch['score_after']}%, {rank} "
+        return (f"{ch['id']}: prioritas kerja {ch['score_before']}/100 → {ch['score_after']}/100, {rank} "
                 f"(pola diagnosis serupa {ch['sim']:.2f} dengan {ch['source']})")
     return f"{ch['id']}: {rank}"
 

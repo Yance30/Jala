@@ -29,7 +29,7 @@ def _text(page, needle):
 def _go_to_audit(page):
     _nav(page, "Risk Ranking")
     expect(_text(page, "Prioritas Klaster")).to_be_visible()
-    page.get_by_role("button", name="Buka alasan penandaan").click()
+    page.get_by_role("button", name="Buka detail kasus").click()
     page.get_by_role("button", name="Buka Tindak Lanjut").click()
     expect(_text(page, "bagaimana kalau dokter ini dikeluarkan")).to_be_visible()
 
@@ -42,6 +42,9 @@ def test_journey_dashboard_to_audit_with_dismiss_and_undo(app_url, page, js_erro
     expect(page.get_by_text("UMPAN BALIK VERIFIKATOR")).to_have_count(0)        # belum ada keputusan
 
     page.get_by_role("button", name="Tandai pola wajar").click()
+    expect(_text(page, "dapat memengaruhi klaster dengan pola serupa")).to_be_visible()
+    page.get_by_role("button", name="Konfirmasi (Simulasi)").click()
+    expect(_text(page, "Tandai sebagai pola wajar tercatat di riwayat lokal.")).to_be_visible()
     expect(_text(page, "UMPAN BALIK VERIFIKATOR")).to_be_visible()
     expect(_text(page, "Riwayat pemeriksaan klaster")).to_be_visible()
     page.get_by_text("Riwayat pemeriksaan klaster").click()
@@ -49,7 +52,7 @@ def test_journey_dashboard_to_audit_with_dismiss_and_undo(app_url, page, js_erro
         page.get_by_role("button", name="Unduh riwayat kasus (.CSV)").click()
     csv_content = Path(download.value.path()).read_text(encoding="utf-8-sig")
     assert "JALA-F031" in csv_content and "Tandai sebagai pola wajar" in csv_content
-    expect(page.get_by_text("→ 40%").first).to_be_visible()                     # skor turun ke 40% dari skor dasar
+    expect(page.get_by_text("→ 40/100").first).to_be_visible()                  # skor turun ke 40/100 dari skor dasar
 
     _nav(page, "Risk Ranking")
     expect(_text(page, "UMPAN BALIK VERIFIKATOR AKTIF")).to_be_visible()        # peringkat berubah di layar
@@ -62,9 +65,29 @@ def test_undo_from_audit_page(app_url, page):
     _open(page, app_url)
     _go_to_audit(page)
     page.get_by_role("button", name="Tandai pola wajar").click()
+    expect(_text(page, "dapat memengaruhi klaster dengan pola serupa")).to_be_visible()
+    page.get_by_role("button", name="Batal").click()
+    expect(page.get_by_text("UMPAN BALIK VERIFIKATOR")).to_have_count(0)
+    page.get_by_role("button", name="Tandai pola wajar").click()
+    page.get_by_role("button", name="Konfirmasi (Simulasi)").click()
     expect(_text(page, "UMPAN BALIK VERIFIKATOR")).to_be_visible()
     page.get_by_role("button", name="Batalkan umpan balik klaster ini").click()
     expect(page.get_by_text("UMPAN BALIK VERIFIKATOR")).to_have_count(0)
+
+
+def test_field_audit_requires_confirmation_and_can_be_cancelled(app_url, page):
+    _open(page, app_url)
+    _go_to_audit(page)
+    page.get_by_role("button", name="Catat rencana pemeriksaan").click()
+    expect(_text(page, "Tidak ada tim yang ditugaskan")).to_be_visible()
+    page.get_by_role("button", name="Batal").click()
+    expect(page.get_by_text("Rencana pemeriksaan lapangan dicatat")).to_have_count(0)
+
+    page.get_by_role("button", name="Catat rencana pemeriksaan").click()
+    page.get_by_role("button", name="Konfirmasi (Simulasi)").click()
+    expect(_text(page, "Rencana pemeriksaan lapangan dicatat")).to_be_visible()
+    page.get_by_role("button", name="Batalkan rencana pada demo ini").click()
+    expect(page.get_by_text("Rencana pemeriksaan lapangan dicatat")).to_have_count(0)
 
 
 def test_evidence_pack_downloads_as_valid_zip(app_url, page):
@@ -90,29 +113,29 @@ def test_deep_link_about_shows_measured_evidence(app_url, page, js_errors):
 
 def test_tutorial_opens_navigates_and_reopens(app_url, page, js_errors):
     _open(page, app_url, "/")                                    # tanpa ?tour=0: terbuka otomatis
-    expect(_text(page, "Selamat datang di JALA")).to_be_visible()
+    expect(_text(page, "Welcome to JALA")).to_be_visible()
     page.get_by_role("button", name="Berikutnya").click()
-    expect(_text(page, "1. Dashboard: lihat gambaran besar")).to_be_visible()
+    expect(_text(page, "1. Dashboard: See the Big Picture")).to_be_visible()
     page.get_by_role("button", name="Sebelumnya").click()
-    expect(_text(page, "Selamat datang di JALA")).to_be_visible()
+    expect(_text(page, "Welcome to JALA")).to_be_visible()
     for _ in range(3):
         page.get_by_role("button", name="Berikutnya").click()
         page.wait_for_timeout(700)
-    expect(_text(page, "3. Peta Jaringan: lihat hubungannya")).to_be_visible()
+    expect(_text(page, "3. Network Analysis: Explore Connections")).to_be_visible()
 
     page.get_by_role("button", name="Buka halaman ini").click()
     expect(page.get_by_text("3. Peta Jaringan: lihat hubungannya")).to_have_count(0)    # dialog tertutup
     expect(_text(page, "PERINGATAN KLASTER")).to_be_visible()                         # sudah di Network Graph
 
-    page.get_by_role("button", name="Cara Pakai").first.click()
-    expect(_text(page, "3. Peta Jaringan: lihat hubungannya")).to_be_visible()          # lanjut di langkah terakhir
+    page.get_by_role("button", name="How to Use").first.click()
+    expect(_text(page, "3. Network Analysis: Explore Connections")).to_be_visible()     # lanjut di langkah terakhir
     assert not js_errors, js_errors
 
 
 def test_tour_zero_skips_dialog(app_url, page):
     _open(page, app_url, "/?tour=0")
     expect(_text(page, "Ringkasan Prioritas Pemeriksaan")).to_be_visible()
-    expect(page.get_by_text("Selamat datang di JALA")).to_have_count(0)
+    expect(page.get_by_text("Welcome to JALA")).to_have_count(0)
 
 
 def test_demo_case_opens_traceable_claim_review_on_mobile(app_url, page):
@@ -127,6 +150,18 @@ def test_demo_case_opens_traceable_claim_review_on_mobile(app_url, page):
     assert width <= 392, f"Halaman melebar ke {width}px pada viewport 390px"
 
 
+def test_risk_queue_switches_to_mobile_cards(app_url, page):
+    _open(page, app_url, "/?page=risk&tour=0")
+    page.set_viewport_size({"width": 390, "height": 844})
+    expect(page.locator(".j-risk-mobile-card").first).to_be_visible()
+    expect(page.locator(".j-risk-desktop-table")).to_be_hidden()
+    expect(_text(page, "Skor mengurutkan pemeriksaan; bukan probabilitas atau bukti.")).to_be_visible()
+    width = page.evaluate("Math.max(document.documentElement.scrollWidth, document.body.scrollWidth)")
+    assert width <= 392, f"Antrean melebar ke {width}px pada viewport 390px"
+    page.get_by_role("button", name="Buka detail kasus").click()
+    expect(_text(page, "Detail Klaim")).to_be_visible()
+
+
 def test_dashboard_provenance_and_reset_demo(app_url, page):
     _open(page, app_url)
     page.get_by_text("Asal data dan cara menghitung skor").click()
@@ -135,6 +170,8 @@ def test_dashboard_provenance_and_reset_demo(app_url, page):
 
     _go_to_audit(page)
     page.get_by_role("button", name="Tandai pola wajar").click()
+    expect(_text(page, "dapat memengaruhi klaster dengan pola serupa")).to_be_visible()
+    page.get_by_role("button", name="Konfirmasi (Simulasi)").click()
     expect(_text(page, "UMPAN BALIK VERIFIKATOR")).to_be_visible()
     _nav(page, "Dashboard")
     page.get_by_role("button", name="Reset demo").click()

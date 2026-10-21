@@ -37,7 +37,9 @@ def test_detect_module_never_reads_labels():
     assert ".labels" not in src and "labels[" not in src
     assert "synthetic import ICD_CAP" in src          # satu-satunya impor dari pembangkit: tabel plafon, bukan label
     params = inspect.signature(det.build_features).parameters
-    assert list(params) == ["claims", "faskes", "affiliations", "patients"]
+    assert list(params) == ["claims", "faskes", "affiliations", "patients", "tariff_caps"]
+    assert params["tariff_caps"].kind == inspect.Parameter.KEYWORD_ONLY
+    assert params["tariff_caps"].default is None
 
 
 def _tiny(rows, aff=None):

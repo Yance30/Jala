@@ -1,7 +1,8 @@
 import numpy as np
+import pandas as pd
 import pytest
 
-from core.evaluate import benchmark, expected_hits, fold_assignment
+from core.evaluate import benchmark, expected_hits, fold_assignment, percentile_rank
 from core.synthetic import generate_world
 
 
@@ -62,3 +63,11 @@ def test_metrics_are_json_serialisable(bm):
 
 def test_scored_has_no_nan(bm):
     assert not bm.scored[["score_graph", "score_iforest", "score_rules"]].isna().any().any()
+
+
+def test_percentile_rank_gives_ties_the_same_value():
+    out = percentile_rank(pd.Series([10.0, 9.0, 9.0, 1.0]))
+    assert out.iloc[0] == pytest.approx(100.0)
+    assert out.iloc[1] == out.iloc[2] == pytest.approx(50.0)
+    assert out.iloc[3] == 0.0
+    assert percentile_rank(pd.Series([7.0])).iloc[0] == 100.0

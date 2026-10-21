@@ -4,6 +4,7 @@ Dilewati otomatis bila Playwright atau Chromium belum terpasang:
     pip install -r requirements-dev.txt && playwright install chromium
 """
 import socket
+import os
 import subprocess
 import sys
 import tempfile
@@ -23,14 +24,17 @@ def _free_port() -> int:
         return s.getsockname()[1]
 
 
-@pytest.fixture(scope="session")
-def app_url():
+@pytest.fixture
+def app_url(tmp_path, request):
     port = _free_port()
     log = tempfile.NamedTemporaryFile("w+", suffix="_streamlit.log", delete=False)
     proc = subprocess.Popen(
         [sys.executable, "-m", "streamlit", "run", "app.py", "--server.headless", "true",
          "--server.port", str(port), "--browser.gatherUsageStats", "false"],
         cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,
+        env=dict(os.environ, JALA_MODE=getattr(request, "param", "demo"),
+                 JALA_BATCH_DB=str(tmp_path / "batch.sqlite3"),
+                 JALA_REVIEW_HISTORY_DB=str(tmp_path / "review.sqlite3")),
     )
     url = f"http://127.0.0.1:{port}"
     try:

@@ -1,0 +1,82 @@
+{
+  "data_version": "synthetic-chronology-v2",
+  "model": {
+    "version": "batch-gbm-v2",
+    "sklearn_version": "1.9.1",
+    "seed": 2026,
+    "cutoff": "2026-08-30T00:00:00",
+    "n_training_claims": 11465,
+    "features": [
+      "f_out_region",
+      "f_faskes_oor_z",
+      "f_pat_total",
+      "f_pat_nfaskes",
+      "f_burst",
+      "f_burst_z",
+      "f_doc_conc",
+      "f_doc_nfaskes",
+      "f_conc_component",
+      "f_gap_prev_h",
+      "f_dup_recent",
+      "f_dup_cross",
+      "f_ref",
+      "f_ref_internal",
+      "f_doc_ref_internal",
+      "f_ref_doc_share",
+      "f_ref_reciprocity",
+      "f_tarif_ratio",
+      "f_volume_z",
+      "f_tarif_match_prev",
+      "f_dup_pair_cross",
+      "f_dup_faskes_z"
+    ],
+    "training_fingerprint": "49e52217cee52d4c945855791fee66a863b4c12ea193bf4666c79095856d4d87",
+    "score_semantics": "Ranking signal, not a calibrated fraud probability",
+    "inference": "Closed batch; training data and current batch form the observable snapshot",
+    "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+  },
+  "test_start": "2026-08-30T00:09:35.990717651",
+  "test_end": "2026-10-02T14:00:57.249376444",
+  "quality": {
+    "schema_version": 1,
+    "passed": true,
+    "rows": {
+      "claims": 17431,
+      "faskes": 60,
+      "affiliations": 254,
+      "patients": 5480
+    },
+    "issues": [],
+    "scope": "Pemeriksaan struktur dan konsistensi data; bukan validasi klinis, kebenaran label, atau kepatuhan."
+  },
+  "jala": {
+    "n_claims": 5966,
+    "n_fraud": 265,
+    "capacity": 500,
+    "auc": 0.9997325858091761,
+    "average_precision": 0.99403462754484,
+    "expected_fraud_at_k": 265.0,
+    "precision_at_k": 0.53,
+    "recall_at_k": 1.0,
+    "tie_policy": "Expected hits averaged over tied scores"
+  },
+  "rules": {
+    "n_claims": 5966,
+    "n_fraud": 265,
+    "capacity": 500,
+    "auc": 0.5618782537323805,
+    "average_precision": 0.08142607308817049,
+    "expected_fraud_at_k": 51.52826310380267,
+    "precision_at_k": 0.10305652620760535,
+    "recall_at_k": 0.19444627586340632,
+    "tie_policy": "Expected hits averaged over tied scores"
+  },
+  "limitations": [
+    "Synthetic data from the same generator family, not operational BPJS data.",
+    "One temporal holdout; reference tables are static synthetic snapshots.",
+    "The complete test batch is visible at batch close; not real-time prediction.",
+    "Historical labels are assumed available at training cutoff.",
+    "Scores are not calibrated probabilities; indicators are not model attributions.",
+    "This experiment does not replace the legacy grouped-CV benchmark."
+  ]
+}

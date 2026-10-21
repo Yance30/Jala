@@ -56,6 +56,27 @@ def _privacy():
     )
 
 
+def _data_quality():
+    import json
+
+    from components import bench
+    from core.data_quality import inspect
+
+    with st.expander("Kualitas data sintetis"):
+        world = bench.get_world()
+        report = inspect(world.claims, world.faskes, world.affiliations, world.patients)
+        st.caption("Memeriksa kelengkapan, kunci unik, referensi antar-tabel, nilai numerik, dan urutan waktu.")
+        if report["passed"]:
+            st.success("Data sintetis lolos pemeriksaan struktur dan konsistensi.")
+        else:
+            st.error("Ditemukan masalah kualitas data yang perlu ditinjau sebelum pemodelan.")
+            st.dataframe(report["issues"], hide_index=True, width="stretch")
+        st.caption(report["scope"])
+        st.download_button("Unduh laporan kualitas data", json.dumps(report, ensure_ascii=False, indent=2),
+                           file_name="jala-data-quality.json", mime="application/json",
+                           key="download_data_quality")
+
+
 def render():
     _hero()
     guide.render_page_guide("about")
@@ -63,6 +84,17 @@ def render():
         st.markdown(guide.glossary_html(), unsafe_allow_html=True)
     _divider("comparison")
     comparison.render_content()
+    _data_quality()
+    from components import batch_lab
+    batch_lab.render()
+    from components import external_lab
+    if st.button("Buka Data & Prediksi", type="primary"):
+        st.session_state.page = "data_prediction"
+        st.rerun()
+    external_lab.render_independent_report()
+    external_lab.render_model_comparison()
+    external_lab.render_unseen_report()
+    external_lab.render_upcoding_report()
     _divider("privacy")
     _privacy()
     layout.render_footer()

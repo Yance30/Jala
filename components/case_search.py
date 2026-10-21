@@ -56,7 +56,7 @@ def render_sidebar(live) -> None:
             st.selectbox(
                 "Pilih kasus",
                 ids,
-                format_func=lambda cid: f"{cid} · {by_id[cid]['name']} · {by_id[cid]['score']}%",
+                format_func=lambda cid: f"{cid} · {by_id[cid]['name']} · {by_id[cid]['score']}/100",
                 key="case_search_result",
             )
             if st.button("Buka detail kasus", key="case_search_open", width="stretch"):

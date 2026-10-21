@@ -40,7 +40,7 @@ def review_timeline(cid: str, key: str) -> None:
             st.warning(storage_error + " Catatan hanya tersedia pada sesi aktif.")
         elif bench.review_history_persistent():
             st.caption(
-                "Tersimpan di basis data lokal instance demo dan dapat terlihat oleh pengguna instance ini. "
+                "Tersimpan di basis data ruang aktif, mengikuti identitas sesi atau pemilik. "
                 "Gunakan ID serta catatan sintetis; jangan masukkan data pribadi atau data nyata."
             )
         else:
@@ -65,8 +65,8 @@ def review_timeline(cid: str, key: str) -> None:
             score_text = ""
             if before is not None and after is not None:
                 score_text = (
-                    f"Skor prioritas: {before}% → {after}%"
-                    if before != after else f"Skor prioritas tidak berubah ({after}%)"
+                    f"Prioritas kerja: {before}/100 → {after}/100"
+                    if before != after else f"Prioritas kerja tidak berubah ({after}/100)"
                 )
             note_html = (f'<div style="margin-top:7px;font-size:13px;white-space:pre-wrap;'
                          f'overflow-wrap:anywhere;">{note}</div>' if note else "")
@@ -122,9 +122,9 @@ def feedback_card(live, cid: str) -> None:
     rank = [x["id"] for x in live.clusters].index(cid) + 1
     base = c["score_base"]
     if info["kind"] == "dismiss":
-        head = f"Pola ditandai wajar pada {fb[cid]['at']}. Skor {base}% → <b>{c['score']}%</b>, urutan saat ini #{rank}."
+        head = f"Pola ditandai wajar pada {fb[cid]['at']}. Skor {base}/100 → <b>{c['score']}/100</b>, urutan saat ini #{rank}."
     elif info["kind"] == "similar":
-        head = (f"Skor diturunkan {base}% → <b>{c['score']}%</b> (urutan #{rank}) karena pola diagnosis serupa "
+        head = (f"Skor diturunkan {base}/100 → <b>{c['score']}/100</b> (urutan #{rank}) karena pola diagnosis serupa "
                 f"({info['sim']:.2f}) dengan {info['source']} yang ditandai wajar. Klaster ini sendiri belum diputuskan: "
                 f"tinjau, atau batalkan catatan pola wajar di {info['source']} bila keliru.")
     else:
@@ -251,4 +251,3 @@ def benign_note(live, cid: str) -> None:
         """,
         unsafe_allow_html=True,
     )
-

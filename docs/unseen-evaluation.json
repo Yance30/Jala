@@ -1,0 +1,851 @@
+{
+  "protocol": "leave-one-family-out-v1",
+  "train_seeds": [
+    101,
+    211
+  ],
+  "test_seeds": [
+    1201,
+    1213
+  ],
+  "runs": [
+    {
+      "excluded_family": null,
+      "seed": 1201,
+      "model": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-10-01T00:00:00",
+        "n_training_claims": 2910,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "321e1c5c71d506363662b4f742862cc02b2ac1126fd29686187e3bbdfa0f1838",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "metrics": {
+        "50": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 50,
+          "auc": 0.989095281306715,
+          "average_precision": 0.8244885242045394,
+          "expected_fraud_at_k": 48.0,
+          "precision_at_k": 0.96,
+          "recall_at_k": 0.24,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "100": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 100,
+          "auc": 0.989095281306715,
+          "average_precision": 0.8244885242045394,
+          "expected_fraud_at_k": 73.0,
+          "precision_at_k": 0.73,
+          "recall_at_k": 0.365,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "300": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 300,
+          "auc": 0.989095281306715,
+          "average_precision": 0.8244885242045394,
+          "expected_fraud_at_k": 200.0,
+          "precision_at_k": 0.6666666666666666,
+          "recall_at_k": 1.0,
+          "tie_policy": "Expected hits averaged over tied scores"
+        }
+      },
+      "families": [
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "recall": {
+            "50": 0.5,
+            "100": 0.5,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "recall": {
+            "50": 0.2,
+            "100": 0.825,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "300": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "excluded_family": null,
+      "seed": 1213,
+      "model": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-10-01T00:00:00",
+        "n_training_claims": 2910,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "321e1c5c71d506363662b4f742862cc02b2ac1126fd29686187e3bbdfa0f1838",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "metrics": {
+        "50": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 50,
+          "auc": 0.9877032667876587,
+          "average_precision": 0.7869989194824737,
+          "expected_fraud_at_k": 44.0,
+          "precision_at_k": 0.88,
+          "recall_at_k": 0.22,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "100": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 100,
+          "auc": 0.9877032667876587,
+          "average_precision": 0.7869989194824737,
+          "expected_fraud_at_k": 67.0,
+          "precision_at_k": 0.67,
+          "recall_at_k": 0.335,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "300": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 300,
+          "auc": 0.9877032667876587,
+          "average_precision": 0.7869989194824737,
+          "expected_fraud_at_k": 200.0,
+          "precision_at_k": 0.6666666666666666,
+          "recall_at_k": 1.0,
+          "tie_policy": "Expected hits averaged over tied scores"
+        }
+      },
+      "families": [
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "recall": {
+            "50": 0.25,
+            "100": 0.3625,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "recall": {
+            "50": 0.6,
+            "100": 0.925,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0125,
+            "300": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "excluded_family": "phantom_distributed",
+      "seed": 1201,
+      "model": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-10-01T00:00:00",
+        "n_training_claims": 2750,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "b24ef39ba76fdc198ea796a10d503cc3902d21ef589d947237804ddf75a82057",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "metrics": {
+        "50": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 50,
+          "auc": 0.8187595281306715,
+          "average_precision": 0.36736118024789544,
+          "expected_fraud_at_k": 10.0,
+          "precision_at_k": 0.2,
+          "recall_at_k": 0.05,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "100": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 100,
+          "auc": 0.8187595281306715,
+          "average_precision": 0.36736118024789544,
+          "expected_fraud_at_k": 54.0,
+          "precision_at_k": 0.54,
+          "recall_at_k": 0.27,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "300": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 300,
+          "auc": 0.8187595281306715,
+          "average_precision": 0.36736118024789544,
+          "expected_fraud_at_k": 119.0,
+          "precision_at_k": 0.39666666666666667,
+          "recall_at_k": 0.595,
+          "tie_policy": "Expected hits averaged over tied scores"
+        }
+      },
+      "families": [
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0125,
+            "300": 0.05
+          }
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "recall": {
+            "50": 0.0,
+            "100": 0.325,
+            "300": 0.9
+          }
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "recall": {
+            "50": 0.125,
+            "100": 0.5,
+            "300": 0.9875
+          }
+        }
+      ]
+    },
+    {
+      "excluded_family": "phantom_distributed",
+      "seed": 1213,
+      "model": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-10-01T00:00:00",
+        "n_training_claims": 2750,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "b24ef39ba76fdc198ea796a10d503cc3902d21ef589d947237804ddf75a82057",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "metrics": {
+        "50": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 50,
+          "auc": 0.7956442831215971,
+          "average_precision": 0.6368156063496141,
+          "expected_fraud_at_k": 49.0,
+          "precision_at_k": 0.98,
+          "recall_at_k": 0.245,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "100": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 100,
+          "auc": 0.7956442831215971,
+          "average_precision": 0.6368156063496141,
+          "expected_fraud_at_k": 91.0,
+          "precision_at_k": 0.91,
+          "recall_at_k": 0.455,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "300": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 300,
+          "auc": 0.7956442831215971,
+          "average_precision": 0.6368156063496141,
+          "expected_fraud_at_k": 132.0,
+          "precision_at_k": 0.44,
+          "recall_at_k": 0.66,
+          "tie_policy": "Expected hits averaged over tied scores"
+        }
+      },
+      "families": [
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "300": 0.1875
+          }
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "recall": {
+            "50": 0.2,
+            "100": 0.575,
+            "300": 0.925
+          }
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "recall": {
+            "50": 0.5125,
+            "100": 0.85,
+            "300": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "excluded_family": "repeat_delayed",
+      "seed": 1201,
+      "model": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-10-01T00:00:00",
+        "n_training_claims": 2830,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "8631f73d5b594ee7586543edc321ff59f7beb9af1d48dd064f674d28f3497ff3",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "metrics": {
+        "50": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 50,
+          "auc": 0.6157894736842104,
+          "average_precision": 0.2648515612982618,
+          "expected_fraud_at_k": 40.645161290322584,
+          "precision_at_k": 0.8129032258064517,
+          "recall_at_k": 0.20322580645161292,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "100": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 100,
+          "auc": 0.6157894736842104,
+          "average_precision": 0.2648515612982618,
+          "expected_fraud_at_k": 43.87096774193549,
+          "precision_at_k": 0.43870967741935485,
+          "recall_at_k": 0.21935483870967742,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "300": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 300,
+          "auc": 0.6157894736842104,
+          "average_precision": 0.2648515612982618,
+          "expected_fraud_at_k": 56.774193548387096,
+          "precision_at_k": 0.18924731182795698,
+          "recall_at_k": 0.2838709677419355,
+          "tie_policy": "Expected hits averaged over tied scores"
+        }
+      },
+      "families": [
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "recall": {
+            "50": 0.5,
+            "100": 0.5,
+            "300": 0.5
+          }
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "recall": {
+            "50": 0.016129032258064516,
+            "100": 0.0967741935483871,
+            "300": 0.4193548387096774
+          }
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "300": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "excluded_family": "repeat_delayed",
+      "seed": 1213,
+      "model": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-10-01T00:00:00",
+        "n_training_claims": 2830,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "8631f73d5b594ee7586543edc321ff59f7beb9af1d48dd064f674d28f3497ff3",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "metrics": {
+        "50": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 50,
+          "auc": 0.579437386569873,
+          "average_precision": 0.17176757046758284,
+          "expected_fraud_at_k": 22.54237288135593,
+          "precision_at_k": 0.45084745762711864,
+          "recall_at_k": 0.11271186440677966,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "100": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 100,
+          "auc": 0.579437386569873,
+          "average_precision": 0.17176757046758284,
+          "expected_fraud_at_k": 26.779661016949152,
+          "precision_at_k": 0.2677966101694915,
+          "recall_at_k": 0.13389830508474576,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "300": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 300,
+          "auc": 0.579437386569873,
+          "average_precision": 0.17176757046758284,
+          "expected_fraud_at_k": 43.728813559322035,
+          "precision_at_k": 0.14576271186440679,
+          "recall_at_k": 0.21864406779661016,
+          "tie_policy": "Expected hits averaged over tied scores"
+        }
+      },
+      "families": [
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "recall": {
+            "50": 0.25,
+            "100": 0.25,
+            "300": 0.25
+          }
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "recall": {
+            "50": 0.0635593220338983,
+            "100": 0.1694915254237288,
+            "300": 0.5932203389830508
+          }
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "300": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "excluded_family": "selfref_oneway",
+      "seed": 1201,
+      "model": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-10-01T00:00:00",
+        "n_training_claims": 2750,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "cbf6830e96f3ed817996999f40a58089f60bd63296cdc2aba8a3f6f22e4b82ff",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "metrics": {
+        "50": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 50,
+          "auc": 0.7273457350272232,
+          "average_precision": 0.609171745286894,
+          "expected_fraud_at_k": 50.0,
+          "precision_at_k": 1.0,
+          "recall_at_k": 0.25,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "100": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 100,
+          "auc": 0.7273457350272232,
+          "average_precision": 0.609171745286894,
+          "expected_fraud_at_k": 93.0,
+          "precision_at_k": 0.93,
+          "recall_at_k": 0.465,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "300": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 300,
+          "auc": 0.7273457350272232,
+          "average_precision": 0.609171745286894,
+          "expected_fraud_at_k": 121.0,
+          "precision_at_k": 0.4033333333333333,
+          "recall_at_k": 0.605,
+          "tie_policy": "Expected hits averaged over tied scores"
+        }
+      },
+      "families": [
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "recall": {
+            "50": 0.625,
+            "100": 0.9375,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "recall": {
+            "50": 0.0,
+            "100": 0.45,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "300": 0.0125
+          }
+        }
+      ]
+    },
+    {
+      "excluded_family": "selfref_oneway",
+      "seed": 1213,
+      "model": {
+        "version": "batch-gbm-v2",
+        "sklearn_version": "1.9.1",
+        "seed": 2026,
+        "cutoff": "2026-10-01T00:00:00",
+        "n_training_claims": 2750,
+        "features": [
+          "f_out_region",
+          "f_faskes_oor_z",
+          "f_pat_total",
+          "f_pat_nfaskes",
+          "f_burst",
+          "f_burst_z",
+          "f_doc_conc",
+          "f_doc_nfaskes",
+          "f_conc_component",
+          "f_gap_prev_h",
+          "f_dup_recent",
+          "f_dup_cross",
+          "f_ref",
+          "f_ref_internal",
+          "f_doc_ref_internal",
+          "f_ref_doc_share",
+          "f_ref_reciprocity",
+          "f_tarif_ratio",
+          "f_volume_z",
+          "f_tarif_match_prev",
+          "f_dup_pair_cross",
+          "f_dup_faskes_z"
+        ],
+        "feature_set": "base",
+        "training_fingerprint": "cbf6830e96f3ed817996999f40a58089f60bd63296cdc2aba8a3f6f22e4b82ff",
+        "score_semantics": "Ranking signal, not a calibrated fraud probability",
+        "inference": "Closed batch; training data and current batch form the observable snapshot",
+        "tariff_fingerprint": "09266feaf526f2823feebf0e906fc103164bd79be4d3c23b06658537748da5d0"
+      },
+      "metrics": {
+        "50": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 50,
+          "auc": 0.7572368421052631,
+          "average_precision": 0.6106805680165045,
+          "expected_fraud_at_k": 49.0,
+          "precision_at_k": 0.98,
+          "recall_at_k": 0.245,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "100": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 100,
+          "auc": 0.7572368421052631,
+          "average_precision": 0.6106805680165045,
+          "expected_fraud_at_k": 97.0,
+          "precision_at_k": 0.97,
+          "recall_at_k": 0.485,
+          "tie_policy": "Expected hits averaged over tied scores"
+        },
+        "300": {
+          "n_claims": 2955,
+          "n_fraud": 200,
+          "capacity": 300,
+          "auc": 0.7572368421052631,
+          "average_precision": 0.6106805680165045,
+          "expected_fraud_at_k": 120.0,
+          "precision_at_k": 0.4,
+          "recall_at_k": 0.6,
+          "tie_policy": "Expected hits averaged over tied scores"
+        }
+      },
+      "families": [
+        {
+          "family": "phantom_distributed",
+          "n": 80,
+          "recall": {
+            "50": 0.475,
+            "100": 0.925,
+            "300": 1.0
+          }
+        },
+        {
+          "family": "repeat_delayed",
+          "n": 40,
+          "recall": {
+            "50": 0.275,
+            "100": 0.575,
+            "300": 0.975
+          }
+        },
+        {
+          "family": "selfref_oneway",
+          "n": 80,
+          "recall": {
+            "50": 0.0,
+            "100": 0.0,
+            "300": 0.0125
+          }
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Synthetic planted families from one generator, not operational validation.",
+    "Only independent scenario data used for training; legacy generator excluded to avoid family overlap.",
+    "Excluded claims removed before features; static entity references retained.",
+    "No hyperparameter tuning on test seeds; baseline graph + GBM only."
+  ]
+}

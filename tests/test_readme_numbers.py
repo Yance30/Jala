@@ -17,6 +17,7 @@ from core import live as L
 
 README = Path(__file__).resolve().parent.parent / "README.md"
 BENCH = Path(__file__).resolve().parent.parent / "docs" / "benchmark.json"
+DEMO = Path(__file__).resolve().parent.parent / "DEMO.md"
 
 
 def _dec3(x: float) -> str:
@@ -36,6 +37,11 @@ def _id_pct1(x: float) -> str:
 def readme_text() -> str:
     assert README.exists(), "README.md tidak ditemukan"
     return README.read_text(encoding="utf-8")
+
+@pytest.fixture(scope="module")
+def demo_text() -> str:
+    assert DEMO.exists(), "DEMO.md tidak ditemukan"
+    return DEMO.read_text(encoding="utf-8")
 
 
 @pytest.fixture(scope="module")
@@ -68,8 +74,8 @@ def test_main_table_row_matches_benchmark(readme_text, bench, label, key):
     cells = _row_cells(readme_text, label)
     assert cells[0] == label
     # AUC JALA persis di batas pembulatan: benchmark.json 0.99659 (-> 0.997) vs robustness.json
-    # 0.99593 (-> 0.996). README memakai 0.996 (konsisten dengan tabel ablasi & materi presentasi),
-    # jadi AUC dicocokkan dengan toleransi; sel lain harus persis.
+    # 0.99593 (-> 0.996). README menampilkan 0.997 di tabel utama (pembulatan benchmark) dan 0.996 di
+    # tabel ablasi (pipeline robustness), jadi AUC dicocokkan dengan toleransi; sel lain harus persis.
     assert float(cells[1]) == pytest.approx(s["auc"], abs=0.001)
     assert cells[2] == _dec3(s["ap"])
     assert cells[3] == _pct1(s["recall_at_k"]["500"])
@@ -99,3 +105,25 @@ def test_cluster_table_matches_live_evaluation(readme_text, engine):
     assert f"**{ev['clusters_without_fraud']} dari {ev['n_clusters']}**" in readme_text
     # pembilang "9 dari 9" (klaster mayoritas fraud) tetap sinkron
     assert re.search(rf"\|\s*{ev['clusters_mostly_fraud']} dari {ev['clusters_mostly_fraud']}\b", readme_text)
+
+
+def test_demo_headlines_match_live_dashboard_and_benchmark(demo_text, bench, engine):
+    _, live = engine
+    values = {row["label"]: row["value"] for row in live.kpis()}
+    expected_counts = (
+        f"{values['Dugaan Phantom Billing (Klaim Palsu)']} dugaan Phantom Billing, "
+        f"{values['Dugaan Repeat Billing']} dugaan Repeat Billing, dan "
+        f"{values['Dugaan Rujukan tidak sesuai (Self-referral)']} dugaan Self-Referral"
+    )
+    assert expected_counts in demo_text
+
+    jala = bench["scorers"]["graph_gbm"]
+    rules = bench["scorers"]["rules"]
+    expected_metrics = (
+        f"AUC JALA {_dec3(jala['auc']).replace('.', ',')} dibanding "
+        f"{_dec3(rules['auc']).replace('.', ',')} untuk aturan sederhana; "
+        f"di kapasitas 500, recall masing-masing "
+        f"{_pct1(jala['recall_at_k']['500']).replace('.', ',')} "
+        f"dan {_pct1(rules['recall_at_k']['500']).replace('.', ',')}"
+    )
+    assert expected_metrics in demo_text

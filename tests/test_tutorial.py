@@ -40,7 +40,7 @@ def test_opens_automatically_once_per_session():
     at = AppTest.from_file(APP, default_timeout=120)
     at.session_state["intro_done"] = True
     at.run()
-    assert not at.exception and "Selamat datang di JALA" in _text(at)
+    assert not at.exception and "Welcome to JALA" in _text(at)
     assert at.session_state["tour_seen"] is True
     assert any(b.key == "tour_open" for b in at.button)           # tombol sidebar tersedia
 
@@ -50,7 +50,7 @@ def test_tour_zero_disables_auto_open():
     at.query_params["tour"] = "0"
     at.session_state["intro_done"] = True
     at.run()
-    assert not at.exception and "Selamat datang di JALA" not in _text(at)
+    assert not at.exception and "Welcome to JALA" not in _text(at)
     assert at.session_state["tour_seen"] is True
 
 
@@ -59,9 +59,9 @@ def test_sidebar_button_opens_dialog_on_demand():
     at.session_state["intro_done"] = True
     at.session_state["tour_seen"] = True
     at.run()
-    assert "Selamat datang di JALA" not in _text(at)
+    assert "Welcome to JALA" not in _text(at)
     next(b for b in at.button if b.key == "tour_open").click().run()
-    assert not at.exception and "Selamat datang di JALA" in _text(at)
+    assert not at.exception and "Welcome to JALA" in _text(at)
 
 
 def test_example_cluster_is_top_base_cluster():
