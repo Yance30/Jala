@@ -57,7 +57,7 @@ def test_risk_table_structure_and_one_row_per_cluster():
     assert "<table" in html and "<thead>" in html and "<tbody>" in html
     assert html.count("<tr") == 1 + len(rows)                       # 1 baris header + 1 per klaster
     assert "92/100" in html and "70/100" in html
-    assert "bukan probabilitas atau bukti" in html
+    assert "j-risk-score-note" not in html  # Explanation belongs above the table, not in every row.
     assert html.count('class="j-card j-risk-mobile-card"') == len(rows)
 
 

@@ -285,18 +285,16 @@ def render_workflow_stepper(page: str):
         return
     steps = ["Ringkasan", "Pilih kasus", "Periksa bukti", "Tindak lanjut"]
     active = {"dashboard": 0, "risk": 1, "claim": 2, "network": 2, "audit": 3}.get(page, 0)
-    items = []
-    for i, label in enumerate(steps):
-        state = "active" if i == active else ("done" if i < active else "")
-        current = ' aria-current="step"' if i == active else ""
-        items.append(
-            f'<li class="{state}"{current}><span class="j-step-number">{i + 1}</span>'
-            f'<span>{label}</span></li>'
-        )
-    st.markdown(
-        f'<nav class="j-workflow" aria-label="Tahap pemeriksaan"><ol>{"".join(items)}</ol></nav>',
-        unsafe_allow_html=True,
-    )
+    destinations = ["dashboard", "risk", "claim", "audit"]
+    with st.container(key="workflow_navigation"):
+        columns = st.columns(4)
+        for i, label in enumerate(steps):
+            with columns[i]:
+                if st.button(f"{i + 1} · {label}", key=f"workflow_back_{i}",
+                             disabled=i >= active, width="stretch",
+                             type="primary" if i == active else "secondary"):
+                    goto(destinations[i], cluster=st.session_state.get("selected_cluster"))
+    return
 
 
 # =========================================================

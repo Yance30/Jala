@@ -102,8 +102,10 @@ def render():
     }
     for row in RISK_CLUSTERS:
         action = st.session_state.get("audited", {}).get(row["id"])
-        if action in action_labels and action != "dismiss":
-            row["status"] = action_labels[action]
+        from components.review_status import cluster_status
+        label, tone, completed = cluster_status(action, bench.get_feedback().get(row["id"]))
+        row["status"] = (label, tone)
+        row["review_completed"] = completed
     RISK_STATS = live.risk_stats(audited=len(st.session_state.get("audited", {})))
 
     # ======================================================
@@ -265,6 +267,8 @@ def render():
         chip,
         query,
     )
+    order = st.selectbox("Urutan klaster", ["Skor tertinggi", "Belum selesai lebih dahulu"], key="risk_review_order")
+    rows = sorted(rows, key=lambda row: ((row.get("review_completed", False) if order == "Belum selesai lebih dahulu" else False), -row["score"], row["id"]))
     shared_filter = st.session_state.get("case_search_filter", case_search.ALL_CASES)
     active_filter = next((label for value, label in filter_options if value == chip), chip)
     st.markdown(

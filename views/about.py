@@ -79,6 +79,8 @@ def _data_quality():
 
 def render():
     _hero()
+    from core.release import RELEASE, build_identity
+    st.caption(f"Versi JALA: {RELEASE} · {build_identity()}")
     guide.render_page_guide("about")
     with st.expander("Arti istilah dan metrik"):
         st.markdown(guide.glossary_html(), unsafe_allow_html=True)

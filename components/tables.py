@@ -13,14 +13,11 @@ def risk_table_html(rows) -> str:
         subtitle = escape(str(r["subtitle"]))
         why = escape(str(r["why"]))
         status = badge(escape(str(r["status"][0])), escape(str(r["status"][1])))
-        typology = badge(escape(str(r["typology"][0])), escape(str(r["typology"][1])))
+        typology = f'<span class="j-pill {escape(str(r["typology"][1]))}">{escape(str(r["typology"][0]))}</span>'
         score_tone = "#B91C1C" if score > 85 else "#0F766E"
         score_html = (
             '<div class="j-risk-score">'
             f'<div class="j-risk-score-value" style="color:{score_tone};">{score}/100</div>'
-            f'<div class="j-bar" style="margin:6px 0;"><span style="width:{score}%;background:{score_tone};"></span></div>'
-            f'<div class="j-sub">{escape(str(r["conf"]))} · {escape(str(r["metric"]))}</div>'
-            '<div class="j-risk-score-note">Urutan pemeriksaan, bukan probabilitas atau bukti.</div>'
             '</div>'
         )
         body.append(
@@ -55,7 +52,6 @@ def risk_table_html(rows) -> str:
                 <span>Prioritas pemeriksaan</span>
                 <strong style="color:{score_tone};">{score}/100</strong>
               </div>
-              <div class="j-risk-score-note">Skor mengurutkan pemeriksaan; bukan probabilitas atau bukti.</div>
               <div class="j-risk-mobile-field">
                 <span>Dugaan pola</span>
                 {typology}
