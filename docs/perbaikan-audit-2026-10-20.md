@@ -1,5 +1,47 @@
 # Serah terima perbaikan JALA
 
+## Status terbaru — 22 Oktober 2026
+
+### Lanjutan — 23 Oktober 2026
+
+- Pengulangan petunjuk pada Data & Prediksi dan chip penjelasan skor pada detail klaim dikurangi. Petunjuk saat model tersimpan belum tersedia kini menunjuk pilihan Latih model baru.
+- Tes alur AppTest data contoh → latih → simpan → pilih model tersimpan → prediksi klaim setelah periode pelatihan → buat antrean lulus. Tes memakai database terisolasi.
+- Baris langkah 1–4 sudah berupa tombol navigasi kembali, dengan kasus terpilih dipertahankan; bukan tombol tambahan di luar baris langkah.
+- Branch rilis `feat/clear-review-flow` dibuat dari `origin/main`. Penyalinan berkas ke worktree rilis tidak selesai dan telah dihentikan; belum ada commit/push baru pada tahap ini.
+- Alat browser gagal diinisialisasi pada pemeriksaan ini. Pemeriksaan visual hosting/mobile belum dapat diselesaikan.
+
+- Pengiriman UX telah digabung ke `main` melalui [PR #2](https://github.com/Yance30/Jala/pull/2), commit `efcaf752bddfec588b86f40804439ed569924dd5`.
+- CI PR lulus: 263 tes unit dan 16 tes browser E2E, pemeriksaan lock, serta benchmark.
+- [CI setelah merge](https://github.com/Yance30/Jala/actions/runs/39649911786) juga lulus pada job `test` dan `e2e`.
+- Versi hosting publik belum terverifikasi. Kelulusan CI tidak membuktikan versi yang sedang berjalan di Streamlit Cloud.
+- Pemeriksaan HTTP pada alamat publik mendapat status 200. Ini hanya memastikan halaman awal merespons; browser pemeriksaan tidak tersedia, sehingga tampilan dan SHA deployment belum dapat dicocokkan.
+- Penanda versi ditambahkan pada halaman Tentang. Commit dibaca dari checkout yang berjalan; perubahan lokal ditandai. Jika metadata Git tidak tersedia, UI menyatakan commit tidak tersedia, bukan menebak versi hosting.
+- Penambahan penanda versi dan pembaruan dokumen ini masih lokal; keduanya belum termasuk commit merge `efcaf75` maupun deployment publik.
+- Untuk image tanpa `.git`, pengelola deployment dapat memasok `JALA_BUILD_COMMIT` berisi SHA sumber build. Nilai ini harus berasal dari proses build, bukan disalin dari commit terbaru secara manual.
+
+## Riwayat implementasi dan validasi
+
+### Penyederhanaan alur pemeriksaan — 22 Oktober 2026
+
+- Risk Ranking menampilkan skor /100 tanpa paragraf berulang; kategori tabel memakai nama pendek. Penjelasan skor tetap ada pada pengantar halaman.
+- Status membedakan belum ditinjau, pemeriksaan berjalan, dan hasil pola wajar yang telah dicatat pada demo. Rencana lapangan dan penangguhan simulasi tidak dianggap selesai. Pilihan urutan belum selesai lebih dahulu mempertahankan urutan skor dalam kelompok.
+- Kartu utama Tindak Lanjut memuat status klaster; blok Ringkasan pola terukur dan pemberitahuan status duplikat dihapus. Bukti tetap dapat ditinjau melalui detail kasus dan paket pemeriksaan.
+- Baris empat tahap menjadi tombol navigasi ke tahap sebelumnya; tahap aktif dan berikutnya tidak dapat diklik. Pilihan kasus tetap dibawa saat kembali ke bukti.
+- Data & Prediction menjelaskan pilihan data contoh/unggahan, lalu memisahkan latihan model baru dan pemakaian model tersimpan.
+- Perubahan ini masih lokal. Pemeriksaan menggunakan AppTest; tampilan browser hosting belum diverifikasi.
+
+### Pemeriksaan navigasi lokal — 22 Oktober 2026
+
+- Pemeriksaan awal: 59 tes halaman, tinjauan, panduan dan penanda versi lulus; 5 tes tambahan untuk seluruh tujuan sidebar, pintu masuk Data & Prediksi dan perjalanan kasus juga lulus.
+- Ditemukan alamat `?page=` belum mengikuti perpindahan melalui tombol. Navigasi kini menyelaraskan alamat dengan halaman aktif; state halaman tidak dikenal kembali ke dashboard.
+- Setelah koreksi, 8 tes navigasi dan alias halaman lulus dalam 44,28 detik, termasuk membuka tautan hasil navigasi pada sesi baru; `git diff --check` untuk `app.py` lulus.
+- Pemeriksaan memakai Streamlit AppTest, bukan browser hosting. Ini memeriksa callback tombol, tujuan dan render halaman, tetapi tidak membuktikan klik sentuh, unduhan browser, tautan jangkar atau pemuatan JavaScript di hosting.
+- Tombol login/logout OIDC belum diuji dengan penyedia nyata. Tombol yang memerlukan data, identitas pemeriksa atau konfirmasi tetap mengikuti prasyaratnya; tidak semua tombol harus berpindah halaman.
+- Perubahan navigasi dan tes baru masih lokal, belum dikirim ke hosting.
+
+Catatan di bawah merekam kondisi pada setiap tahap. Pernyataan belum commit/push
+dan hasil tes bertahap merupakan riwayat, bukan status pengiriman terbaru di atas.
+
 ## Pembaruan pengiriman UX poin 2–5
 
 Ringkasan batch kini mengutamakan periode, jumlah klaim dan sumber; metadata teknis

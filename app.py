@@ -48,6 +48,13 @@ if requested in ROUTES and requested != st.session_state.get("qp_seen"):
     st.session_state.page = requested
     st.session_state.qp_seen = requested
 
+# Keep links in sync with navigation buttons and sidebar callbacks.
+if st.session_state.page not in ROUTES:
+    st.session_state.page = "dashboard"
+if st.query_params.get("page") != st.session_state.page:
+    st.query_params["page"] = st.session_state.page
+st.session_state.qp_seen = st.session_state.page
+
 theme.patch_markdown()
 theme.inject_theme()
 

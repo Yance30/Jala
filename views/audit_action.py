@@ -143,6 +143,10 @@ def render():
         ),
     )
     guide.render_page_guide("audit")
+    from components.review_status import cluster_status
+    status_label, status_tone, _ = cluster_status(
+        st.session_state.get("audited", {}).get(cid), bench.get_feedback().get(cid))
+
     if st.button("Kembali ke Prioritas Klaster", icon=":material/arrow_back:", key="audit_back_to_queue"):
         layout.goto("risk", cluster=cid)
 
@@ -154,7 +158,7 @@ def render():
               <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
                 <span class="j-iconbox red">✳</span>
                 <b style="font-size:18px;">{_esc(a['name'])}</b>
-                {cards.badge(a['flag'], 'red')}
+                {cards.badge(status_label, status_tone)}
                 {cards.badge(*a['typology'])}
               </div>
               <div class="j-sub" style="margin-top:6px;">🧠 {a['algo']}</div>
@@ -174,13 +178,6 @@ def render():
                 f'<div style="font-weight:600;margin:4px 0 2px;color:{ {"dark": "#132A1C", "red": "#DC2626", "teal": "#0F766E"}[tone] };">'
                 f'{_esc(value)}</div><div class="j-sub">{_esc(note)}</div></div>'
                 for label, value, note, tone in a['cards'])}
-          </div>
-          <div class="j-note" style="margin-top:14px;align-items:flex-start;">
-            <span>ⓘ</span>
-            <div>
-              <b>Ringkasan pola terukur:</b>
-              <div style="margin-top:4px;">{_esc(a['evidence'])}</div>
-            </div>
           </div>
           <div style="display:flex;justify-content:flex-end;margin-top:10px;">
             <span class="j-chip"><span class="ms">hub</span> {_esc(a['density'])}</span>
@@ -209,7 +206,6 @@ def render():
             "field_audit": "Rencana pemeriksaan lapangan dicatat",
             "dismiss": "Pola ditandai wajar dalam simulasi",
         }
-        st.info(f"Status klaster: {labels.get(audited_status, 'Tindak lanjut dicatat')} · hanya berlaku pada demo ini.")
         if audited_status == "field_audit" and st.button("Batalkan rencana pada demo ini", key=f"undo_field_{cid}"):
             st.session_state["audited"].pop(cid, None)
             bench.record_review_event(cid, "Rencana pemeriksaan dibatalkan")
