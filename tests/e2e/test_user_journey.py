@@ -1,6 +1,8 @@
 """Alur pengguna nyata di browser: dashboard -> risk ranking -> claim details -> audit action,
 unduh berkas bukti, dismiss lalu batalkan, tautan langsung, dan tutorial."""
+import csv
 import io
+import re
 from pathlib import Path
 import zipfile
 
@@ -39,6 +41,7 @@ def test_journey_dashboard_to_audit_with_dismiss_and_undo(app_url, page, js_erro
     expect(_text(page, "Ringkasan Prioritas Pemeriksaan")).to_be_visible()
 
     _go_to_audit(page)
+    selected_case = re.search(r"KLASTER: (JALA-F[0-9]+)", page.get_by_text(re.compile(r"KLASTER: JALA-F")).last.inner_text()).group(1)
     expect(page.get_by_text("UMPAN BALIK VERIFIKATOR")).to_have_count(0)        # belum ada keputusan
 
     page.get_by_role("button", name="Tandai pola wajar").click()
@@ -51,7 +54,10 @@ def test_journey_dashboard_to_audit_with_dismiss_and_undo(app_url, page, js_erro
     with page.expect_download() as download:
         page.get_by_role("button", name="Unduh riwayat kasus (.CSV)").click()
     csv_content = Path(download.value.path()).read_text(encoding="utf-8-sig")
-    assert "JALA-F031" in csv_content and "Tandai sebagai pola wajar" in csv_content
+    events = list(csv.DictReader(io.StringIO(csv_content)))
+    assert len(events) == 1
+    assert events[0]["case_id"] == selected_case
+    assert events[0]["action"] == "Tandai sebagai pola wajar"
     expect(page.get_by_text("→ 40/100").first).to_be_visible()                  # skor turun ke 40/100 dari skor dasar
 
     _nav(page, "Risk Ranking")
@@ -81,13 +87,13 @@ def test_field_audit_requires_confirmation_and_can_be_cancelled(app_url, page):
     page.get_by_role("button", name="Catat rencana pemeriksaan").click()
     expect(_text(page, "Tidak ada tim yang ditugaskan")).to_be_visible()
     page.get_by_role("button", name="Batal").click()
-    expect(page.get_by_text("Rencana pemeriksaan lapangan dicatat")).to_have_count(0)
+    expect(page.get_by_text("Dalam pemeriksaan", exact=False)).to_have_count(0)
 
     page.get_by_role("button", name="Catat rencana pemeriksaan").click()
     page.get_by_role("button", name="Konfirmasi (Simulasi)").click()
-    expect(_text(page, "Rencana pemeriksaan lapangan dicatat")).to_be_visible()
+    expect(_text(page, "Dalam pemeriksaan")).to_be_visible()
     page.get_by_role("button", name="Batalkan rencana pada demo ini").click()
-    expect(page.get_by_text("Rencana pemeriksaan lapangan dicatat")).to_have_count(0)
+    expect(page.get_by_text("Dalam pemeriksaan", exact=False)).to_have_count(0)
 
 
 def test_evidence_pack_downloads_as_valid_zip(app_url, page):
@@ -155,7 +161,7 @@ def test_risk_queue_switches_to_mobile_cards(app_url, page):
     page.set_viewport_size({"width": 390, "height": 844})
     expect(page.locator(".j-risk-mobile-card").first).to_be_visible()
     expect(page.locator(".j-risk-desktop-table")).to_be_hidden()
-    expect(_text(page, "Skor mengurutkan pemeriksaan; bukan probabilitas atau bukti.")).to_be_visible()
+    expect(_text(page, "skor bukan probabilitas atau bukti kecurangan.")).to_be_visible()
     width = page.evaluate("Math.max(document.documentElement.scrollWidth, document.body.scrollWidth)")
     assert width <= 392, f"Antrean melebar ke {width}px pada viewport 390px"
     page.get_by_role("button", name="Buka detail kasus").click()

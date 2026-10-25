@@ -49,11 +49,6 @@ def render():
     layout.page_header(
         "", "teal", "Alasan Penandaan",
         "Alasan kelompok ini mendapat prioritas tinjauan, disertai konteks dan contoh klaim terkait. Skor bukan bukti atau putusan.",
-        right_html=(
-            '<div style="display:flex;gap:8px;">'
-            '<span class="j-chip">Skor mengurutkan tinjauan; bukan putusan</span>'
-            '<span class="j-chip">Prioritas tertinggi ditinjau dahulu</span></div>'
-        ),
     )
     guide.render_page_guide("claim")
     guide.render_typology_glossary()

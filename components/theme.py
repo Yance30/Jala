@@ -1792,10 +1792,12 @@ div[data-testid="stHorizontalBlock"]
 }
 
 .j-whatif-card .j-value {
-    font-size: 28px;
-    white-space: nowrap;
-    overflow-wrap: normal;
-    word-break: keep-all;
+    font-size: 24px;
+    line-height: 1.3;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    min-width: 0;
 }
 
 .j-whatif-card .j-note {

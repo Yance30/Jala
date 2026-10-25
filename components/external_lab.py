@@ -82,7 +82,7 @@ def _saved_model_panel(data, capacity):
     st.write("**Model tersimpan: prediksi batch baru tanpa pelatihan ulang**")
     registry = batch_store.list_models()
     if not registry:
-        st.caption("Belum ada model tersimpan di basis data lokal. Latih model di atas, lalu simpan.")
+        st.info("Belum ada model tersimpan. Pilih Latih model baru, jalankan pelatihan, lalu simpan model.")
         return
     labels = {row["id"]: f"{row['id'][:10]} · {row['metadata']['version']} · "
                          f"cutoff {row['metadata']['cutoff'][:10]} · {row['created'][:16]}" for row in registry}
@@ -107,9 +107,9 @@ def _saved_model_panel(data, capacity):
 
 def render(expanded=False):
     with st.expander("Data batch · unggah, validasi, dan prediksi", expanded=expanded):
-        st.subheader("1. Siapkan paket data")
-        st.write("Gunakan paket CSV sintetis/uji dengan tabel referensi sendiri. "
-                 "Paket tidak valid diblokir seluruhnya; baris tidak dibuang diam-diam.")
+        st.subheader("1. Siapkan paket data", anchor="siapkan-data")
+        st.write("Mulai dengan Gunakan data contoh, atau unggah paket CSV dan JSON Anda. "
+                 "Setelah validasi, pilih melatih model baru atau memakai model tersimpan.")
         st.caption("File: claims.csv, faskes.csv, affiliations.csv, patients.csv, tariff_caps.json. "
                    "Tambahkan labels.csv untuk pelatihan, dan mapping.json bila nama kolom berbeda. "
                    "Waktu tanpa zona dianggap UTC; gunakan offset eksplisit untuk waktu lokal.")
@@ -118,7 +118,7 @@ def render(expanded=False):
         uploads = st.file_uploader("Unggah file CSV dan JSON setelah ZIP diekstrak (maksimal 5 MB/file)",
                                    type=["csv", "json"], accept_multiple_files=True, key="external_files")
         use_example = st.button("Gunakan data contoh", key="external_example")
-        st.subheader("2. Validasi paket")
+        st.subheader("2. Validasi paket", anchor="validasi-paket")
         validate = st.button("Validasi paket unggahan", key="external_validate", disabled=not uploads)
         if use_example or validate:
             st.session_state.pop("external_dataset", None)
@@ -153,7 +153,16 @@ def render(expanded=False):
             st.caption("Ini pemeriksaan struktur kolom dan bentuk nilai waktu, bukan verifikasi arti variabel, "
                        "identitas entitas, atau kebenaran hubungan di sumber. Pastikan pemetaan kolom dan "
                        "ketelitian waktu cocok dengan kamus data sebelum menafsirkan indikator.")
-        st.subheader("3. Jalankan prediksi")
+        st.subheader("3. Jalankan prediksi", anchor="jalankan-prediksi")
+        purpose = st.radio("Apa yang ingin Anda lakukan?",
+                           ["Latih model baru", "Gunakan model tersimpan"], key="prediction_purpose")
+        if purpose == "Gunakan model tersimpan":
+            st.caption("Nilai batch baru memakai model yang sudah disimpan, tanpa melatih ulang.")
+            capacity = st.number_input("Kapasitas pemeriksaan", min_value=1, max_value=2000,
+                                       value=100, key="saved_capacity")
+            _saved_model_panel(data, int(capacity))
+            return
+        st.caption("Model baru belajar dari klaim historis berlabel, lalu menilai klaim setelah batas waktu.")
         st.write("Model utama menggunakan fitur graf + gradient boosting. "
                  "Batas waktu memisahkan data pelatihan dari klaim yang akan diprediksi.")
         signature = data.provenance["files_sha256"]["claims.csv"][:12]
@@ -190,7 +199,6 @@ def render(expanded=False):
             st.caption("Simpan model mencakup riwayat klaim pelatihan dan tabel referensi, bukan parameter saja.")
             st.caption("Hasil berlaku pada paket uji ini; belum merupakan validasi operasional BPJS. "
                        "Referensi dianggap statis dan label historis dianggap tersedia pada cutoff.")
-        _saved_model_panel(data, int(capacity))
 
 
 def render_independent_report():
