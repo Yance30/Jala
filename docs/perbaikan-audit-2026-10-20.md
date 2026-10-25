@@ -1,5 +1,13 @@
 # Serah terima perbaikan JALA
 
+## Pemeriksaan rilis - 26 Oktober 2026
+
+- PR #3 sudah memiliki perbaikan tiga ekspektasi E2E lama pada commit `69e4aa6`; CI run `39838896735` lulus.
+- Navigasi batch kini membawa pilihan tahap dari Tinjau ke bagian persiapan, validasi, atau prediksi. Data sesi tetap dipertahankan; prediksi tanpa paket aktif kembali ke persiapan.
+- Label langkah kedua alur memakai angka dan titik, tanpa karakter tanda tanya.
+- Tes browser diperluas untuk tujuan navigasi pada desktop dan mobile, serta kecocokan ID ekspor dengan kasus yang diperiksa.
+- Pengiriman perubahan lanjutan dan verifikasi hosting sedang dilakukan. Catatan lokal di bawah adalah riwayat tahap sebelumnya.
+
 ## Status terbaru — 22 Oktober 2026
 
 ### Lanjutan — 23 Oktober 2026

@@ -107,7 +107,7 @@ def _saved_model_panel(data, capacity):
 
 def render(expanded=False):
     with st.expander("Data batch · unggah, validasi, dan prediksi", expanded=expanded):
-        st.subheader("1. Siapkan paket data")
+        st.subheader("1. Siapkan paket data", anchor="siapkan-data")
         st.write("Mulai dengan Gunakan data contoh, atau unggah paket CSV dan JSON Anda. "
                  "Setelah validasi, pilih melatih model baru atau memakai model tersimpan.")
         st.caption("File: claims.csv, faskes.csv, affiliations.csv, patients.csv, tariff_caps.json. "
@@ -118,7 +118,7 @@ def render(expanded=False):
         uploads = st.file_uploader("Unggah file CSV dan JSON setelah ZIP diekstrak (maksimal 5 MB/file)",
                                    type=["csv", "json"], accept_multiple_files=True, key="external_files")
         use_example = st.button("Gunakan data contoh", key="external_example")
-        st.subheader("2. Validasi paket")
+        st.subheader("2. Validasi paket", anchor="validasi-paket")
         validate = st.button("Validasi paket unggahan", key="external_validate", disabled=not uploads)
         if use_example or validate:
             st.session_state.pop("external_dataset", None)
@@ -153,7 +153,7 @@ def render(expanded=False):
             st.caption("Ini pemeriksaan struktur kolom dan bentuk nilai waktu, bukan verifikasi arti variabel, "
                        "identitas entitas, atau kebenaran hubungan di sumber. Pastikan pemetaan kolom dan "
                        "ketelitian waktu cocok dengan kamus data sebelum menafsirkan indikator.")
-        st.subheader("3. Jalankan prediksi")
+        st.subheader("3. Jalankan prediksi", anchor="jalankan-prediksi")
         purpose = st.radio("Apa yang ingin Anda lakukan?",
                            ["Latih model baru", "Gunakan model tersimpan"], key="prediction_purpose")
         if purpose == "Gunakan model tersimpan":

@@ -88,3 +88,15 @@ def test_planned_action_is_not_completed_review():
     assert cluster_status("freeze")[2] is False
     assert cluster_status(None)[2] is False
     assert cluster_status("dismiss")[2] is True
+
+
+@pytest.mark.parametrize("step", [0, 1, 2])
+def test_batch_stepper_returns_to_data_without_clearing_queue(step):
+    app = open_page("batch_review")
+    app.session_state["batch_review"] = "retained-queue"
+    assert app.button(key="batch_workflow_back_3").disabled
+    assert app.button(key="batch_workflow_back_4").disabled
+    app.button(key=f"batch_workflow_back_{step}").click().run()
+    assert app.session_state["page"] == "data_prediction"
+    assert app.session_state["batch_review"] == "retained-queue"
+    assert not app.exception

@@ -275,11 +275,20 @@ def render_workflow_stepper(page: str):
     if page in ("data_prediction", "batch_review"):
         labels = ["Siapkan data", "Validasi", "Prediksi", "Tinjau", "Unduh hasil"]
         active = 3 if page == "batch_review" else (2 if st.session_state.get("external_dataset") is not None else 0)
-        items = "".join(f'<li class="{"active" if i == active else "done" if i < active else ""}"'
-                        + (' aria-current="step"' if i == active else '')
-                        + f'><span class="j-step-number">{i+1}</span><span>{label}</span></li>'
-                        for i, label in enumerate(labels))
-        st.markdown(f'<nav class="j-workflow" aria-label="Tahap pemeriksaan"><ol>{items}</ol></nav>', unsafe_allow_html=True)
+        anchors = ["siapkan-data", "validasi-paket", "jalankan-prediksi"]
+        with st.container(key="batch_workflow_navigation"):
+            for i, (column, label) in enumerate(zip(st.columns(5), labels)):
+                with column:
+                    if i < active and page == "data_prediction":
+                        st.markdown(
+                            f'<a class="j-batch-step-link" style="display:block;padding:0.5rem;border:1px solid currentColor;border-radius:0.5rem;text-align:center;text-decoration:underline;" href="#{anchors[i]}" target="_self">{i + 1}. {label}</a>',
+                            unsafe_allow_html=True,
+                        )
+                    elif st.button(f"{i + 1}. {label}", key=f"batch_workflow_back_{i}",
+                                   disabled=i >= active, width="stretch",
+                                   type="primary" if i == active else "secondary"):
+                        st.session_state["batch_navigation_anchor"] = anchors[i]
+                        goto("data_prediction")
         return
     if page in ("about", "system_status"):
         return
@@ -290,7 +299,7 @@ def render_workflow_stepper(page: str):
         columns = st.columns(4)
         for i, label in enumerate(steps):
             with columns[i]:
-                if st.button(f"{i + 1} · {label}", key=f"workflow_back_{i}",
+                if st.button(f"{i + 1}. {label}", key=f"workflow_back_{i}",
                              disabled=i >= active, width="stretch",
                              type="primary" if i == active else "secondary"):
                     goto(destinations[i], cluster=st.session_state.get("selected_cluster"))

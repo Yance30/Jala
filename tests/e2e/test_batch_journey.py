@@ -99,3 +99,20 @@ def test_demo_browser_sessions_do_not_share_queues(app_url, page, browser, tmp_p
         expect(page.get_by_text("Klaim dalam batch", exact=True)).to_be_visible()
     finally:
         other.close()
+
+
+@pytest.mark.parametrize("width", [390, 1400])
+def test_batch_step_navigation_preserves_results_and_targets_section(app_url, page, tmp_path, width):
+    prepare_batch(page, app_url, tmp_path)
+    page.set_viewport_size({"width": width, "height": 900})
+    for label, anchor in [("1. Siapkan data", "siapkan-data"),
+                          ("2. Validasi", "validasi-paket"),
+                          ("3. Prediksi", "jalankan-prediksi")]:
+        page.get_by_role("button", name="Buka antrean tinjauan", exact=True).click()
+        expect(page.get_by_role("heading", name="Tinjauan klaim", exact=True)).to_be_visible()
+        expect(page.get_by_role("button", name="4. Tinjau", exact=True)).to_be_disabled()
+        expect(page.get_by_role("button", name="5. Unduh hasil", exact=True)).to_be_disabled()
+        page.get_by_role("button", name=label, exact=True).click()
+        expect(page.locator("#" + anchor)).to_be_in_viewport()
+        # The uploaded dataset and scored result remain usable after returning.
+        expect(page.get_by_role("button", name="Buka antrean tinjauan", exact=True)).to_be_visible()
