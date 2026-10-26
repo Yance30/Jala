@@ -1,0 +1,63 @@
+{
+  "scope": "Full row scan, regular tables only; no fraud labels inferred",
+  "tables": {
+    "202403_fkrtl.dta": {
+      "rows": 1699219,
+      "missing": {
+        "PSTV01": 0,
+        "FKL02": 0,
+        "FKL03": 0,
+        "FKL04": 0,
+        "FKL18": 0,
+        "FKL47": 0,
+        "FKL48": 0
+      },
+      "duplicate_key_rows": 0,
+      "dates": {
+        "FKL03": [
+          "2023-07-15 00:00:00",
+          "2024-12-31 00:00:00"
+        ],
+        "FKL04": [
+          "2024-01-01 00:00:00",
+          "2024-12-31 00:00:00"
+        ]
+      },
+      "negative_costs": {
+        "FKL47": 0,
+        "FKL48": 0
+      },
+      "unmatched_rows": 0,
+      "discharge_before_arrival": 0,
+      "billed_differs_verified": 1631,
+      "unique_nonmissing_keys": 1699219
+    },
+    "202405_diagnosissekunder.dta": {
+      "rows": 1967670,
+      "missing": {
+        "FKL02": 0,
+        "FKL24": 0
+      },
+      "duplicate_key_rows": 600371,
+      "dates": {},
+      "negative_costs": {},
+      "unmatched_rows": 0,
+      "unique_nonmissing_keys": 1367299
+    },
+    "2015202401_kepesertaan.dta": {
+      "rows": 2590751,
+      "missing": {
+        "PSTV01": 0,
+        "PSTV16": 0,
+        "PSTV10": 0
+      },
+      "duplicate_key_rows": 0,
+      "dates": {},
+      "negative_costs": {},
+      "unmatched_rows": 0,
+      "unique_nonmissing_keys": 2590751,
+      "fkrtl_participants_missing_from_membership": 0,
+      "fkrtl_unique_participants": 306710
+    }
+  }
+}

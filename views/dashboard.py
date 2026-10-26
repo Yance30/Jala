@@ -29,9 +29,21 @@ def _find_contrast_cluster(live):
 
 
 def render():
-    if st.button("Unggah data & jalankan prediksi", key="start_prediction", type="primary"):
-        st.session_state.page = "data_prediction"
-        st.rerun()
+    st.subheader("Mulai pemeriksaan")
+    demo_col, data_col = st.columns(2)
+    with demo_col:
+        with st.container(border=True):
+            st.markdown("**Demo sintetis**")
+            st.write("Coba memilih kasus, menelusuri bukti, dan mencatat tindak lanjut dengan data buatan.")
+            if st.button("Coba demo sintetis", key="start_demo", width="stretch"):
+                layout.goto("risk")
+    with data_col:
+        with st.container(border=True):
+            st.markdown("**Paket data**")
+            st.write("Validasi paket CSV/JSON sesuai format JALA, lalu latih atau gunakan model tersimpan.")
+            if st.button("Olah paket data", key="start_prediction", type="primary", width="stretch"):
+                layout.goto("data_prediction")
+            st.caption("Berkas Stata Rilis2025 belum didukung oleh pengunggah ini.")
     live = bench.get_live()
     col_sel, col_sync = st.columns([3, 1])
     with col_sel:
@@ -53,7 +65,7 @@ def render():
     st.markdown(
         f"""
         <div class="j-h1 j-dashboard-title">Ringkasan Prioritas Pemeriksaan</div>
-        <div class="j-body" style="max-width:860px;">Ringkasan klaim yang perlu diperhatikan. Versi ini adalah prototipe yang memakai data buatan; rancangan akhirnya memakai model jaringan graf (HAN).</div>
+        <div class="j-body" style="max-width:860px;">Ringkasan klaim yang perlu diperhatikan. Prototipe ini memakai fitur graf dan gradient boosting pada data sintetis.</div>
         <div class="j-sub" style="margin-top:6px;">Semua angka dihitung dari skor prototipe pada data buatan; klaim masuk tinjauan awal bila skornya {THRESH:.0%} atau lebih. Ukuran evaluasi dan batasannya ada di halaman About.</div>
         <div style="height:10px"></div>
         """,

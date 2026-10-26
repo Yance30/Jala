@@ -26,7 +26,8 @@ def test_every_sidebar_destination():
 
 
 @pytest.mark.parametrize("source,label,destination", [
-    ("dashboard", "Unggah data & jalankan prediksi", "data_prediction"),
+    ("dashboard", "Olah paket data", "data_prediction"),
+    ("dashboard", "Coba demo sintetis", "risk"),
     ("about", "Buka Data & Prediksi", "data_prediction"),
     ("batch_review", "Mulai dari Data & Prediksi", "data_prediction"),
 ])

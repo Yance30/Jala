@@ -183,3 +183,21 @@ def test_dashboard_provenance_and_reset_demo(app_url, page):
     page.get_by_role("button", name="Reset demo").click()
     _nav(page, "Risk Ranking")
     expect(page.get_by_text("UMPAN BALIK VERIFIKATOR AKTIF")).to_have_count(0)
+
+
+def test_two_entry_paths_and_evidence_before_action(app_url, page):
+    _open(page, app_url)
+    page.get_by_role("button", name="Olah paket data", exact=True).click()
+    expect(page.get_by_role("heading", name="1. Siapkan paket data", exact=True)).to_be_visible()
+    _nav(page, "Dashboard")
+    page.get_by_role("button", name="Coba demo sintetis", exact=True).click()
+    page.get_by_role("button", name="Buka detail kasus").click()
+    expect(page.locator("#alasan-kasus")).to_be_visible()
+    links = page.locator('nav[aria-label="Pintasan bukti kasus"]')
+    links.get_by_role("link", name="Periksa klaim sumber").click()
+    expect(page.locator("#klaim-sumber")).to_be_in_viewport()
+    expect(page.get_by_role("button", name="Unduh seluruh klaim sumber (.CSV)")).to_be_visible()
+    links.get_by_role("link", name="Catat tindak lanjut").click()
+    expect(page.locator("#tindakan-pemeriksa")).to_be_in_viewport()
+    page.get_by_role("button", name="Buka Tindak Lanjut").click()
+    expect(page.get_by_role("button", name="Catat rencana pemeriksaan")).to_be_visible()
