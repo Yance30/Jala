@@ -70,11 +70,10 @@ def render():
             f'</div>',
             unsafe_allow_html=True,
         )
-    if st.button("Buka Tindak Lanjut", type="primary", icon=":material/arrow_forward:",
-                 key="claim_open_audit", width="stretch"):
-        layout.goto("audit", cluster=selected)
-    if st.button("Lihat Peta Jaringan (opsional)", key="claim_open_network", width="stretch"):
-        layout.goto("network", cluster=selected)
+    st.subheader("Mengapa kasus ini diprioritaskan?", anchor="alasan-kasus")
+    st.write(detail["why"])
+    st.caption("Indikator berikut adalah konteks pemeriksaan, bukan penjelasan kontribusi setiap fitur model atau bukti fraud.")
+    st.markdown('<nav aria-label="Pintasan bukti kasus"><a href="#klaim-sumber" target="_self">Periksa klaim sumber</a> | <a href="#tindakan-pemeriksa" target="_self">Catat tindak lanjut</a></nav>', unsafe_allow_html=True)
 
     cols = st.columns(4)
     for col, s in zip(cols, live.triage_stats(auc)):
@@ -151,12 +150,7 @@ def render():
         )
         st.markdown(
             f"""
-            <div class="j-alert-red" style="background:#FDF1EC;">
-              <b>🧠 Mengapa ditandai?</b>
-              <div style="margin-top:6px;color:#475569;">{detail['why']}</div>
-              <div style="margin-top:8px;color:#0F766E;font-size:12px;">🕸 {detail['why_note']}</div>
-            </div>
-            <div class="j-h2" style="margin:16px 0 8px;">Bukti Terukur (dari fitur klaim)</div>
+            <div class="j-h2" style="margin:16px 0 8px;">Indikator pendukung (dari fitur klaim)</div>
             """,
             unsafe_allow_html=True,
         )
@@ -179,7 +173,8 @@ def render():
             layout.goto("risk")
 
     # Klaim sumber dapat diperiksa langsung; batasi tabel layar agar tetap ringan.
-    with st.expander("Telusuri klaim sumber dan alasan per klaim"):
+    st.subheader("Klaim sumber", anchor="klaim-sumber")
+    with st.expander("Telusuri klaim sumber dan alasan per klaim", expanded=True):
         claim_rows = evidence_core.claims_table(live, selected)
         if st.session_state.get("demo_role", "Verifikator") == "Verifikator":
             claim_rows["patient_id"] = claim_rows["patient_id"].map(mask_participant_id)
@@ -209,6 +204,13 @@ def render():
             width="stretch",
             key=f"claim_trace_{selected}",
         )
+
+    st.subheader("Tindakan pemeriksa", anchor="tindakan-pemeriksa")
+    if st.button("Buka Tindak Lanjut", type="primary", icon=":material/arrow_forward:",
+                 key="claim_open_audit", width="stretch"):
+        layout.goto("audit", cluster=selected)
+    if st.button("Lihat Peta Jaringan (opsional)", key="claim_open_network", width="stretch"):
+        layout.goto("network", cluster=selected)
 
     verifier_tools.review_timeline(selected, key=f"claim_history_{selected}")
     layout.render_footer()

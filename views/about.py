@@ -86,6 +86,8 @@ def render():
         st.markdown(guide.glossary_html(), unsafe_allow_html=True)
     _divider("comparison")
     comparison.render_content()
+    from components.ablation_report import render as render_ablation
+    render_ablation()
     _data_quality()
     from components import batch_lab
     batch_lab.render()
