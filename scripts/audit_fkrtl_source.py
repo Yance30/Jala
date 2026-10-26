@@ -51,7 +51,7 @@ def audit(source):
                             stats['discharge_before_arrival'] = stats.get('discharge_before_arrival', 0) + int((frame.FKL04 < frame.FKL03).sum())
                             stats['billed_differs_verified'] = stats.get('billed_differs_verified', 0) + int((frame.FKL47.notna() & frame.FKL48.notna() & frame.FKL47.ne(frame.FKL48)).sum())
                         elif key == 'FKL02':
-                            stats['unmatched_rows'] += int((frame.FKL02.notna() & ~frame.FKL02.isin(visits)).sum())
+                            stats['unmatched_rows'] += sum(value not in visits for value in frame.FKL02.dropna())
             stats['unique_nonmissing_keys'] = len(seen)
             if key == 'PSTV01':
                 stats['fkrtl_participants_missing_from_membership'] = len(patients - seen)
