@@ -1,12 +1,22 @@
 # Serah terima perbaikan JALA
 
+## Validasi snapshot - 26 Oktober 2026
+
+- Seluruh kode aplikasi lokal sama dengan `origin/main` pada `69eb8ee` setelah normalisasi akhir baris. Snapshot ini memperbarui README, catatan rilis, dan tiga dokumen kajian Rilis2024.
+- Pengujian ulang lokal: **280 tes unit lulus** (289,28 detik), **18 tes browser lulus** (625,87 detik), kedua lock dependensi dan `python -m core.evaluate` lulus.
+- Percobaan awal terhalang izin folder sementara lama. Pengulangan memakai folder terpisah dan selesai tanpa kegagalan. Hasil lokal tidak menggantikan status CI GitHub atau verifikasi deployment.
+- Data mentah BPJS, hasil ekstraksi, database, kredensial, dan screenshot lokal tidak disertakan. Kajian Rilis2024 memuat skema dan agregat; integrasi data belum diimplementasikan.
+
 ## Pemeriksaan rilis - 26 Oktober 2026
 
 - PR #3 sudah memiliki perbaikan tiga ekspektasi E2E lama pada commit `69e4aa6`; CI run `39838896735` lulus.
 - Navigasi batch kini membawa pilihan tahap dari Tinjau ke bagian persiapan, validasi, atau prediksi. Data sesi tetap dipertahankan; prediksi tanpa paket aktif kembali ke persiapan.
 - Label langkah kedua alur memakai angka dan titik, tanpa karakter tanda tanya.
 - Tes browser diperluas untuk tujuan navigasi pada desktop dan mobile, serta kecocokan ID ekspor dengan kasus yang diperiksa.
-- Pengiriman perubahan lanjutan dan verifikasi hosting sedang dilakukan. Catatan lokal di bawah adalah riwayat tahap sebelumnya.
+- PR #3 telah digabung ke `main` pada commit `69eb8ee904159e7ce882b5c6554743c3ba06e89e`: https://github.com/Yance30/Jala/pull/3.
+- CI PR commit `fac736c` lulus: 280 tes unit, 18 tes browser (termasuk navigasi batch desktop/mobile), lock, dan benchmark. Run: https://github.com/Yance30/Jala/actions/runs/40226359101.
+- Hosting merespons HTTP 200 setelah merge. SHA deployment dan klik pada hosting belum terverifikasi: akses browser khusus JALA belum tersedia (persetujuan aplikasi timeout).
+- Catatan hasil merge PR #3 diperbarui pada snapshot 26 Oktober 2026. Catatan lokal di bawah adalah riwayat tahap sebelumnya.
 
 ## Status terbaru — 22 Oktober 2026
 
