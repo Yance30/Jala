@@ -300,8 +300,8 @@ def render_workflow_stepper(page: str):
         for i, label in enumerate(steps):
             with columns[i]:
                 if st.button(f"{i + 1}. {label}", key=f"workflow_back_{i}",
-                             disabled=i >= active, width="stretch",
-                             type="primary" if i == active else "secondary"):
+                           width="stretch",
+                           type="primary" if i == active else "secondary"):
                     goto(destinations[i], cluster=st.session_state.get("selected_cluster"))
     return
 

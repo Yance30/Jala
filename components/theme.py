@@ -162,10 +162,19 @@ section[data-testid="stSidebar"] [data-testid="stVerticalBlock"] > * {
     margin-bottom: 1rem;
 }
 
+/* Memaksa tombol panah/collapse sidebar agar selalu muncul secara permanen */
+section[data-testid="stSidebar"] [data-testid="stSidebarHeader"],
+section[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
 
 /* tombol tutup sidebar */
 section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] button,
 section[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] button {
+    opacity: 1 !important;
+    visibility: visible !important;
     color: #FFFFFF;
 }
 
@@ -174,6 +183,10 @@ section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] svg,
 section[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] svg {
     color: #FFFFFF;
     fill: currentColor;
+}
+
+section[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] span {
+    color: #FFFFFF !important;
 }
 
 
@@ -608,6 +621,8 @@ div[data-testid="stHorizontalBlock"]
     border-radius: 12px;
 
     padding: 1.25rem;
+
+    padding-bottom: 2.25rem;
 
     box-shadow:
         0 3px 12px rgba(15, 23, 42, 0.025);
@@ -1587,6 +1602,7 @@ div[data-testid="stHorizontalBlock"]
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding-bottom: 1.25rem !important;
 }
 
 .j-demo-case .j-h2 {
@@ -1788,7 +1804,7 @@ div[data-testid="stHorizontalBlock"]
 /* Kartu simulasi tampil di kolom Streamlit yang lebih sempit. */
 .j-whatif-card {
     padding: 1rem;
-    min-height: 220px;
+    margin-bottom: 10px
 }
 
 .j-whatif-card .j-value {

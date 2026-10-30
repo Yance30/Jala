@@ -192,20 +192,21 @@ def whatif_panel(live, cid: str) -> None:
     )
     r = by_doc[pick]
     tone = {"inti": "red", "pendukung": "dark", "periferal": "teal"}[r["role"]]
-    cols = st.columns(4)
-    for col, (lab, val, note) in zip(cols, [
+    metrics = [
         ("PERAN STRUKTUR", r["role"].capitalize(), f"{r['claims_removed']} dari {r['claims_total']} klaim terkait"),
         ("KLASTER", f"{r['components_before']} → {r['components_after']}", "bagian setelah dikeluarkan"),
         ("HUBUNGAN HILANG", f"{r['weight_lost_share']:.0%}", f"bobot {r['weight_before']} → {r['weight_after']}"),
         ("FASKES TERPUTUS", str(len(r["faskes_cut"]) + len(r["faskes_lost"])),
          ", ".join(r["faskes_lost"] + r["faskes_cut"]) or "tidak ada"),
-    ]):
-        with col:
-            st.markdown(cards.metric_card(lab, val, note=note, value_tone=tone if lab == "PERAN STRUKTUR" else "dark",
-                                          card_class="j-whatif-card"),
-                        unsafe_allow_html=True)
-    st.markdown(f'<div class="j-note" style="margin-top:10px;"><span>ⓘ</span><div>{r["verdict"]}</div></div>',
-                unsafe_allow_html=True)
+    ]
+    
+    for i in range(0, len(metrics), 2):
+        cols = st.columns(2)
+        for j, (lab, val, note) in enumerate(metrics[i:i+2]):
+            with cols[j]:
+                st.markdown(cards.metric_card(lab, val, note=note, value_tone=tone if lab == "PERAN STRUKTUR" else "dark",
+                                             card_class="j-whatif-card"),
+                            unsafe_allow_html=True)
 
 
 # ---------------------------------------------------------------- posisi modus
@@ -222,6 +223,7 @@ def modus_note(typology: str) -> None:
           <b>Batas pembuktian:</b> {m['batas']}<br>
           <i>{modus.PRINSIP}</i>
         </div></div>
+        <div style="margin-bottom:15px;"></div>
         """,
         unsafe_allow_html=True,
     )

@@ -107,11 +107,11 @@ FOOTER_CUTOFF = "Batas data simulasi: 30 Sep 2026, 23.59 WIB"
 
 NAV_PAGES = [
     ("dashboard", "Dashboard"),
+    ("risk", "Risk Ranking"),
+    ("network", "Network Analysis"),
+    ("audit", "Audit Actions"),
     ("data_prediction", "Data & Prediction"),
     ("batch_review", "Claim Review"),
-    ("network", "Network Analysis"),
-    ("risk", "Risk Ranking"),
-    ("audit", "Audit Actions"),
     ("system_status", "System Status"),
     ("about", "About & Evaluation"),
 ]

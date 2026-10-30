@@ -80,7 +80,15 @@ def render():
     for col, s in zip(cols, live.triage_stats(auc)):
         with col:
             st.markdown(
-                f'<div class="j-card">{cards.stat_card(s["label"], s["value"], s["note"], delta=s["delta"], value_tone=s["tone"])}</div>',
+                f'<div class="j-card">'
+                f'<div style="display:flex;gap:12px;align-items:flex-start;">'
+                f'<div>'
+                f'<div class="j-label" style="font-size:8px">{s["label"]}</div>'
+                f'<div class="j-value {s["tone"]}" style="font-size:24px;margin-top:4px;">{s["value"]}{s["delta"]}</div>'
+                f'<div style="font-size:12px">{s["note"]}</div>'
+                f"</div>"
+                f"</div>"
+                f"</div>",
                 unsafe_allow_html=True,
             )
 

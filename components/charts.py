@@ -91,7 +91,7 @@ def freq_chart(labels, baseline, spike, peak=""):
     if peak and spike:
         fig.add_annotation(
             x=labels[spike.index(max(spike))], y=max(spike),
-            text=f"Puncak {peak}", showarrow=True, arrowhead=2, ay=-30,
+            text=f"Puncak {peak}", showarrow=True, arrowhead=2, ay=-50,
             font=dict(size=11, color=RED, family="Inter, sans-serif"),
         )
     return fig

@@ -114,12 +114,31 @@ def render_page_guide(page: str) -> None:
 
 
 def glossary_html() -> str:
+    # Menyusun baris tabel (tr, td) dari GLOSSARY
     rows = "".join(
-        f'<div class="jg-term"><div class="jg-t">{html.escape(t)}</div>'
-        f'<div class="jg-d">{html.escape(d)}</div></div>'
+        f"<tr>"
+        f'<td style="padding: 8px 12px; border-bottom: 1px solid #e5e7eb; font-weight: 500;">{html.escape(t)}</td>'
+        f'<td style="padding: 8px 12px; border-bottom: 1px solid #e5e7eb;">{html.escape(d)}</td>'
+        f"</tr>"
         for t, d in GLOSSARY
     )
-    return f'<div class="jg-glossary">{rows}</div>'
+
+    # Membungkus dengan struktur <table> mirip gaya tabel Streamlit/DataFrame
+    return f"""
+    <div style="overflow-x: auto; border: 1px solid #e5e7eb; border-radius: 8px; background-color: #ffffff;">
+        <table style="width: 100%; border-collapse: collapse; font-family: sans-serif; font-size: 12px; text-align: left;">
+            <thead>
+                <tr style="background-color: #f9fafb; border-bottom: 1px solid #e5e7eb;">
+                    <th style="padding: 8px 12px; color: #6b7280; font-weight: 500; width: 30%;">Istilah</th>
+                    <th style="padding: 8px 12px; color: #6b7280; font-weight: 500; width: 70%;">Penjelasan</th>
+                </tr>
+            </thead>
+            <tbody>
+                {rows}
+            </tbody>
+        </table>
+    </div>
+    """
 
 
 CSS = """

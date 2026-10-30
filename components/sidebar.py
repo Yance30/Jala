@@ -125,13 +125,6 @@ def render_sidebar():
             on_change=_on_nav,
         )
 
-        if "demo_role" not in st.session_state:
-            st.session_state.demo_role = "Verifikator"
-        st.selectbox("Role preview", ["Verifikator", "Supervisor"], key="demo_role",
-                     format_func=lambda role: "Verifier" if role == "Verifikator" else role)
-        st.caption("Privacy preview for personal data protection discussions; "
-                   "not authentication, access control, or proof of compliance.")
-
         tutorial.sidebar_button()
 
         if demo_page:
