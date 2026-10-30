@@ -73,10 +73,12 @@ def test_invalid_session_route_recovers_to_dashboard():
     assert app.session_state["page"] == "dashboard"
 
 
-def test_stepper_only_allows_backward_navigation():
+def test_stepper_allows_navigation_between_review_steps():
     app = open_page("risk")
-    assert not app.button(key="workflow_back_0").disabled
-    assert all(app.button(key=f"workflow_back_{i}").disabled for i in (1, 2, 3))
+    assert all(
+        not app.button(key=f"workflow_back_{i}").disabled
+        for i in range(4)
+    )
     app.button(key="workflow_back_0").click().run()
     assert app.session_state["page"] == "dashboard"
     assert not app.exception
